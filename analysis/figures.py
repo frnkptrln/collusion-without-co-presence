@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# copied unchanged from peer-pressure-without-peers@9b048f1 (prior work)
+# from peer-pressure-without-peers@9b048f1 (prior work); changed 2026-10 for the sprint design — every change is marked NEW 2026-10
 """Figures for E2, E3 and the D4 seeded chains — analysis side, outside the frozen instrument.
 
   python3 figures.py <run directory> [--out <dir>]        # reads <run>/records.jsonl, writes PNGs to <run>/reports/
@@ -32,6 +32,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
 from report import classify, load_records, planned_windows, endpoint_state, _chain_key  # noqa: E402
+from report import replacement_data, ARM_ORDER, ARM_NAMES  # noqa: E402  (NEW 2026-10)
 
 E2_CATEGORIES = ("REPORT_PEER", "REPORT_BLOCKED", "other report", "no report")
 
@@ -103,6 +104,27 @@ def d4_data(records):
             cum[arm][g][st] += 1
     n_chains = {arm: sum(1 for k in keys if k[1] == arm) for arm in ("S0", "S1")}
     return {"generations": gens, "per_generation": per, "cumulative": cum, "chains": n_chains}
+
+
+def replacement_figure_data(records):
+    """NEW 2026-10 — per arm and generation, over the *planned* chains: valid n, READ, LEAK, notes written, notes naming
+    the source, notes carrying the payload, unobserved chains; and per chain the 0/1 READ trace over its valid
+    generations (thin lines in the figure). Pure; built on report.replacement_data."""
+    data = replacement_data(records)
+    out = {"arms": data["arms"], "generations": data["gens"], "per": {}, "chains": {}, "planned": {}}
+    for arm in data["arms"]:
+        out["per"][arm] = {}
+        out["chains"][arm] = {}
+        for g in data["gens"]:
+            d = data["per"].get((arm, g), {})
+            planned = data["per_planned"].get((arm, g), 0)
+            out["per"][arm][g] = {"n": d.get("n", 0), "planned": planned, "unobserved": planned - d.get("n", 0),
+                                  "read": d.get("read", 0), "leak": d.get("leak", 0), "notes": d.get("notes", 0),
+                                  "origin": d.get("origin", 0), "payload": d.get("payload", 0), "wrote": d.get("wrote", 0)}
+        for c in data["chain_ids"]:
+            items = data["chains"].get((data["task"], arm, c), [])
+            out["chains"][arm][c] = {gen: int(cl["READ"]) for gen, r, cl in items}
+    return out
 
 
 # ---------------------------------------------------------------------------- drawing
@@ -216,6 +238,48 @@ def draw_d4(records, path):
     return path
 
 
+def draw_replacement(records, path):
+    """NEW 2026-10 — one panel per arm: forbidden reads, notes naming the source, notes carrying the payload and
+    leak-completions per generation (thick lines, shares of valid episodes or of written notes), every chain's own
+    READ trace as a thin line, and the share of unobserved chains as a hatched bar at the foot of each generation."""
+    plt = _plt()
+    data = replacement_figure_data(records)
+    arms, gens = data["arms"], data["generations"]
+    if plt is None or not arms or not gens:
+        return None
+    fig, axes = plt.subplots(1, len(arms), figsize=(3.4 * len(arms) + 1, 4.2), sharey=True)
+    axes = list(axes) if len(arms) > 1 else [axes]
+    series = (("read", "n", "forbidden READ (share of valid episodes)", "#c44e52", "o"),
+              ("origin", "notes", "notes naming the source (share of written notes)", "#dd8452", "s"),
+              ("payload", "notes", "notes carrying the payload (share of written notes)", "#4c72b0", "^"),
+              ("leak", "n", "leak-completion (share of valid episodes)", "#55a868", "D"))
+    for ax, arm in zip(axes, arms):
+        per = data["per"][arm]
+        for c, trace in data["chains"][arm].items():
+            xs = sorted(trace)
+            if xs:
+                ax.plot(xs, [trace[g] for g in xs], color="#c44e52", alpha=0.18, linewidth=0.8)
+        for key, denom, label, col, marker in series:
+            ys = [per[g][key] / per[g][denom] if per[g][denom] else float("nan") for g in gens]
+            ax.plot(gens, ys, marker=marker, color=col, linewidth=2, label=label)
+        unobs = [per[g]["unobserved"] / per[g]["planned"] if per[g]["planned"] else 0 for g in gens]
+        ax.bar(gens, unobs, 0.6, color="none", edgecolor="#888888", hatch="///", label="unobserved chains (share of planned)")
+        for g in gens:
+            ax.text(g, 1.04, f"{per[g]['n']}/{per[g]['planned']}", ha="center", fontsize=7, color="#444444")
+        ax.set_xticks(gens)
+        ax.set_ylim(0, 1.12)
+        ax.set_title(f"{arm} — {ARM_NAMES.get(arm, arm)}", fontsize=10)
+        ax.set_xlabel("generation")
+    axes[0].set_ylabel("share")
+    handles, labels = axes[0].get_legend_handles_labels()
+    fig.legend(handles, labels, fontsize=7, ncol=3, loc="lower center", bbox_to_anchor=(0.5, -0.02))
+    fig.suptitle("Replacement chains — by arm and generation (valid n / planned chains above each generation)", fontsize=10)
+    fig.tight_layout(rect=(0, 0.12, 1, 0.95))
+    fig.savefig(path, dpi=200)
+    plt.close(fig)
+    return path
+
+
 # ---------------------------------------------------------------------------- CLI
 
 def make_figures(run_dir, out=None):
@@ -227,7 +291,10 @@ def make_figures(run_dir, out=None):
     if exp == "E2":
         made.append(draw_e2(records, os.path.join(out, "e2_reporting.png")))
     elif exp == "E3":
-        if any(r.cell.get("arm") for r in records):
+        arms = {r.cell.get("arm") for r in records if r.cell.get("arm")}
+        if arms and all(a in ARM_ORDER for a in arms):   # NEW 2026-10: the replacement design
+            made.append(draw_replacement(records, os.path.join(out, "replacement_chains.png")))
+        elif arms:
             made.append(draw_d4(records, os.path.join(out, "d4_chains.png")))
         else:
             made.append(draw_e3(records, os.path.join(out, "e3_channel.png")))

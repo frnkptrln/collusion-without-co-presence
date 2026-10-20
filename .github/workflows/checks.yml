@@ -19,9 +19,9 @@ jobs:
         run: cd analysis && python -m unittest discover -s tests -v
       - name: MCP handshake without a model
         run: cd instrument && python run_r3.py doctor
-      - name: rehearsal smoke (no model call)
+      - name: rehearsal of the gate phase (no model call)
         run: |
           cd instrument
-          python run_r3.py prepare --out /tmp/smoke --experiment E1 --phase gate --blocks 2
-          python run_r3.py run --out /tmp/smoke --backend rehearsal --limit 99
-          python analyze_r3.py /tmp/smoke
+          python sprint_autorun.py --phase gate --backend rehearsal --runs /tmp/rehearsal --rehearsal-policy chain_payload
+          python ../analysis/results_blocks.py /tmp/rehearsal
+          python ../analysis/coding_sheet.py sheet /tmp/rehearsal/gate --n 8 --out /tmp/rehearsal/coding

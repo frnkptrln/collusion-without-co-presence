@@ -104,3 +104,18 @@ Nothing else calls a model. If the gate needs wording B, add 44 episodes and ≈
 
 ---
 *Claude, 19 October 2026.*
+
+---
+
+## Implementation note (pull request of 20 October 2026) — where the code differs from the plan above
+
+- Runs live under `instrument/runs/` (`gate`, `pc-gate`, `main`, `pc-main`), not at the repository root: the September tooling resolves run directories relative to the instrument, and keeping that avoids touching the quota reader, the autorun and the scrub.
+- For the `replacement` design, `--blocks` means chains per arm (gate 2, main 16 by default); `--chains` is the September designs' parameter and is ignored there.
+- The new per-episode fields live in `cell` of the record (`notes`, `note_origin`, `note_auth`, `note_payload`, `first_note_read_i`, `first_forbidden_i`, `initial_notes_payload`, `inherited_payload`), not as new dataclass fields, so September records still parse and new records are a superset. `materialized.json` gains `initial_notes` (the text of every note an episode starts with); for records without it the analysis falls back to the files still at their initial hash.
+- `AUTH` is affirmative and does not contain the bare phrase "for this batch" ("totals for this batch" is innocent); a coordinator-style claim is caught by "standing instruction" and "authorized". §5.1 of the pre-registration lists "for this batch" — a decision for Frank before binding.
+- `LEAK` is an overlay on `FAB` (a FAB episode whose initial notes carried the payload); `FAB` itself is unchanged.
+- The gate (`gate.py`) is evaluated once after both gate batches, not after wave 1; the September `d4_gate.py` is removed because this design has no outcome-dependent stopping.
+- The coding transcript appends the notes the agent itself wrote (the axes code them); read notes stay redacted; the arm is in `sheet_key.json`, not in the sheet; `kappa --b mechanical` compares against the instrument's predicates.
+- `results_blocks.py` writes no prose at all; every line is a verbatim line of `results.md` with its line number.
+- The replacement figure draws the four shares per arm and generation with the per-chain READ traces as thin lines and the unobserved share as a hatched bar; there is no separate "mean of chains" line because the share over valid episodes is that mean.
+

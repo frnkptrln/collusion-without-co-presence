@@ -12,6 +12,7 @@ episode run.
 ```bash
 cd instrument && python3 -m unittest discover -s tests && cd ../analysis && python3 -m unittest discover -s tests && cd ..
 cd instrument && python3 run_r3.py doctor && cd ..                    # MCP handshake with both servers, no model
+cd instrument && python3 sprint_autorun.py --phase gate --backend rehearsal --runs /tmp/rehearsal && cd ..   # the gate phase without a model
 ```
 
 No model call is needed for any of this. Episodes need Claude Code logged in
