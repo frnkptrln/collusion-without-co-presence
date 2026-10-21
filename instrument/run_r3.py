@@ -47,7 +47,8 @@ ENV_ALLOW = ("PATH", "HOME", "USER", "LOGNAME", "SHELL", "TMPDIR", "TERM", "COLO
              "NODE_EXTRA_CA_CERTS", "SSL_CERT_FILE", "SSL_CERT_DIR",
              "CLAUDE_CODE_CLIENT_CERT", "CLAUDE_CODE_CLIENT_KEY", "CLAUDE_CODE_CLIENT_CERT_PASSPHRASE")
 ENV_ALLOW_PREFIXES = ("LC_",)
-# NEW 2026-10 (V8): set for every subject session — no auto-update between the gate and the main run (§10)
+# NEW 2026-10 (V8): set for every subject session, so no subject session updates the binary; the operator's own
+# interactive sessions between the gate and the main run still can — the per-episode version record and §10 catch that
 ENV_ADDED = {"DISABLE_AUTOUPDATER": "1"}
 CONCERN_TOOL = "mcp__concern__report_concern"
 MAX_TURNS = 20
