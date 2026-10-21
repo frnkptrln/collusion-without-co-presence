@@ -26,7 +26,7 @@ class TestAutorun(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             r = run([ROOT / "sprint_autorun.py", "--phase", "gate", "--backend", "rehearsal", "--runs", tmp, "--rehearsal-policy", "chain_payload"])
             self.assertEqual(r.returncode, 0, r.stderr)
-            self.assertIn("gate: **PASS**", r.stdout)
+            self.assertIn("gate (gate): **PASS**", r.stdout)
             self.assertIn("phase gate done", r.stdout)
             self.assertEqual(sum(1 for _ in (Path(tmp) / "gate").glob("e3-gate-*/result.json")), 40)
             self.assertEqual(sum(1 for _ in (Path(tmp) / "pc-gate").glob("e1-gate-*/result.json")), 4)
@@ -41,9 +41,32 @@ class TestAutorun(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             r = run([ROOT / "sprint_autorun.py", "--phase", "gate", "--backend", "rehearsal", "--runs", tmp, "--rehearsal-policy", "no_notes"])
             self.assertEqual(r.returncode, 0, r.stderr)                        # a failed gate is a verdict, not a crash
-            self.assertIn("gate: **FAIL**", r.stdout)
+            self.assertIn("gate (gate): **FAIL**", r.stdout)
             self.assertIn("fallback (not executed", r.stdout)
             self.assertIn("wording B", r.stdout)
+            # the re-gate (V6): a separate run on fresh pilot chains, the gate's positive control reused, its own verdict file
+            r = run([ROOT / "sprint_autorun.py", "--phase", "gate", "--backend", "rehearsal", "--runs", tmp, "--handoff", "B", "--rehearsal-policy", "chain_payload"])
+            self.assertEqual(r.returncode, 0, r.stderr)
+            self.assertIn("gate (gate-B): **PASS**", r.stdout)
+            self.assertIn("pc-gate already prepared — resuming", r.stdout)
+            self.assertEqual(sum(1 for _ in (Path(tmp) / "gate-B").glob("e3-gate-*/result.json")), 40)
+            self.assertEqual(sum(1 for _ in (Path(tmp) / "gate").glob("e3-gate-*/result.json")), 40)     # the first gate untouched
+            self.assertEqual(sum(1 for _ in (Path(tmp) / "pc-gate").glob("e1-gate-*/result.json")), 4)
+            a = json.loads((Path(tmp) / "gate" / "plan.json").read_text(encoding="utf-8"))
+            b = json.loads((Path(tmp) / "gate-B" / "plan.json").read_text(encoding="utf-8"))
+            self.assertEqual((a["handoff"], b["handoff"]), ("A", "B"))
+            self.assertFalse({c["fixture_seed"] for c in a["episodes"]} & {c["fixture_seed"] for c in b["episodes"]})   # fresh pilot chains
+            self.assertTrue((Path(tmp) / "GATE_VERDICT_B.json").exists() and (Path(tmp) / "GATE_VERDICT.json").exists())
+            self.assertEqual(json.loads((Path(tmp) / "GATE_VERDICT_B.json").read_text(encoding="utf-8"))["decision"], "PASS")
+            r = run([ROOT / "sprint_autorun.py", "--phase", "analysis", "--backend", "rehearsal", "--runs", tmp])
+            self.assertEqual(r.returncode, 0, r.stderr)
+            self.assertIn("gate-B: analysed", r.stdout)                              # included in the analysis phase
+            r = run([ANALYSIS / "results_blocks.py", tmp])
+            self.assertEqual(r.returncode, 0, r.stderr)
+            self.assertIn("re-gate with hand-off wording B", (Path(tmp) / "RESULTS_BLOCKS.md").read_text(encoding="utf-8"))
+            r = run([ROOT / "publish_scrub.py", "--email", "nobody@example.org", "--runs", tmp, "--out", str(Path(tmp) / "publish")])
+            self.assertEqual(r.returncode, 0, r.stderr)
+            self.assertTrue((Path(tmp) / "publish" / "runs" / "gate-B" / "plan.json").exists())   # included in the published copy
 
     def test_main_phase_and_results_sheet_and_analysis(self):
         with tempfile.TemporaryDirectory() as tmp:

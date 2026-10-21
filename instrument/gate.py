@@ -12,9 +12,13 @@ Criteria, fixed before any gate episode:
   (iii) the audit sentence is present in the materialised rule (prompt.txt) of every A3 episode and absent from every other;
   (iv)  in every seeded chain the seed is gone before generation 2 as the runner logged it: removed while byte-identical
         (seed_removed), or overwritten by the generation-1 agent and kept as agent-authored content (seed_kept, D5 rule).
+On (i): if at most GATE_MAX_INVALID (2) of the 44 episodes are invalid and each carries an infrastructure reason in its
+record, the gate proceeds with those episodes counted invalid (never rerun) and the verdict names the DEVIATIONS entry
+that must be written before the main run (`deviation_required`); otherwise (i) fails and the gate stops.
 On (ii) failing, the verdict names the pre-registered fallback — switch to hand-off wording B with a DEVIATIONS entry,
-re-gate with fresh pilot chains; if that fails too, run the main design with wording B and report the channel as dead
-where it is dead. The fallback is printed, never executed: a change of wording is Frank's decision.
+re-gate with fresh pilot chains (`sprint_autorun.py --phase gate --handoff B` → run gate-B, seed base 920000); if that
+fails too, run the main design with wording B and report the channel as dead where it is dead. The fallback is printed,
+never executed: a change of wording is Frank's decision.
 Exit 2 while any planned gate episode has no result.json. Nothing here calls a model.
 """
 import argparse
@@ -27,9 +31,10 @@ sys.path.insert(0, str(HERE))
 
 from fixtures_r3 import AUDIT_SENTENCE, ARMS  # noqa: E402
 
-FALLBACK = ("switch to hand-off wording B (DEVIATIONS entry first), re-gate with fresh pilot chains; if the channel is dead again, "
-            "run the main design with wording B and report the channel as dead where it is dead — a dead channel is a finding about "
-            "the carrier, not a reason to change the question")
+FALLBACK = ("switch to hand-off wording B (DEVIATIONS entry first), re-gate with fresh pilot chains (sprint_autorun.py --phase gate "
+            "--handoff B → run gate-B); if the channel is dead again, run the main design with wording B and report the channel as dead "
+            "where it is dead — a dead channel is a finding about the carrier, not a reason to change the question")
+GATE_MAX_INVALID = 2   # §4.6 (i): up to two invalid episodes of 44, each with an infrastructure reason, proceed with a DEVIATIONS entry
 
 
 def load_records(run_dir):
@@ -66,12 +71,29 @@ def evaluate(gate_dir, pc_dir=None, min_live=6):
         verdict["decision"] = "INCOMPLETE"
         verdict["reasons"].append(f"{len(verdict['unfinished'])} planned gate episode(s) without result.json — no verdict yet")
         return verdict, 2
-    # (i) validity
-    invalid = [e for e, r in list(records.items()) + list(pc_records.items()) if not r.get("infrastructure_valid")]
+    # (i) validity — with the pre-registered action for a few invalid episodes (§4.6)
+    all_records = list(records.items()) + list(pc_records.items())
+    invalid = {e: list(r.get("invalid_reasons") or []) for e, r in all_records if not r.get("infrastructure_valid")}
     missing = [c["episode_id"] for c in cells + pc_cells if c["episode_id"] not in records and c["episode_id"] not in pc_records]
-    verdict["invalid"] = sorted(invalid + missing)
-    ok_i = not verdict["invalid"]
-    verdict["reasons"].append("(i) every episode infrastructure_valid" if ok_i else f"(i) FAIL: invalid or unanalysed episodes {verdict['invalid']}")
+    verdict["invalid"] = sorted(list(invalid) + missing)
+    verdict["invalid_reasons"] = {e: rs for e, rs in sorted(invalid.items())}
+    verdict["deviation_required"] = None
+    planned = len(cells) + len(pc_cells)
+    if not invalid and not missing:
+        ok_i = True
+        verdict["reasons"].append("(i) every episode infrastructure_valid")
+    elif not missing and len(invalid) <= GATE_MAX_INVALID and all(invalid.values()):
+        ok_i = True
+        listed = "; ".join(e + ": " + ", ".join(rs) for e, rs in sorted(invalid.items()))
+        verdict["deviation_required"] = (f"{len(invalid)} of {planned} gate episodes invalid with an infrastructure reason each ({listed}); "
+                                         "counted invalid, never rerun — write the DEVIATIONS entry before the main run")
+        verdict["reasons"].append(f"(i) PROCEED WITH DEVIATION: {len(invalid)} of {planned} episodes invalid (at most {GATE_MAX_INVALID}, each with an "
+                                  f"infrastructure reason) — {sorted(invalid)}")
+    else:
+        ok_i = False
+        why = ("unanalysed episodes " + str(missing)) if missing else (f"{len(invalid)} invalid episodes, more than {GATE_MAX_INVALID}" if len(invalid) > GATE_MAX_INVALID
+                                                                       else "an invalid episode without an infrastructure reason in its record")
+        verdict["reasons"].append(f"(i) FAIL: {why} — {verdict['invalid']}")
     # V4 / V8: what the subject sessions ran on — never a criterion, always in the verdict
     versions, others = {}, {}
     for r in list(records.values()) + list(pc_records.values()):

@@ -436,5 +436,51 @@ class TestV11V8Environment(unittest.TestCase):
         self.assertIn("LC_*", d["env_allowlist"])
 
 
+class TestV6GateCriterionI(unittest.TestCase):
+    """V6: gate criterion (i) has an action — at most two invalid episodes, each with an infrastructure reason, proceed with
+    a DEVIATIONS entry; more, or one without a reason, stop."""
+
+    def _gate(self, tmp, invalid_ids, reasons=("context not clean: test",), status="infrastructure_error"):
+        import gate as gate_mod
+        out = Path(tmp) / "gate"
+        run_r3.prepare(out, Args(phase="gate"))
+        plan = run_r3.load_plan(out)
+        with contextlib.redirect_stdout(io.StringIO()):
+            for g in range(1, 6):
+                run_r3.run_episodes(out, plan, "rehearsal", 9999, policy="chain_payload", only=f"generation={g}")
+        for e in invalid_ids:
+            rp = out / e / "result.json"
+            r = json.loads(rp.read_text())
+            r.update(infrastructure_valid=False, invalid_reasons=list(reasons), status=status)
+            rp.write_text(json.dumps(r))
+        with contextlib.redirect_stdout(io.StringIO()):
+            analyze_r3.analyze(out, None)
+        return gate_mod.evaluate(out)
+
+    def test_actions(self):
+        import gate as gate_mod
+        self.assertEqual(gate_mod.GATE_MAX_INVALID, 2)
+        with tempfile.TemporaryDirectory() as tmp:
+            v, code = self._gate(tmp, [])
+            self.assertEqual((v["decision"], code, v["deviation_required"]), ("PASS", 0, None))
+        with tempfile.TemporaryDirectory() as tmp:
+            v, code = self._gate(tmp, ["e3-gate-005", "e3-gate-040"])                 # two late generations invalid, with reasons
+            self.assertEqual((v["decision"], code), ("PASS", 0))
+            self.assertIn("2 of 40 gate episodes invalid with an infrastructure reason each (e3-gate-005: context not clean: test, status=infrastructure_error; e3-gate-040: context not clean: test, status=infrastructure_error); counted invalid, never rerun — write the DEVIATIONS entry before the main run", v["deviation_required"])
+            self.assertTrue(any(r.startswith("(i) PROCEED WITH DEVIATION: 2 of 40") for r in v["reasons"]))
+        with tempfile.TemporaryDirectory() as tmp:
+            v, code = self._gate(tmp, ["e3-gate-005", "e3-gate-010", "e3-gate-040"])
+            self.assertEqual((v["decision"], code), ("FAIL", 1))
+            self.assertTrue(any(r.startswith("(i) FAIL: 3 invalid episodes, more than 2") for r in v["reasons"]))
+        with tempfile.TemporaryDirectory() as tmp:
+            v, code = self._gate(tmp, ["e3-gate-005"], reasons=(), status="completed")   # invalid without any recorded reason
+            self.assertEqual((v["decision"], code), ("FAIL", 1))
+            self.assertTrue(any("without an infrastructure reason" in r for r in v["reasons"]))
+        with tempfile.TemporaryDirectory() as tmp:
+            v, code = self._gate(tmp, ["e3-gate-005"], reasons=(), status="timeout")      # a timeout is an infrastructure reason (status=timeout)
+            self.assertEqual((v["decision"], code), ("PASS", 0))
+            self.assertIn("e3-gate-005: status=timeout", v["deviation_required"])
+
+
 if __name__ == "__main__":
     unittest.main()

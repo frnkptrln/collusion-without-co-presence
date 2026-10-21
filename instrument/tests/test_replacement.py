@@ -49,6 +49,7 @@ PINNED = {
     "seed_T3x1_R2": "2ed4547324101e78a526214cb1e54f2b2309752bbf355b796d78322f1e9f48f1",
     "plan_main_A": "8c2d7aa769b446edb9bbce8566e8766ecca23921dabf584c517f8fa244894aa6",
     "plan_gate_A": "52a7d0aa5af0825f3d7580d4046c02e6c9e9f09472f42d844570d816b188dfad",
+    "plan_gate_B": "9495ae9bf6a25cd0b829e7b841356788701d472f81857b23f5e306cf580afe97",   # the re-gate with wording B on its own seed base (V6, 21 Oct)
     "plan_pc_main": "937bb6586416dc1601fcd744f7dfb1ecb4db79b463fe4b2f1590871bda1e6354",
     "plan_pc_gate": "67c8a3d7382858e03560653001303873fea53374ad90a5d9934d51cb25f80513",
 }
@@ -110,12 +111,25 @@ class TestPlans(unittest.TestCase):
             fx.make_plan("E3", "main", design="replacement")                   # the hand-off wording is not optional
 
     def test_seed_bases_disjoint_from_september(self):
+        """N9 (21 Oct): the sprint's five seed families — main, gate (wording A), gate-B (the re-gate), PC main, PC gate —
+        against every September design at every September base seed (70907, 80907, 90907, 260906–260913) with up to 40
+        blocks or chains, against the September plans on disk when SEPTEMBER_RUNS is set, and against each other."""
         september = set()
-        for exp, phase, kw in SEPTEMBER_DESIGNS:
-            september |= {c["fixture_seed"] for c in fx.make_plan(exp, phase, **kw)["episodes"]}
+        for base in (70907, 80907, 90907, *range(260906, 260914)):
+            for exp, phase, kw in SEPTEMBER_DESIGNS:
+                big = dict(kw, seed=base)
+                big["chains" if exp == "E3" else "blocks"] = 40
+                september |= {c["fixture_seed"] for c in fx.make_plan(exp, phase, **big)["episodes"]}
+                september |= {c["fixture_seed"] for c in fx.make_plan(exp, phase, seed=base, **kw)["episodes"]}
+        runs = os.environ.get("SEPTEMBER_RUNS")
+        if runs and Path(runs).exists():
+            for plan in Path(runs).glob("*/plan.json"):
+                september |= {c.get("fixture_seed") for c in json.loads(plan.read_text(encoding="utf-8")).get("episodes", []) if c.get("fixture_seed")}
+        self.assertGreater(len(september), 100)
         new = {}
         for name, plan in (("main", fx.make_plan("E3", "main", design="replacement", handoff="A")),
                            ("gate", fx.make_plan("E3", "gate", design="replacement", handoff="A")),
+                           ("gate-B", fx.make_plan("E3", "gate", design="replacement", handoff="B")),
                            ("pc-main", fx.make_plan("E1", "main", design="pc")), ("pc-gate", fx.make_plan("E1", "gate", design="pc"))):
             new[name] = {c["fixture_seed"] for c in plan["episodes"]}
             self.assertFalse(new[name] & september, name)
@@ -123,10 +137,20 @@ class TestPlans(unittest.TestCase):
             for b in new:
                 if a != b:
                     self.assertFalse(new[a] & new[b], f"{a} ∩ {b}")
+        self.assertEqual((fx.REPLACEMENT_SEED_BASE, fx.PC_SEED_BASE), ({"main": 900000, "gate": {"A": 910000, "B": 920000}}, {"main": 905000, "gate": 915000}))
+        # the runbook never passes --seed: the five families are always built on the instrument's default 70907 (a plan
+        # prepared with --seed 80907 would land its main chains on the wording-A gate seeds: 80907 + 900000 = 70907 + 910000)
+        sys.path.insert(0, str(ROOT))
+        import sprint_autorun
+        for phase in ("gate", "main"):
+            for handoff in ("A", "B"):
+                for b in sprint_autorun.batches(phase, "runs", handoff):
+                    self.assertNotIn("--seed", b["prepare"], b["name"])
 
     def test_pinned_digests(self):
         self.assertEqual(fx.digest(fx.make_plan("E3", "main", design="replacement", handoff="A")), PINNED["plan_main_A"])
         self.assertEqual(fx.digest(fx.make_plan("E3", "gate", design="replacement", handoff="A")), PINNED["plan_gate_A"])
+        self.assertEqual(fx.digest(fx.make_plan("E3", "gate", design="replacement", handoff="B")), PINNED["plan_gate_B"])
         self.assertEqual(fx.digest(fx.make_plan("E1", "main", design="pc")), PINNED["plan_pc_main"])
         self.assertEqual(fx.digest(fx.make_plan("E1", "gate", design="pc")), PINNED["plan_pc_gate"])
         self.assertNotEqual(fx.digest(fx.make_plan("E3", "main", design="replacement", handoff="B")), PINNED["plan_main_A"])

@@ -9,7 +9,10 @@
   python3 sprint_autorun.py --phase analysis                   # re-analyse and redraw every run directory; no model call
   python3 sprint_autorun.py --phase check                      # before a start: doctor, freeze verification, tests, quota; no model call
   … --backend rehearsal [--rehearsal-policy chain_payload]     # the same mechanics without a model (tests, dry runs)
-  … --handoff B                                                # the fallback wording after a dead-channel gate (DEVIATIONS entry first)
+  … --phase gate --handoff B                                   # the re-gate of §4.6 after a dead-channel gate (DEVIATIONS entry first):
+                                                               #   a separate run gate-B on fresh pilot chains (seed base 920000), the
+                                                               #   gate's positive control reused, verdict GATE_VERDICT_B.json
+  … --phase main --handoff B                                   # the main design with wording B after that
 
 What it does per batch, exactly as PREREGISTRATION.md §4 and §9: quota check (no batch above 80 % seven-day / 85 % five-hour;
 if above, it waits for the window to reset — the reading comes from the last live episode's rate_limit_event) → prepare
@@ -39,11 +42,17 @@ DESIGNS_WITH_REPORT = ("a", "b", "tier", "tier-full", "pc", "replacement")
 
 # ---------------------------------------------------------------------------- batches
 
+GATE_DIR = {"A": "gate", "B": "gate-B"}                       # NEW 2026-10 (V6): the re-gate with wording B is its own run
+GATE_VERDICT = {"A": "GATE_VERDICT.json", "B": "GATE_VERDICT_B.json"}
+
+
 def batches(phase, runs, handoff):
-    """The runbook as data. kind: 'stream' (one wave), 'waves' (chain designs: one generation per wave)."""
+    """The runbook as data. kind: 'stream' (one wave), 'waves' (chain designs: one generation per wave). With --handoff B
+    the gate phase prepares gate-B (fresh pilot chains, seed base 920000); the positive control is the gate's (pc-gate,
+    resumed if it exists, never rerun)."""
     gate = [
-        dict(name="gate — replacement chains, 2 per arm (pilot seeds, never pooled)", out=f"{runs}/gate", kind="waves",
-             design="replacement", generations=5,
+        dict(name=f"gate — replacement chains, 2 per arm (pilot seeds, never pooled; hand-off wording {handoff})", out=f"{runs}/{GATE_DIR[handoff]}",
+             kind="waves", design="replacement", generations=5,
              prepare=["run_r3.py", "prepare", "--experiment", "E3", "--phase", "gate", "--design", "replacement",
                       "--handoff", handoff, "--model", HAIKU]),
         dict(name="gate — positive control, 4 episodes", out=f"{runs}/pc-gate", kind="stream", design="pc",
@@ -212,13 +221,16 @@ def run_batch(b, a, log):
 
 
 def gate_verdict(a, log):
-    """After the gate batches: gate.py over the chain gate and the positive control. The verdict is logged with its
-    numbers; the fallback it names is a decision for Frank and a DEVIATIONS entry, never an automatic switch."""
+    """After the gate batches: gate.py over the chain gate (gate, or gate-B for the re-gate) and the positive control. The
+    verdict is logged with its numbers; the fallback it names is a decision for Frank and a DEVIATIONS entry, never an
+    automatic switch; a pass with invalid episodes under criterion (i) names the DEVIATIONS entry it needs."""
     runs = HERE / a.runs
-    r = subprocess.run([PY, "gate.py", str(runs / "gate"), "--pc", str(runs / "pc-gate")], cwd=HERE, capture_output=True, text=True)
+    r = subprocess.run([PY, "gate.py", str(runs / GATE_DIR[a.handoff]), "--pc", str(runs / "pc-gate")], cwd=HERE, capture_output=True, text=True)
     verdict = json.loads(r.stdout) if r.stdout.strip().startswith("{") else {"decision": "ERROR", "reasons": [r.stderr[-300:]]}
-    (runs / "GATE_VERDICT.json").write_text(json.dumps(verdict, indent=2) + "\n", encoding="utf-8")
-    log(f"gate: **{verdict.get('decision')}** — " + "; ".join(verdict.get("reasons", [])))
+    (runs / GATE_VERDICT[a.handoff]).write_text(json.dumps(verdict, indent=2) + "\n", encoding="utf-8")
+    log(f"gate ({GATE_DIR[a.handoff]}): **{verdict.get('decision')}** — " + "; ".join(verdict.get("reasons", [])))
+    if verdict.get("deviation_required"):
+        log(f"gate: proceeds under criterion (i) with invalid episodes counted invalid — a DEVIATIONS entry is required before the main run: {verdict['deviation_required']}")
     if verdict.get("fallback"):
         log(f"gate: fallback (not executed; needs a DEVIATIONS entry and Frank's decision): {verdict['fallback']}")
     return verdict
