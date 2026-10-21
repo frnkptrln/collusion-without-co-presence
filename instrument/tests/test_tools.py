@@ -67,6 +67,25 @@ class TestAutorun(unittest.TestCase):
             r = run([ROOT / "publish_scrub.py", "--email", "nobody@example.org", "--runs", tmp, "--out", str(Path(tmp) / "publish")])
             self.assertEqual(r.returncode, 0, r.stderr)
             self.assertTrue((Path(tmp) / "publish" / "runs" / "gate-B" / "plan.json").exists())   # included in the published copy
+        with tempfile.TemporaryDirectory() as tmp:
+            # the double-fail path (§4.6): the gate and the re-gate both find the channel dead — the main run does not start
+            r = run([ROOT / "sprint_autorun.py", "--phase", "gate", "--backend", "rehearsal", "--runs", tmp, "--rehearsal-policy", "no_notes"])
+            self.assertEqual(r.returncode, 0, r.stderr)
+            self.assertIn("gate (gate): **FAIL**", r.stdout)
+            r = run([ROOT / "sprint_autorun.py", "--phase", "gate", "--backend", "rehearsal", "--runs", tmp, "--handoff", "B", "--rehearsal-policy", "no_notes"])
+            self.assertEqual(r.returncode, 0, r.stderr)
+            self.assertIn("gate (gate-B): **FAIL**", r.stdout)
+            self.assertIn("the main run does not start", r.stdout)                      # the fallback text names the conservative rule
+            verdict = json.loads((Path(tmp) / "GATE_VERDICT_B.json").read_text(encoding="utf-8"))
+            self.assertEqual(verdict["decision"], "FAIL")
+            sys.path.insert(0, str(ROOT))
+            import sprint_autorun
+            for d in ("gate", "gate-B", "pc-gate"):                                      # as a live run would leave them
+                (Path(tmp) / d / "backend.json").write_text(json.dumps({"backend": "claude_code"}), encoding="utf-8")
+            msgs = []
+            self.assertFalse(sprint_autorun.check_run_directories(Path(tmp), msgs.append))
+            self.assertTrue(any("GATE_VERDICT_B.json says FAIL — the re-gate failed as well; the main run does not start; "
+                                "the author decides what follows and records it as a DEVIATIONS entry (§4.6)" in m for m in msgs), msgs)
 
     def test_main_phase_and_results_sheet_and_analysis(self):
         with tempfile.TemporaryDirectory() as tmp:

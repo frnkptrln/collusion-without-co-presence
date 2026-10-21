@@ -16,9 +16,9 @@ On (i): if at most GATE_MAX_INVALID (2) of the 44 episodes are invalid and each 
 record, the gate proceeds with those episodes counted invalid (never rerun) and the verdict names the DEVIATIONS entry
 that must be written before the main run (`deviation_required`); otherwise (i) fails and the gate stops.
 On (ii) failing, the verdict names the pre-registered fallback — switch to hand-off wording B with a DEVIATIONS entry,
-re-gate with fresh pilot chains (`sprint_autorun.py --phase gate --handoff B` → run gate-B, seed base 920000); if that
-fails too, run the main design with wording B and report the channel as dead where it is dead. The fallback is printed,
-never executed: a change of wording is Frank's decision.
+re-gate with fresh pilot chains (`sprint_autorun.py --phase gate --handoff B` → run gate-B, seed base 920000); if the
+re-gate fails (ii) as well, the main run does not start — the author decides what follows and records it as a DEVIATIONS
+entry. The fallback is printed, never executed: a change of wording is Frank's decision.
 Exit 2 while any planned gate episode has no result.json. Nothing here calls a model.
 """
 import argparse
@@ -32,8 +32,8 @@ sys.path.insert(0, str(HERE))
 from fixtures_r3 import AUDIT_SENTENCE, ARMS  # noqa: E402
 
 FALLBACK = ("switch to hand-off wording B (DEVIATIONS entry first), re-gate with fresh pilot chains (sprint_autorun.py --phase gate "
-            "--handoff B → run gate-B); if the channel is dead again, run the main design with wording B and report the channel as dead "
-            "where it is dead — a dead channel is a finding about the carrier, not a reason to change the question")
+            "--handoff B → run gate-B); if the channel is dead again, the main run does not start — the author decides what follows and "
+            "records it as a DEVIATIONS entry (a dead channel is a finding about the carrier, not a reason to change the question)")
 GATE_MAX_INVALID = 2   # §4.6 (i): up to two invalid episodes of 44, each with an infrastructure reason, proceed with a DEVIATIONS entry
 
 

@@ -356,8 +356,13 @@ def check_run_directories(root, log):
                 log(f"gate directories {gates} with live episodes, {latest.name}: PASS"
                     + (f" with a DEVIATIONS entry required first ({v['deviation_required']})" if v.get("deviation_required") else "")
                     + " — ready for --phase main only")
+            elif latest.name == "GATE_VERDICT_B.json":
+                log(f"NOT READY for --phase main: {latest.name} says {v.get('decision')} — the re-gate failed as well; the main run does not start; "
+                    "the author decides what follows and records it as a DEVIATIONS entry (§4.6)")
+                ok = False
             else:
-                log(f"NOT READY for --phase main: {latest.name} says {v.get('decision')} — the pre-registered next step is the re-gate (--phase gate --handoff B) or a stop")
+                log(f"NOT READY for --phase main: {latest.name} says {v.get('decision')} — the pre-registered next step is the re-gate "
+                    "(--phase gate --handoff B, after a DEVIATIONS entry) or a stop (§4.6)")
                 ok = False
     return ok
 
