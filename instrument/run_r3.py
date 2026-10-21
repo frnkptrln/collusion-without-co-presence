@@ -33,9 +33,44 @@ SOURCE_FILES = ("fixtures_r3.py", "workspace_server.py", "concern_server.py", "r
 STOP_STATUSES = ("transport_error", "infrastructure_error", "execution_error", "timeout")
 ENV_SCRUB = ("MAX_THINKING_TOKENS", "CLAUDE_EFFORT", "CLAUDE_CODE_INCLUDE_PARTIAL_MESSAGES",
              "CLAUDE_PROJECT_UUID", "CLAUDE_PROJECT_TOOL",
-             "CLAUDE_ADDITIONAL_DIRECTORIES", "CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD")
+             "CLAUDE_ADDITIONAL_DIRECTORIES", "CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD")   # the September denylist (kept for the record)
+# NEW 2026-10 (V11): the subject session's environment is built from this allowlist — everything else the operator's shell
+# carries (CLAUDECODE, CLAUDE_CODE_SESSION_ID, CLAUDE_CODE_CHILD_SESSION, ANTHROPIC_MODEL, …) is dropped, and the *names* of
+# every inherited variable are logged per episode. Names taken from the Claude Code environment-variable documentation and
+# the strings of the 2.1.30x binary: shell basics, the authentication and configuration the CLI reads, network and TLS.
+ENV_ALLOW = ("PATH", "HOME", "USER", "LOGNAME", "SHELL", "TMPDIR", "TERM", "COLORTERM", "TZ", "LANG", "LANGUAGE",
+             "XDG_CONFIG_HOME", "XDG_CACHE_HOME", "XDG_DATA_HOME", "XDG_STATE_HOME", "XDG_RUNTIME_DIR",
+             "ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "ANTHROPIC_BASE_URL", "ANTHROPIC_CUSTOM_HEADERS",
+             "CLAUDE_CODE_OAUTH_TOKEN", "CLAUDE_CONFIG_DIR", "CLAUDE_CODE_HOST_CREDS_FILE", "CLAUDE_CODE_HOST_AUTH_ENV_VAR",
+             "CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST",
+             "HTTP_PROXY", "HTTPS_PROXY", "NO_PROXY", "http_proxy", "https_proxy", "no_proxy",
+             "NODE_EXTRA_CA_CERTS", "SSL_CERT_FILE", "SSL_CERT_DIR",
+             "CLAUDE_CODE_CLIENT_CERT", "CLAUDE_CODE_CLIENT_KEY", "CLAUDE_CODE_CLIENT_CERT_PASSPHRASE")
+ENV_ALLOW_PREFIXES = ("LC_",)
+# NEW 2026-10 (V8): set for every subject session — no auto-update between the gate and the main run (§10)
+ENV_ADDED = {"DISABLE_AUTOUPDATER": "1"}
 CONCERN_TOOL = "mcp__concern__report_concern"
 MAX_TURNS = 20
+
+
+def subject_environment(inherited):
+    """NEW 2026-10 (V11, V8): the environment of a subject session from the operator's — allowlisted names only, plus
+    the variable that CLAUDE_CODE_HOST_AUTH_ENV_VAR names, plus ENV_ADDED. Returns (env, handling) where handling lists
+    the names passed, dropped and added (never a value)."""
+    inherited = dict(inherited)
+    allowed = set(ENV_ALLOW)
+    if inherited.get("CLAUDE_CODE_HOST_AUTH_ENV_VAR"):
+        allowed.add(inherited["CLAUDE_CODE_HOST_AUTH_ENV_VAR"])
+    env = {k: v for k, v in inherited.items() if k in allowed or k.startswith(ENV_ALLOW_PREFIXES)}
+    dropped = sorted(k for k in inherited if k not in env)
+    env.update(ENV_ADDED)
+    handling = {"allowlist": list(ENV_ALLOW), "allow_prefixes": list(ENV_ALLOW_PREFIXES), "inherited_names": sorted(inherited),
+                "passed": sorted(k for k in env if k not in ENV_ADDED), "dropped": dropped, "added": dict(ENV_ADDED),
+                "removed_if_present": {key: key in inherited for key in ENV_SCRUB},
+                "host_managed_provider_present": bool(inherited.get("CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST")),
+                "note": "Allowlist (NEW 2026-10): only the names above reach the subject session; the names of every inherited "
+                        "variable are listed, no value is recorded."}
+    return env, handling
 
 
 def write_json(path, data):
@@ -198,15 +233,11 @@ def run_claude(ep, cell, plan, timeout):
     write_json(ep / "mcp.json", {"mcpServers": servers})
     cmd = claude_command(exe, ep, plan, cell)
     write_json(ep / "command.json", cmd)
-    env = os.environ.copy()
-    removed = {key: key in env for key in ENV_SCRUB}
-    for key in ENV_SCRUB:
-        env.pop(key, None)
+    env, handling = subject_environment(os.environ)
     env["CLAUDE_CODE_DIAGNOSTICS_FILE"] = str(ep / "diag.jsonl")
-    write_json(ep / "environment_handling.json", {"removed_if_present": removed,
-               "diagnostics_file": "diag.jsonl",
-               "host_managed_provider_present": bool(env.get("CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST")),
-               "note": "Other environment inherited; no credential values recorded."})
+    handling["added"]["CLAUDE_CODE_DIAGNOSTICS_FILE"] = "diag.jsonl"
+    handling["diagnostics_file"] = "diag.jsonl"
+    write_json(ep / "environment_handling.json", handling)
     started = time.monotonic()
     timed_out = False
     with tempfile.TemporaryDirectory(prefix="peer-traces-r3-session-") as cwd:
@@ -436,10 +467,13 @@ def run_episodes(out, plan, backend, limit, episode=None, timeout=420, stream=No
 
 def doctor():
     exe = shutil.which("claude")
+    env, handling = subject_environment(os.environ)
     result = {"python": sys.version.split()[0], "claude_installed": bool(exe), "model_calls_made": 0,
               "api_key_environment_present": bool(os.environ.get("ANTHROPIC_API_KEY")),
               "project_context_env_present": bool(os.environ.get("CLAUDE_PROJECT_UUID")),
-              "scrub_list": list(ENV_SCRUB), "source_hash": source_hash()}
+              "scrub_list": list(ENV_SCRUB), "env_allowlist": list(ENV_ALLOW) + [p + "*" for p in ENV_ALLOW_PREFIXES],
+              "env_passed_now": handling["passed"], "env_dropped_now": handling["dropped"], "env_added": dict(ENV_ADDED),
+              "source_hash": source_hash()}
     if exe:
         version = subprocess.run([exe, "--version"], text=True, capture_output=True, timeout=15)
         result["claude_version"] = version.stdout.strip()

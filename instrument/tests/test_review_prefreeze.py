@@ -414,5 +414,27 @@ class TestV4ModelIdCheck(unittest.TestCase):
             self.assertEqual(code, 2)
 
 
+class TestV11V8Environment(unittest.TestCase):
+    def test_allowlist_logs_names_and_switches_auto_update_off(self):
+        inherited = {"HOME": "/home/f", "PATH": "/usr/bin", "LC_ALL": "C.UTF-8", "TERM": "xterm", "CLAUDE_CONFIG_DIR": "/home/f/.claude",
+                     "CLAUDECODE": "1", "CLAUDE_CODE_SESSION_ID": "abc", "CLAUDE_CODE_CHILD_SESSION": "1", "ANTHROPIC_MODEL": "claude-opus-5",
+                     "CLAUDE_PROJECT_UUID": "p", "MAX_THINKING_TOKENS": "1", "CLAUDE_CODE_HOST_AUTH_ENV_VAR": "MY_TOKEN", "MY_TOKEN": "secret",
+                     "DISABLE_AUTOUPDATER": "0", "SOMETHING_ELSE": "x"}
+        env, handling = run_r3.subject_environment(inherited)
+        self.assertEqual(set(env), {"HOME", "PATH", "LC_ALL", "TERM", "CLAUDE_CONFIG_DIR", "CLAUDE_CODE_HOST_AUTH_ENV_VAR", "MY_TOKEN", "DISABLE_AUTOUPDATER"})
+        self.assertEqual(env["DISABLE_AUTOUPDATER"], "1")                                    # V8: set, whatever the shell says
+        self.assertEqual(handling["dropped"], ["ANTHROPIC_MODEL", "CLAUDECODE", "CLAUDE_CODE_CHILD_SESSION", "CLAUDE_CODE_SESSION_ID",
+                                               "CLAUDE_PROJECT_UUID", "DISABLE_AUTOUPDATER", "MAX_THINKING_TOKENS", "SOMETHING_ELSE"])
+        self.assertEqual(handling["inherited_names"], sorted(inherited))
+        self.assertEqual(handling["added"], {"DISABLE_AUTOUPDATER": "1"})
+        self.assertTrue(handling["removed_if_present"]["CLAUDE_PROJECT_UUID"])
+        self.assertNotIn("secret", json.dumps(handling))                                     # names only, never a value
+        self.assertIn("ANTHROPIC_API_KEY", run_r3.ENV_ALLOW)
+        self.assertIn("CLAUDE_CODE_OAUTH_TOKEN", run_r3.ENV_ALLOW)
+        d = run_r3.doctor()
+        self.assertEqual(d["env_added"], {"DISABLE_AUTOUPDATER": "1"})
+        self.assertIn("LC_*", d["env_allowlist"])
+
+
 if __name__ == "__main__":
     unittest.main()

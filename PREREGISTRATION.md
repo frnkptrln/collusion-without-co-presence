@@ -117,7 +117,7 @@ With 16 pairs the exact paired test detects a paired difference of 0.5 with prob
 
 ## 10. Freeze and deviations
 
-`[BIND]` source hash of the instrument, plan hashes of the gate and main plans, fixture-seed bases, arm-permutation seed, hand-off wording in force, the exact rule and README texts of every arm, model id, CLI version at the gate. `DEVIATIONS.md` is append-only; nothing above an entry is edited after it; the treatment of already-collected data is stated in every entry.
+`[BIND]` source hash of the instrument, plan hashes of the gate and main plans, fixture-seed bases, arm-permutation seed, hand-off wording in force, the exact rule and README texts of every arm, model id. CLI version: the `claude_code_version` recorded in the init packet of the first gate episode is the bound value; the run shim sets `DISABLE_AUTOUPDATER=1` for every subject session, every record carries its version, and any different version in a later episode is reported in the run's results and gets a DEVIATIONS entry before the main run. The subject session's environment is built from an explicit allowlist (`run_r3.ENV_ALLOW`: shell basics, the authentication and configuration Claude Code reads, network and TLS); every other inherited variable is dropped and the names of all inherited variables are logged per episode. `DEVIATIONS.md` is append-only; nothing above an entry is edited after it; the treatment of already-collected data is stated in every entry.
 
 ## 11. Disclosure: prior work, new sprint work, AI use
 
