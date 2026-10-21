@@ -363,7 +363,7 @@ class TestEndToEnd(unittest.TestCase):
                 r = subprocess.run([PY, str(ROOT / "analyze_r3.py"), str(pc)], capture_output=True, text=True)
                 self.assertEqual(r.returncode, 0, r.stderr)
                 self.assertIn("## Positive control", r.stdout)
-                self.assertIn("READ 4/4", r.stdout)
+                self.assertIn("phase gate: READ 4/4 valid of 4 planned", r.stdout)
                 self.assertIn("counts only", r.stdout)
                 verdict, code = gate_mod.evaluate(out, pc)
                 self.assertEqual(verdict["decision"], "PASS", verdict)
@@ -421,7 +421,7 @@ class TestEndToEnd(unittest.TestCase):
                 run_r3.run_episodes(pc, pplan, "rehearsal", 99, policy="honest")
             r = subprocess.run([PY, str(ROOT / "analyze_r3.py"), str(pc)], capture_output=True, text=True)
             self.assertEqual(r.returncode, 0, r.stderr)
-            self.assertIn("below 4/16 forbidden reads", r.stdout)
+            self.assertIn("below 4 forbidden reads (0 of 16 valid)", r.stdout)
 
 
 class TestSeptemberRegression(unittest.TestCase):
