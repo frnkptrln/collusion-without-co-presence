@@ -482,5 +482,72 @@ class TestV6GateCriterionI(unittest.TestCase):
             self.assertIn("e3-gate-005: status=timeout", v["deviation_required"])
 
 
+class TestV7Freeze(unittest.TestCase):
+    """V7: freeze.py refuses while any [BIND] or [FRANK] remains; the manifest is keyed by repository-relative paths and
+    covers the instrument, the runbook and analysis/*.py; a frozen tree verifies at another path."""
+
+    def _tree(self, tmp):
+        import shutil
+        repo = Path(tmp) / "repo"
+        (repo / "instrument").mkdir(parents=True)
+        for p in ROOT.glob("*.py"):
+            shutil.copy(p, repo / "instrument" / p.name)
+        shutil.copytree(ROOT.parent / "analysis", repo / "analysis", ignore=shutil.ignore_patterns("__pycache__", "tests"))
+        shutil.copy(ROOT.parent / "PREREGISTRATION.md", repo / "PREREGISTRATION.md")
+        return repo
+
+    def _freeze(self, repo, *args):
+        import subprocess
+        return subprocess.run([sys.executable, str(repo / "instrument" / "freeze.py"), *args], capture_output=True, text=True)
+
+    def test_refusals_and_manifest(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = self._tree(tmp)
+            pre = repo / "PREREGISTRATION.md"
+            text = pre.read_text(encoding="utf-8")
+            self.assertIn("[BIND]", text)
+            self.assertIn("[FRANK]", text)
+            r = self._freeze(repo, "--note", "test")
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("still has placeholders [BIND]", r.stderr)
+            self.assertIn("[FRANK]", r.stderr)
+            pre.write_text(text.replace("[BIND]", "[DUMMY-BOUND-BY-TEST]"), encoding="utf-8")     # [FRANK] items still open
+            r = self._freeze(repo, "--note", "test")
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("still has placeholders [FRANK]", r.stderr)
+            self.assertFalse((repo / "instrument" / "MANIFEST.sha256.json").exists())
+            pre.write_text(text.replace("[BIND]", "[DUMMY-BOUND-BY-TEST]").replace("[FRANK]", "[DUMMY-DECIDED-BY-TEST]"), encoding="utf-8")
+            r = self._freeze(repo, "--note", "test")
+            self.assertEqual(r.returncode, 0, r.stderr)
+            m = json.loads((repo / "instrument" / "MANIFEST.sha256.json").read_text(encoding="utf-8"))
+            self.assertIn("PREREGISTRATION.md", m["files"])
+            for f in ("instrument/fixtures_r3.py", "instrument/report.py", "instrument/gate.py", "instrument/sprint_autorun.py", "instrument/quota.py",
+                      "analysis/report.py", "analysis/results_blocks.py", "analysis/coding_sheet.py", "analysis/figures.py"):
+                self.assertIn(f, m["files"], f)
+            self.assertTrue(all(not k.startswith("/") for k in m["files"]))                        # repository-relative keys only
+            self.assertEqual(m["groups"]["runbook"], ["instrument/sprint_autorun.py", "instrument/quota.py"])
+            # verifies at another path
+            import shutil
+            moved = Path(tmp) / "elsewhere"
+            shutil.move(str(repo), str(moved))
+            r = subprocess_verify(moved)
+            self.assertEqual(r, [])
+            (moved / "analysis" / "report.py").write_text("changed\n", encoding="utf-8")
+            self.assertEqual(subprocess_verify(moved), ["analysis/report.py"])
+            # a second freeze without --version is refused
+            r = self._freeze(moved, "--note", "again")
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("needs --version", r.stderr)
+
+
+def subprocess_verify(repo):
+    import subprocess
+    code = ("import json, sys; sys.path.insert(0, sys.argv[1]); from freeze import verify_manifest; "
+            "print(json.dumps(verify_manifest(sys.argv[1] + '/MANIFEST.sha256.json')[1]))")
+    r = subprocess.run([sys.executable, "-c", code, str(repo / "instrument")], capture_output=True, text=True)
+    assert r.returncode == 0, r.stderr
+    return json.loads(r.stdout)
+
+
 if __name__ == "__main__":
     unittest.main()

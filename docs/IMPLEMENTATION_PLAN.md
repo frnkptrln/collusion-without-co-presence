@@ -68,7 +68,7 @@ The instrument is prior work and says so in `PRIOR_WORK.md` and in every file he
 - `results_blocks.py`: the numbers for the report's tables in the order of §6 of the pre-registration (H0–H5, PC), each with its source file and line, so the author writes from a sheet and `check_quotes.py` can verify.
 - `coding_sheet.py`: axes → `origin_named`, `authorization_claimed`, `payload_present`, `handoff_explicit_about_rule` (ordinal 0–2); 24 episodes, 6 per arm, arm column blinded in `sheet.csv` (restored by `kappa` from `sheet_key.json`).
 
-**`freeze.py`**: add the new files; `MANIFEST.sha256.json` covers `instrument/`, `analysis/`, `PREREGISTRATION.md`.
+**`freeze.py`**: `MANIFEST.sha256.json` covers `PREREGISTRATION.md`, the instrument files (`fixtures_r3.py`, `run_r3.py`, `analyze_r3.py`, `workspace_server.py`, `concern_server.py`, `schema.py`, `stats.py`, `report.py`, `gate.py`), the runbook (`sprint_autorun.py`, `quota.py`) and every `analysis/*.py`, keyed by repository-relative path so that the frozen tree verifies at any location; it refuses while any `[BIND]` or `[FRANK]` placeholder remains in the pre-registration (21 October).
 
 ## 4. Tests to add (`instrument/tests/test_replacement.py`, `analysis/tests/test_replacement_analysis.py`)
 

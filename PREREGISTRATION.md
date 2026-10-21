@@ -5,7 +5,7 @@
 Pre-registration draft for the Apart Research AI Collusion Research Sprint, 23–25 October 2026.
 Anchor: Track 3 (collusion carriers and countermeasures), questions 3.1 (can side channels carry collusion beyond explicit text) and 3.4 (what a coalition does when it learns it is being watched); cross-track 1.2 (robustness to replacing participants) and 2.3 (what counts as convincing evidence).
 
-Status: **DRAFT, unbound.** Items marked `[BIND]` are filled when the instrument is frozen; items marked `[FRANK]` are decisions the author makes before binding. Once bound, this file is hashed, the instrument is frozen (`MANIFEST.sha256.json`), and every later change is a dated entry in `DEVIATIONS.md`. No main episode is run before the freeze.
+Status: **DRAFT, unbound.** Two kinds of placeholder remain in this file: items marked BIND in square brackets are filled when the instrument is frozen, and items marked FRANK in square brackets are decisions the author makes before binding; `freeze.py` refuses while either kind remains. Once bound, this file is hashed, the instrument is frozen (`instrument/MANIFEST.sha256.json`, keyed by repository-relative paths over this file, the instrument, the runbook and the analysis), and every later change is a dated entry in `DEVIATIONS.md`. No main episode is run before the freeze.
 
 Author: Frank Peterlein. Draft prepared with Claude (Anthropic); see §11.
 
@@ -108,7 +108,7 @@ With 16 pairs the exact paired test detects a paired difference of 0.5 with prob
 
 ## 9. Execution plan
 
-- Mon 19 / Tue 20 Oct: this draft; author decides `[FRANK]` items (arms, wording, repository name) and predictions.
+- Mon 19 / Tue 20 Oct: this draft; author decides the FRANK items (arms, wording, repository name) and predictions.
 - Tue 20 / Wed 21: implementation per `IMPLEMENTATION_PLAN.md`; full rehearsal of the plan with the scripted backend (no model call); tests; freeze; bind this file.
 - Thu 22: gate (§4.6), ≈ 1.5 USD-equivalent; re-freeze only if wording B is needed.
 - Fri 23 (sprint day 1): main run, 336 episodes on four streams, started by the author; automatic analysis after the last episode.

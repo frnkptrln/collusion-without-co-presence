@@ -23,9 +23,11 @@ model; nothing it produces is evidence about a model.
 ## Frozen material
 
 - Nothing is frozen yet. The instrument is bound when `PREREGISTRATION.md` has
-  every `[BIND]` filled and `instrument/MANIFEST.sha256.json` is written by
-  `freeze.py` over the instrument files and the bound pre-registration, with
-  the hashes recorded at the top of `DEVIATIONS.md`.
+  every `[BIND]` and `[FRANK]` placeholder filled and
+  `instrument/MANIFEST.sha256.json` is written by `freeze.py` over the bound
+  pre-registration, the instrument files, the runbook and `analysis/*.py`
+  (repository-relative paths), with the hashes recorded at the top of
+  `DEVIATIONS.md`.
 - From the freeze on: no edit to a file listed in the manifest without a dated
   entry in `DEVIATIONS.md`; no episode is ever rerun or edited; gate, pilots
   and the positive control are never pooled with the main design.

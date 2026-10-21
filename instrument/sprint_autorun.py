@@ -300,11 +300,10 @@ def preflight(a, log):
         ok = False
     manifest = newest_manifest()
     if manifest:
-        import hashlib
-        m = json.loads(manifest.read_text(encoding="utf-8"))
-        bad = [f for f, h in m["instrument"].items() if hashlib.sha256((HERE / f).read_bytes()).hexdigest() != h]
-        bad += [f for f, h in m["preregistration"].items() if hashlib.sha256(Path(f).read_bytes()).hexdigest() != h]
-        log(f"freeze {manifest.name} ({m.get('frozen_at_utc')}): " + ("all hashes match" if not bad else f"MISMATCH in {bad}"))
+        sys.path.insert(0, str(HERE))
+        from freeze import verify_manifest   # NEW 2026-10 (V7): repository-relative keys, verified wherever the tree sits
+        m, bad = verify_manifest(manifest)
+        log(f"freeze {manifest.name} ({m.get('frozen_at_utc')}): {len(m['files'])} files, " + ("all hashes match" if not bad else f"MISMATCH in {bad}"))
         ok &= not bad
     else:
         log("freeze: no MANIFEST.sha256.json — the instrument is not bound; a live batch needs the freeze first")
