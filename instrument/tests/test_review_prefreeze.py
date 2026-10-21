@@ -493,7 +493,9 @@ class TestV7Freeze(unittest.TestCase):
         for p in ROOT.glob("*.py"):
             shutil.copy(p, repo / "instrument" / p.name)
         shutil.copytree(ROOT.parent / "analysis", repo / "analysis", ignore=shutil.ignore_patterns("__pycache__", "tests"))
-        shutil.copy(ROOT.parent / "PREREGISTRATION.md", repo / "PREREGISTRATION.md")
+        # a synthetic pre-registration with both placeholder kinds — never the real file, which has none once Frank binds it
+        (repo / "PREREGISTRATION.md").write_text("# synthetic\n\nSeed base [BIND] (x) and [BIND] (y); wording [FRANK]; audit [FRANK]; "
+                                                 "predictions [FRANK].\n\n[BIND] source hash.\n", encoding="utf-8")
         return repo
 
     def _freeze(self, repo, *args):
@@ -505,16 +507,14 @@ class TestV7Freeze(unittest.TestCase):
             repo = self._tree(tmp)
             pre = repo / "PREREGISTRATION.md"
             text = pre.read_text(encoding="utf-8")
-            self.assertIn("[BIND]", text)
-            self.assertIn("[FRANK]", text)
             r = self._freeze(repo, "--note", "test")
             self.assertEqual(r.returncode, 1)
-            self.assertIn("still has placeholders [BIND]", r.stderr)
-            self.assertIn("[FRANK]", r.stderr)
+            self.assertIn("still has placeholders [BIND] ×3, [FRANK] ×3", r.stderr)
             pre.write_text(text.replace("[BIND]", "[DUMMY-BOUND-BY-TEST]"), encoding="utf-8")     # [FRANK] items still open
             r = self._freeze(repo, "--note", "test")
             self.assertEqual(r.returncode, 1)
-            self.assertIn("still has placeholders [FRANK]", r.stderr)
+            self.assertIn("still has placeholders [FRANK] ×3", r.stderr)
+            self.assertNotIn("[BIND]", r.stderr)
             self.assertFalse((repo / "instrument" / "MANIFEST.sha256.json").exists())
             pre.write_text(text.replace("[BIND]", "[DUMMY-BOUND-BY-TEST]").replace("[FRANK]", "[DUMMY-DECIDED-BY-TEST]"), encoding="utf-8")
             r = self._freeze(repo, "--note", "test")
@@ -556,22 +556,24 @@ class TestV9N13Tooling(unittest.TestCase):
         import sprint_autorun
         event = {"type": "rate_limit_event", "rate_limit_info": {"unifiedWindows": {"five_hour": {"utilization": 0.97, "resetsAt": 1}, "seven_day": {"utilization": 0.91, "resetsAt": 2}}}}
         with tempfile.TemporaryDirectory() as tmp:
-            ep = Path(tmp) / "runs" / "gate" / "e3-gate-001"
+            name = "runs-test-" + Path(tmp).name          # a relative name that exists under the cwd only, never under instrument/
+            ep = Path(tmp) / name / "gate" / "e3-gate-001"
             ep.mkdir(parents=True)
             (ep / "stdout.jsonl").write_text(json.dumps(event) + "\n", encoding="utf-8")
-            q = sprint_autorun.quota_reading(str(Path(tmp) / "runs"))                  # absolute: found from any cwd
+            q = sprint_autorun.quota_reading(str(Path(tmp) / name))                    # absolute: found from any cwd
             self.assertEqual((q["five_hour"], q["seven_day"]), (0.97, 0.91))
+            self.assertFalse((ROOT / name).exists())
             cwd = os.getcwd()
             try:
                 os.chdir(tmp)
-                self.assertIsNone(sprint_autorun.quota_reading("runs"))                 # relative: the instrument's runs/, not the cwd's
+                self.assertIsNone(sprint_autorun.quota_reading(name))                   # relative: resolved against instrument/, not the cwd
             finally:
                 os.chdir(cwd)
-            r = subprocess.run([sys.executable, str(ROOT / "quota.py"), str(Path(tmp) / "runs")], capture_output=True, text=True, cwd=tmp)
+            r = subprocess.run([sys.executable, str(ROOT / "quota.py"), str(Path(tmp) / name)], capture_output=True, text=True, cwd=tmp)
             self.assertIn("five_hour: 97%", r.stdout)
             self.assertIn("batch allowed by §12.4: False", r.stdout)
-            r = subprocess.run([sys.executable, str(ROOT / "quota.py"), "runs"], capture_output=True, text=True, cwd=tmp)
-            self.assertIn("no rate_limit_event found under " + str(ROOT / "runs"), r.stdout)
+            r = subprocess.run([sys.executable, str(ROOT / "quota.py"), name], capture_output=True, text=True, cwd=tmp)
+            self.assertIn("no rate_limit_event found under " + str(ROOT / name), r.stdout)
 
     def test_check_refuses_existing_sprint_directories(self):
         import sprint_autorun
@@ -588,10 +590,17 @@ class TestV9N13Tooling(unittest.TestCase):
             self.assertTrue(any("NOT READY: ['gate', 'pc-gate']" in m and "rehearsal" in m for m in msgs))
             for d in ("gate", "pc-gate"):
                 (root / d / "backend.json").write_text(json.dumps({"backend": "claude_code"}))
-            (root / "GATE_VERDICT.json").write_text("{}")
             msgs.clear()
-            self.assertTrue(sprint_autorun.check_run_directories(root, msgs.append))       # a finished live gate: ready for main
-            self.assertTrue(any("ready for --phase main only" in m for m in msgs))
+            self.assertFalse(sprint_autorun.check_run_directories(root, msgs.append))      # live gate without a verdict: not yet
+            self.assertTrue(any("no verdict file" in m for m in msgs))
+            (root / "GATE_VERDICT.json").write_text(json.dumps({"decision": "FAIL"}))
+            msgs.clear()
+            self.assertFalse(sprint_autorun.check_run_directories(root, msgs.append))      # a failed gate: the re-gate or a stop, not main
+            self.assertTrue(any("says FAIL" in m for m in msgs))
+            (root / "GATE_VERDICT_B.json").write_text(json.dumps({"decision": "PASS", "deviation_required": "1 of 44 …"}))
+            msgs.clear()
+            self.assertTrue(sprint_autorun.check_run_directories(root, msgs.append))       # the re-gate passed: ready for main
+            self.assertTrue(any("GATE_VERDICT_B.json: PASS with a DEVIATIONS entry required first" in m and "ready for --phase main only" in m for m in msgs))
             (root / "main").mkdir()
             (root / "main" / "plan.json").write_text("{}")
             (root / "main" / "backend.json").write_text(json.dumps({"backend": "claude_code"}))

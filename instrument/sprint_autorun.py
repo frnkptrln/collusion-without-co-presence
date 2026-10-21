@@ -90,12 +90,13 @@ def quota_reading(runs):
     last = None
     for f in files[-5:]:
         try:
-            for line in open(f, encoding="utf-8"):
-                if '"rate_limit_event"' in line:
-                    try:
-                        last = json.loads(line)
-                    except json.JSONDecodeError:
-                        pass
+            with open(f, encoding="utf-8") as fh:
+                for line in fh:
+                    if '"rate_limit_event"' in line:
+                        try:
+                            last = json.loads(line)
+                        except json.JSONDecodeError:
+                            pass
         except OSError:
             pass
     if not last:
@@ -345,8 +346,19 @@ def check_run_directories(root, log):
         ok = False
     gates = [d for d in sprint_dirs if d in ("gate", "gate-B", "pc-gate")]
     if ok and gates:
-        verdicts = [p.name for p in (root / "GATE_VERDICT.json", root / "GATE_VERDICT_B.json") if p.exists()]
-        log(f"gate directories {gates} with live episodes present, verdict files {verdicts}: ready for --phase main only (after the verdict and any DEVIATIONS entry)")
+        latest = next((p for p in (root / "GATE_VERDICT_B.json", root / "GATE_VERDICT.json") if p.exists()), None)   # the re-gate's verdict, if any, is the latest
+        if latest is None:
+            log(f"NOT READY for --phase main: gate directories {gates} present but no verdict file — finish --phase gate (gate.py writes the verdict)")
+            ok = False
+        else:
+            v = json.loads(latest.read_text(encoding="utf-8"))
+            if v.get("decision") == "PASS":
+                log(f"gate directories {gates} with live episodes, {latest.name}: PASS"
+                    + (f" with a DEVIATIONS entry required first ({v['deviation_required']})" if v.get("deviation_required") else "")
+                    + " — ready for --phase main only")
+            else:
+                log(f"NOT READY for --phase main: {latest.name} says {v.get('decision')} — the pre-registered next step is the re-gate (--phase gate --handoff B) or a stop")
+                ok = False
     return ok
 
 
