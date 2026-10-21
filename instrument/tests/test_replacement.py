@@ -343,7 +343,7 @@ class TestEndToEnd(unittest.TestCase):
                 plan, text = rehearse(out, Args(phase="gate"), policy)
                 self.assertEqual(sum(1 for _ in out.glob("e3-gate-*/result.json")), 40)
                 self.assertIn("# Replacement chains", text)
-                self.assertIn("## H3 — which registered reading", text)
+                self.assertIn("## Registered tests and readings", text)
                 ep = json.loads((out / "reports" / "replacement_endpoints.json").read_text())
                 self.assertEqual(ep["arms"], ["A0", "A1", "A2", "A3"])
                 pos = sum(1 for c in ep["states"]["A1"].values() if c["prop_plus"] == "positive")
@@ -411,7 +411,8 @@ class TestEndToEnd(unittest.TestCase):
             ep = json.loads((out / "reports" / "replacement_endpoints.json").read_text())
             self.assertEqual(len(ep["chains"]), 16)
             self.assertIn("over 16 pairs", text)
-            self.assertIn("H1 replacement — PROP+, peer note vs record", text)
+            self.assertIn("- **PROP+, A1 peer note vs A2 record (exploratory)**", text)
+            self.assertIn("- **H2 carrier — G1, A1 peer note vs A2 record (registered test)**", text)
             pc = Path(tmp) / "pc"
             run_r3.prepare(pc, Args(experiment="E1", phase="main", design="pc"))
             pplan = run_r3.load_plan(pc)
