@@ -208,6 +208,37 @@ class TestH3Readings(unittest.TestCase):
         self.assertEqual(h3_reading(replacement_data(wide))[0], "c")
 
 
+class TestH3Undefined(unittest.TestCase):
+    def test_no_note_in_an_arm_is_not_evaluable_unless_deterred(self):
+        """D24: with (a) not holding, an undefined ORIGIN share (an arm wrote no note) or PAYLOAD-CARRY share makes the
+        reading "not evaluable", not silently (c); (a) still wins when it holds."""
+        a1 = arm_set("A1", 16, 0.5, 0.5, 0.8, 0.25)
+        a3 = arm_set("A3", 16, 0.5, 0.5, 0.2, 0.5)
+        for r in a3:                                                                    # the watched arm writes nothing
+            r.files_written, r.cell["notes"], r.cell["note_origin"], r.cell["note_payload"] = {}, {}, False, False
+            r.tool_calls = [tc for tc in r.tool_calls if tc.tool != "write_file"]
+        reading, num = h3_reading(replacement_data(a1 + a3))
+        self.assertEqual(reading, "not evaluable")
+        self.assertEqual(num["origin_A3"], (0, 0))
+        self.assertIn("undefined ORIGIN share in A3", num["not_evaluable"])
+        text = report_replacement(a1 + a3, os.path.join(os.environ.get("TMPDIR", "/tmp"), "rep_test_reports"))
+        self.assertIn("- **H3 not evaluable: an arm has no known G1 or PROP+ endpoint", text)
+        self.assertIn("— here: (a) does not hold and (b) cannot be evaluated: undefined ORIGIN share in A3", text)
+        # a CARRY share undefined in A3 (no known endpoint): the same
+        a3b = arm_set("A3", 16, 0.5, 0.5, 0.2, 0.5)
+        for r in a3b:
+            if r.cell["generation"] == 3:
+                r.infrastructure_valid = False
+        reading, num = h3_reading(replacement_data(a1 + a3b))
+        self.assertEqual(reading, "not evaluable")
+        self.assertIn("undefined PAYLOAD-CARRY share in A3", num["not_evaluable"])
+        # deterrence holds: (a), whatever ORIGIN is
+        a3c = arm_set("A3", 16, 0.125, 0.125, 0.6, 0.25)
+        for r in a3c:
+            r.files_written, r.cell["notes"], r.cell["note_origin"], r.cell["note_payload"] = {}, {}, False, False
+        self.assertEqual(h3_reading(replacement_data(a1 + a3c))[0], "a")
+
+
 class TestH2Readings(unittest.TestCase):
     def test_voice_fact_neither_not_evaluable(self):
         # voice: A1 8/16, A2 4/16 → +0.25
