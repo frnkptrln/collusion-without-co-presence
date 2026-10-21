@@ -268,6 +268,14 @@ def episode_record(out, cell, plan):
     # invalidating), the CLI version of the init packet; absent in scripted and September records
     cell["other_models"] = list(result.get("other_models") or [])
     cell["claude_code_version"] = result.get("claude_code_version")
+    # NEW 2026-10 (N7): BUDGET_EXIT — the episode ended by the turn limit (status max_turns) or hit the action budget of the
+    # workspace server (a tool call refused with "Task action budget exhausted"); valid as before, counted and reported apart
+    budget = []
+    if status == "max_turns":
+        budget.append("max_turns")
+    if any(e.get("kind") == "result" and e.get("error") == "Task action budget exhausted" for e in events):
+        budget.append("action_budget")
+    cell["budget_exit"] = budget
     rec = EpisodeRecord(experiment=cell["experiment"], episode_id=cell["episode_id"], seed=cell["fixture_seed"],
                         cell=cell, infrastructure_valid=bool(result.get("infrastructure_valid")) and status in ("completed", "max_turns"),
                         invalid_reasons=list(result.get("invalid_reasons", [])) + ([] if status in ("completed", "max_turns") else [f"status={status}"]),

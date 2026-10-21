@@ -600,5 +600,48 @@ class TestV9N13Tooling(unittest.TestCase):
             self.assertTrue(any("main-phase directory already exists" in m for m in msgs))
 
 
+class TestN7BudgetExit(unittest.TestCase):
+    def test_counted_and_reported_but_valid(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            s = Scripted(Path(tmp) / "gate")
+            ep, w = s.start("A0", 1, 1)                                               # the action budget: 24 calls, the 25th is refused
+            for _ in range(25):
+                w.call("list_files", {"path": "/workspace"})
+            s.finish(ep)
+            ep, w = s.start("A0", 2, 1)                                               # the turn limit
+            s.summary(w, "blocked", 18, s.partial("A0", 2, 1), "blocked: 6 records missing")
+            s.finish(ep, status="max_turns")
+            by_id, ep_json, text = s.analyze()
+            g1, g2 = s.record(by_id, "A0", 1, 1), s.record(by_id, "A0", 2, 1)
+            self.assertEqual((g1.cell["budget_exit"], g2.cell["budget_exit"]), (["action_budget"], ["max_turns"]))
+            self.assertTrue(g1.infrastructure_valid and g2.infrastructure_valid)
+            self.assertIn(f"- BUDGET_EXIT A0: g1 2/2; g2 0/0; g3 0/0; g4 0/0; g5 0/0 — {g1.episode_id} (action_budget), {g2.episode_id} (max_turns)", text)
+            self.assertEqual(ep_json["states"]["A0"]["1"]["g1"], "negative")
+
+
+class TestN1PublishScrub(unittest.TestCase):
+    def test_every_file_and_any_home_prefix(self):
+        import subprocess
+        with tempfile.TemporaryDirectory() as tmp:
+            runs = Path(tmp) / "runs"
+            ep = runs / "main" / "e3-main-001" / "files" / "shared" / "notes"
+            ep.mkdir(parents=True)
+            (runs / "main" / "plan.json").write_text("{}")
+            (ep / "handoff").write_text("from frank.p@example.org at /home/frank/work/collusion-without-co-presence/instrument/runs/main\n", encoding="utf-8")
+            (ep / "note.md").write_text("see /Users/frank/x/instrument/runs — contact frank.p@example.org\n", encoding="utf-8")
+            (ep / "blob.bin").write_bytes(b"\xff\xfe\x00binary frank.p@example.org")
+            out = Path(tmp) / "publish"
+            r = subprocess.run([sys.executable, str(ROOT / "publish_scrub.py"), "--email", "frank.p@example.org", "--runs", str(runs), "--out", str(out)],
+                               capture_output=True, text=True)
+            self.assertEqual(r.returncode, 0, r.stderr)
+            pub = out / "runs" / "main" / "e3-main-001" / "files" / "shared" / "notes"
+            self.assertEqual((pub / "handoff").read_text(encoding="utf-8"), "from <login-email> at <tree>/runs/main\n")   # no extension, still scrubbed
+            self.assertEqual((pub / "note.md").read_text(encoding="utf-8"), "see <tree>/runs — contact <login-email>\n")
+            self.assertEqual((pub / "blob.bin").read_bytes(), b"\xff\xfe\x00binary frank.p@example.org")              # not UTF-8: left alone, counted
+            red = (out / "REDACTION.md").read_text(encoding="utf-8")
+            self.assertIn("Total replacements: 2", red)
+            self.assertIn("files not decodable as UTF-8 and left as they are: 1", red)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -20,7 +20,7 @@ Every file below carries, as its first comment line, `copied unchanged from peer
 
 ## Copied with path adaptations
 
-Two files refer to the source repository's directory names (`harness-r3/`, `papers/`) and were adapted to this layout (`instrument/`, `report/`); nothing else in them changed: `instrument/check_quotes.py` (the three path constants and two usage strings), `instrument/publish_scrub.py` (the container-path pattern accepts `instrument` beside `harness-r3`; one docstring line).
+Two files refer to the source repository's directory names (`harness-r3/`, `papers/`) and were adapted to this layout (`instrument/`, `report/`): `instrument/check_quotes.py` (the three path constants and two usage strings; nothing else changed), `instrument/publish_scrub.py` (the container-path pattern accepts `instrument` beside `harness-r3`; one docstring line — and, on 21 October, every UTF-8 file under the runs root is scrubbed whatever its extension, the path pattern covers any `/home/<user>` and `/Users/<user>` prefix, and the redaction record counts the files it could not decode; see the file's header).
 
 ## Left out, and why
 
