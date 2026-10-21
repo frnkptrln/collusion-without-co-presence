@@ -358,5 +358,15 @@ class TestFigureDataAndLeak(unittest.TestCase):
         self.assertEqual(ARM_ORDER, ("A0", "A1", "A2", "A3"))
 
 
+class TestCopiesIdentical(unittest.TestCase):
+    def test_analysis_copies_equal_the_instrument(self):
+        """analysis/schema.py, report.py and stats.py are the instrument's copies (PRIOR_WORK.md); a drift would make the
+        results sheet and the figures disagree with the records."""
+        instrument = os.path.join(os.path.dirname(ROOT), "instrument")
+        for name in ("schema.py", "report.py", "stats.py"):
+            with open(os.path.join(ROOT, name), encoding="utf-8") as a, open(os.path.join(instrument, name), encoding="utf-8") as b:
+                self.assertEqual(a.read(), b.read(), name)
+
+
 if __name__ == "__main__":
     unittest.main()
