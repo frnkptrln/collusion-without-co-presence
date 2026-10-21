@@ -549,5 +549,56 @@ def subprocess_verify(repo):
     return json.loads(r.stdout)
 
 
+class TestV9N13Tooling(unittest.TestCase):
+    def test_quota_reading_is_independent_of_the_working_directory(self):
+        import os
+        import subprocess
+        import sprint_autorun
+        event = {"type": "rate_limit_event", "rate_limit_info": {"unifiedWindows": {"five_hour": {"utilization": 0.97, "resetsAt": 1}, "seven_day": {"utilization": 0.91, "resetsAt": 2}}}}
+        with tempfile.TemporaryDirectory() as tmp:
+            ep = Path(tmp) / "runs" / "gate" / "e3-gate-001"
+            ep.mkdir(parents=True)
+            (ep / "stdout.jsonl").write_text(json.dumps(event) + "\n", encoding="utf-8")
+            q = sprint_autorun.quota_reading(str(Path(tmp) / "runs"))                  # absolute: found from any cwd
+            self.assertEqual((q["five_hour"], q["seven_day"]), (0.97, 0.91))
+            cwd = os.getcwd()
+            try:
+                os.chdir(tmp)
+                self.assertIsNone(sprint_autorun.quota_reading("runs"))                 # relative: the instrument's runs/, not the cwd's
+            finally:
+                os.chdir(cwd)
+            r = subprocess.run([sys.executable, str(ROOT / "quota.py"), str(Path(tmp) / "runs")], capture_output=True, text=True, cwd=tmp)
+            self.assertIn("five_hour: 97%", r.stdout)
+            self.assertIn("batch allowed by §12.4: False", r.stdout)
+            r = subprocess.run([sys.executable, str(ROOT / "quota.py"), "runs"], capture_output=True, text=True, cwd=tmp)
+            self.assertIn("no rate_limit_event found under " + str(ROOT / "runs"), r.stdout)
+
+    def test_check_refuses_existing_sprint_directories(self):
+        import sprint_autorun
+        msgs = []
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp) / "runs"
+            self.assertTrue(sprint_autorun.check_run_directories(root, msgs.append))       # nothing there: ready for the gate
+            for d, backend in (("gate", "scripted_software_rehearsal"), ("pc-gate", "scripted_software_rehearsal")):
+                (root / d).mkdir(parents=True)
+                (root / d / "plan.json").write_text("{}")
+                (root / d / "backend.json").write_text(json.dumps({"backend": backend}))
+            msgs.clear()
+            self.assertFalse(sprint_autorun.check_run_directories(root, msgs.append))      # rehearsal leftovers block a live run
+            self.assertTrue(any("NOT READY: ['gate', 'pc-gate']" in m and "rehearsal" in m for m in msgs))
+            for d in ("gate", "pc-gate"):
+                (root / d / "backend.json").write_text(json.dumps({"backend": "claude_code"}))
+            (root / "GATE_VERDICT.json").write_text("{}")
+            msgs.clear()
+            self.assertTrue(sprint_autorun.check_run_directories(root, msgs.append))       # a finished live gate: ready for main
+            self.assertTrue(any("ready for --phase main only" in m for m in msgs))
+            (root / "main").mkdir()
+            (root / "main" / "plan.json").write_text("{}")
+            (root / "main" / "backend.json").write_text(json.dumps({"backend": "claude_code"}))
+            msgs.clear()
+            self.assertFalse(sprint_autorun.check_run_directories(root, msgs.append))      # a main directory: never twice
+            self.assertTrue(any("main-phase directory already exists" in m for m in msgs))
+
+
 if __name__ == "__main__":
     unittest.main()

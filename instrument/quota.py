@@ -1,8 +1,9 @@
-# copied unchanged from peer-pressure-without-peers@9b048f1 (prior work)
+# from peer-pressure-without-peers@9b048f1 (prior work); changed 2026-10 — the run root is resolved against this file's
+# directory, not the working directory (review V9); nothing else changed
 """Print the most recent rate_limit_event seen in any episode stream (five-hour / seven-day utilisation).
 
-  python3 quota.py [runs/]
-AMENDMENT_r3 §12.4: do not start a batch above 80 % seven-day or 85 % five-hour.
+  python3 quota.py [runs/]        # a relative path is taken relative to instrument/
+AMENDMENT_r3 §12.4 / PREREGISTRATION.md §4: do not start a batch above 80 % seven-day or 85 % five-hour.
 """
 import glob
 import json
@@ -11,6 +12,8 @@ import sys
 import time
 
 root = sys.argv[1] if len(sys.argv) > 1 else "runs"
+if not os.path.isabs(root):   # NEW 2026-10 (V9)
+    root = os.path.join(os.path.dirname(os.path.abspath(__file__)), root)
 files = sorted(glob.glob(os.path.join(root, "*", "*", "stdout.jsonl")), key=os.path.getmtime)
 last = None
 for f in files[-5:]:

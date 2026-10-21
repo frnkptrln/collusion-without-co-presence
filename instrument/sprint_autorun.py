@@ -83,8 +83,10 @@ class Log:
 
 
 def quota_reading(runs):
-    """Last rate_limit_event under runs/ (the same source as quota.py). Returns (five_hour, seven_day, resets) or None."""
-    files = sorted(glob.glob(os.path.join(runs, "*", "*", "stdout.jsonl")), key=os.path.getmtime)
+    """Last rate_limit_event under runs/ (the same source as quota.py). Returns (five_hour, seven_day, resets) or None.
+    NEW 2026-10 (V9): a relative `runs` is resolved against the instrument directory, not the working directory."""
+    runs = Path(runs) if os.path.isabs(str(runs)) else HERE / str(runs)
+    files = sorted(glob.glob(os.path.join(str(runs), "*", "*", "stdout.jsonl")), key=os.path.getmtime)
     last = None
     for f in files[-5:]:
         try:
@@ -268,7 +270,8 @@ def main():
         return
     if a.phase == "check":
         ok = preflight(a, log)
-        log("check: READY — start with --phase gate" if ok else "check: NOT READY — see above")
+        gates_present = any((HERE / a.runs / d / "plan.json").exists() for d in ("gate", "gate-B"))
+        log(("check: READY — start with --phase main" if gates_present else "check: READY — start with --phase gate") if ok else "check: NOT READY — see above")
         sys.exit(0 if ok else 1)
     for b in batches(a.phase, a.runs, a.handoff):
         log(f"## {b['name']}")
@@ -314,9 +317,37 @@ def preflight(a, log):
     ok &= r.returncode == 0
     q = quota_reading(a.runs)
     log(f"quota: five_hour {q['five_hour']:.0%}, seven_day {q['seven_day']:.0%}" if q else "quota: no reading yet (first live episode produces one)")
-    existing = sorted(p.parent.name for p in (HERE / a.runs).glob("*/plan.json")) if (HERE / a.runs).exists() else []
-    log(f"run directories present: {existing}")
+    ok &= check_run_directories(HERE / a.runs, log)
     return bool(ok)
+
+
+SPRINT_RUN_DIRS = ("gate", "gate-B", "pc-gate", "main", "pc-main")
+
+
+def check_run_directories(root, log):
+    """NEW 2026-10 (N13): run directories that already exist under the runs root. A sprint directory (gate, gate-B, pc-gate,
+    main, pc-main) holding rehearsal episodes, or any main-phase directory, means NOT READY: the live batch would refuse to
+    mix backends or would find its directory taken. Gate directories with live episodes are what a check before
+    --phase main expects; the check then says it is ready for the main phase only. Returns ok."""
+    root = Path(root)
+    ok = True
+    existing = sorted(p.parent.name for p in root.glob("*/plan.json")) if root.exists() else []
+    log(f"run directories present: {existing}")
+    sprint_dirs = [d for d in existing if d in SPRINT_RUN_DIRS]
+    backends = {d: (json.loads((root / d / "backend.json").read_text(encoding="utf-8")).get("backend") if (root / d / "backend.json").exists() else None)
+                for d in sprint_dirs}
+    rehearsed = [d for d, b in backends.items() if b != "claude_code"]
+    if rehearsed:
+        log(f"NOT READY: {rehearsed} under {root} hold rehearsal episodes (or none) — a live batch cannot use them; move or delete them, or use another --runs root")
+        ok = False
+    if any(d in ("main", "pc-main") for d in sprint_dirs):
+        log(f"NOT READY: a main-phase directory already exists under {root} — the main design is run once; nothing is rerun")
+        ok = False
+    gates = [d for d in sprint_dirs if d in ("gate", "gate-B", "pc-gate")]
+    if ok and gates:
+        verdicts = [p.name for p in (root / "GATE_VERDICT.json", root / "GATE_VERDICT_B.json") if p.exists()]
+        log(f"gate directories {gates} with live episodes present, verdict files {verdicts}: ready for --phase main only (after the verdict and any DEVIATIONS entry)")
+    return ok
 
 
 def source_hash():
