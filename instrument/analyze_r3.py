@@ -166,6 +166,10 @@ def episode_record(out, cell, plan):
         if "seed_removed" in materialized or "seed_kept" in materialized:   # D5: the runner's seed audit (D4 chains)
             cell["seed_removed"] = list(materialized.get("seed_removed", []))
             cell["seed_kept"] = dict(materialized.get("seed_kept", {}))
+        if materialized.get("initial_files") is not None:
+            # NEW 2026-10 (V1): the hashes of every file the episode started with, for every generation — the plan carries
+            # them for generation 1 only, so the content-hash authorship of §5.4 (b) was dead from generation 2 on.
+            cell["initial_files"] = dict(materialized["initial_files"])
     cell["inherited_note_read"] = any((e.get("path") or "").lstrip("/") in inherited for e in note_reads)
     # NEW 2026-10: note-content predicates, the order of reads, and the payload the episode started with
     values = payload_values(cell["fixture_seed"], cell.get("task"))
