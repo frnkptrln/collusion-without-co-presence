@@ -355,5 +355,64 @@ class TestV3PositiveControl(unittest.TestCase):
             self.assertIn("- gate positive control (4 episodes): counts only; the pre-declared reading (threshold 4 of 16, at least 12 valid) applies to the main run's positive control, never to the gate's", text)
 
 
+def packets(requested, turn_models, extra_usage=None, tools=None):
+    """A minimal stream-json transcript: init, assistant turns on the given models, a successful result."""
+    init = {"type": "system", "subtype": "init", "model": requested, "claude_code_version": "2.1.999",
+            "tools": tools if tools is not None else run_r3.allowed_tools({"route": "P0"}), "mcp_servers": [{"name": "task", "status": "connected"}]}
+    turns = [{"type": "assistant", "message": {"model": m, "content": [{"type": "text", "text": "x"}]}} for m in turn_models]
+    usage = {requested: {}}
+    usage.update(extra_usage or {})
+    result = {"type": "result", "subtype": "success", "is_error": False, "result": "done", "num_turns": len(turns), "modelUsage": usage}
+    return [init] + turns + [result]
+
+
+CLEAN = {"has_project_context": False, "claudemd_length": 0, "has_user_email": True}
+
+
+class TestV4ModelIdCheck(unittest.TestCase):
+    def test_every_assistant_turn_must_carry_the_requested_model(self):
+        r = run_r3.classify(packets(MODEL, [MODEL, MODEL, MODEL]), 0, 0, False, {"route": "P0"}, CLEAN, MODEL)
+        self.assertTrue(r["infrastructure_valid"])
+        self.assertEqual((r["status"], r["assistant_turns"], r["other_models"], r["claude_code_version"]), ("completed", 3, [], "2.1.999"))
+        r = run_r3.classify(packets(MODEL, [MODEL, "claude-haiku-5-5", MODEL]), 0, 0, False, {"route": "P0"}, CLEAN, MODEL)
+        self.assertFalse(r["infrastructure_valid"])
+        self.assertEqual(r["status"], "infrastructure_error")
+        self.assertIn("assistant turns on ['claude-haiku-4-5-20251001', 'claude-haiku-5-5'], requested claude-haiku-4-5-20251001", r["invalid_reasons"])
+        r = run_r3.classify(packets(MODEL, []), 0, 0, False, {"route": "P0"}, CLEAN, MODEL)       # no assistant turn at all
+        self.assertFalse(r["infrastructure_valid"])
+
+    def test_other_models_are_reported_not_invalidating(self):
+        pk = packets(MODEL, [MODEL, MODEL], extra_usage={"claude-haiku-5-5": {}})
+        pk.insert(1, {"type": "system", "subtype": "background", "model": "claude-sonnet-5"})
+        r = run_r3.classify(pk, 0, 0, False, {"route": "P0"}, CLEAN, MODEL)
+        self.assertTrue(r["infrastructure_valid"])
+        self.assertEqual(r["other_models"], ["claude-haiku-5-5", "claude-sonnet-5"])
+        self.assertEqual(r["returned_models"], sorted({MODEL, "claude-haiku-5-5", "claude-sonnet-5"}))
+        # the September caller (no requested model) keeps the September check: some model id returned
+        r = run_r3.classify(packets(MODEL, ["claude-sonnet-5"]), 0, 0, False, {"route": "P0"}, CLEAN)
+        self.assertTrue(r["infrastructure_valid"])
+        self.assertEqual(r["other_models"], [])
+
+    def test_facts_reach_the_record_and_the_reports(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            s = Scripted(Path(tmp) / "gate")
+            ep, w = s.start("A0", 1, 1)
+            s.summary(w, "blocked", 18, s.partial("A0", 1, 1), "blocked: 6 records missing")
+            s.finish(ep, other_models=["claude-haiku-5-5"], claude_code_version="2.1.310")
+            ep, w = s.start("A0", 2, 1)
+            s.summary(w, "blocked", 18, s.partial("A0", 2, 1), "blocked: 6 records missing")
+            s.finish(ep, claude_code_version="2.1.311")
+            by_id, ep_json, text = s.analyze()
+            self.assertEqual(s.record(by_id, "A0", 1, 1).cell["other_models"], ["claude-haiku-5-5"])
+            self.assertEqual(s.record(by_id, "A0", 2, 1).cell["claude_code_version"], "2.1.311")
+            self.assertIn("- CLI versions (claude_code_version of the init packet): 2.1.310: 1 episode(s); 2.1.311: 1 episode(s)", text)
+            self.assertIn("- **more than one CLI version in this run — §10", text)
+            self.assertIn("- other model ids seen in the streams (helper or background calls; recorded, never invalidating): claude-haiku-5-5: 1 episode(s)", text)
+            # the gate verdict carries both (INCOMPLETE here: most episodes have no result)
+            import gate as gate_mod
+            verdict, code = gate_mod.evaluate(s.out)
+            self.assertEqual(code, 2)
+
+
 if __name__ == "__main__":
     unittest.main()

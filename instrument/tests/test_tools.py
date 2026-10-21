@@ -31,6 +31,8 @@ class TestAutorun(unittest.TestCase):
             self.assertEqual(sum(1 for _ in (Path(tmp) / "gate").glob("e3-gate-*/result.json")), 40)
             self.assertEqual(sum(1 for _ in (Path(tmp) / "pc-gate").glob("e1-gate-*/result.json")), 4)
             self.assertTrue((Path(tmp) / "GATE_VERDICT.json").exists())
+            verdict = json.loads((Path(tmp) / "GATE_VERDICT.json").read_text(encoding="utf-8"))
+            self.assertEqual((verdict["claude_code_versions"], verdict["other_models"]), ({}, {}))   # scripted: nothing recorded, keys present (V4, V8)
             self.assertTrue((Path(tmp) / "gate" / "reports" / "replacement_report.md").exists())
             r2 = run([ROOT / "sprint_autorun.py", "--phase", "gate", "--backend", "rehearsal", "--runs", tmp])
             self.assertEqual(r2.returncode, 0, r2.stderr)

@@ -264,6 +264,10 @@ def episode_record(out, cell, plan):
     cell["initial_notes_payload"] = {path: has_payload(content, values) for path, content in (initial_notes or {}).items()}
     cell["inherited_payload"] = any(cell["initial_notes_payload"].values())
     cell["deliverable_full_totals"] = bool(deliverable_full_totals)   # NEW 2026-10 (B1)
+    # NEW 2026-10 (V4, V8): what the runner recorded about the subject session — other model ids seen in the stream (never
+    # invalidating), the CLI version of the init packet; absent in scripted and September records
+    cell["other_models"] = list(result.get("other_models") or [])
+    cell["claude_code_version"] = result.get("claude_code_version")
     rec = EpisodeRecord(experiment=cell["experiment"], episode_id=cell["episode_id"], seed=cell["fixture_seed"],
                         cell=cell, infrastructure_valid=bool(result.get("infrastructure_valid")) and status in ("completed", "max_turns"),
                         invalid_reasons=list(result.get("invalid_reasons", [])) + ([] if status in ("completed", "max_turns") else [f"status={status}"]),

@@ -230,22 +230,36 @@ def run_claude(ep, cell, plan, timeout):
         except json.JSONDecodeError:
             parse_errors += 1
     diag = parse_diag(ep / "diag.jsonl")
-    result = classify(packets, parse_errors, process.returncode, timed_out, cell, diag)
+    result = classify(packets, parse_errors, process.returncode, timed_out, cell, diag, plan["requested_model"])
     result.update(backend="claude_code", exit_code=process.returncode, diagnostics=diag,
                   elapsed_seconds=round(time.monotonic() - started, 3), requested_model=plan["requested_model"])
     return result
 
 
-def classify(packets, parse_errors, returncode, timed_out, cell, diag):
-    """r2 classification plus the r3 context check. Result subtype is read before the exit code."""
+def classify(packets, parse_errors, returncode, timed_out, cell, diag, requested_model=None):
+    """r2 classification plus the r3 context check. Result subtype is read before the exit code.
+    NEW 2026-10 (V4): the model-id check of PREREGISTRATION.md §5.3 — every assistant turn of the subject session must
+    carry the requested model id, else the episode is infrastructure-invalid; any other model id seen anywhere in the
+    stream (helper or background calls: packets' `model` fields, the result's modelUsage keys) is recorded in
+    `other_models` and reported, but does not invalidate. Without a requested model (September callers) the check is
+    the September one: some model id was returned."""
     init = next((p for p in packets if p.get("type") == "system" and p.get("subtype") == "init"), {})
     final = next((p for p in reversed(packets) if p.get("type") == "result"), {})
     models = set()
+    assistant_models = []
     for p in packets:
         message = p.get("message") if isinstance(p.get("message"), dict) else {}
         model = message.get("model") or p.get("model")
         if model:
             models.add(model)
+        if p.get("type") == "assistant":
+            assistant_models.append(message.get("model"))
+    models |= {m for m in (final.get("modelUsage") or {}) if isinstance(m, str)}
+    if requested_model:
+        model_ok = bool(assistant_models) and all(m == requested_model for m in assistant_models)
+    else:
+        model_ok = bool(models)
+    other_models = sorted(m for m in models if m != requested_model) if requested_model else []
     allowed = set(allowed_tools(cell)) | {"EndConversation"}
     advertised = set(init.get("tools", []))
     observed = {b.get("name") for p in packets if isinstance(p.get("message"), dict)
@@ -254,10 +268,11 @@ def classify(packets, parse_errors, returncode, timed_out, cell, diag):
     servers = {s.get("name"): s.get("status") for s in init.get("mcp_servers", [])}
     connected = servers.get("task") == "connected" and (cell.get("route") != "P1" or servers.get("concern") == "connected")
     context_clean = diag.get("has_project_context") is False and (diag.get("claudemd_length") in (0, None))
-    infrastructure_valid = bool(init and connected and models and not unexpected and not parse_errors and context_clean)
+    infrastructure_valid = bool(init and connected and model_ok and not unexpected and not parse_errors and context_clean)
     reasons = []
     if not init: reasons.append("no init packet")
     if not connected: reasons.append(f"mcp servers {servers}")
+    if not model_ok: reasons.append(f"assistant turns on {sorted({str(m) for m in assistant_models}) or 'no model'}, requested {requested_model}")
     if unexpected: reasons.append(f"unexpected tools {unexpected}")
     if parse_errors: reasons.append(f"{parse_errors} stream parse errors")
     if not context_clean: reasons.append(f"context not clean: {diag}")
@@ -280,7 +295,11 @@ def classify(packets, parse_errors, returncode, timed_out, cell, diag):
                 result_subtype=subtype, num_turns=final.get("num_turns"), usage=final.get("usage"),
                 reported_cost_usd=final.get("total_cost_usd"), infrastructure_valid=infrastructure_valid,
                 invalid_reasons=reasons, unexpected_tools=unexpected, mcp_servers=servers,
-                stream_parse_errors=parse_errors)
+                stream_parse_errors=parse_errors,
+                # NEW 2026-10 (V4, V8): the subject session's assistant turns and the model ids they carried; other model ids
+                # seen in the stream; the CLI version from the init packet
+                assistant_turns=len(assistant_models), assistant_models=sorted({str(m) for m in assistant_models}),
+                other_models=other_models, claude_code_version=init.get("claude_code_version"))
 
 
 def rehearse_episode(ep, cell, plan, policy):
