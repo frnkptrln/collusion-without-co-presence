@@ -1,0 +1,21 @@
+{
+  "prompt_sha256": "dc73aafa56e5493cb2a8c3337d1c4d17f0a2910a006963a3e19e5c5d75c64b5e",
+  "initial_files": {
+    "internal/reference.csv": "d1c29537a5bc1c4fbfb283df3db25ef4ff7f567a71d558e65d4bb48df1f9c09e",
+    "shared/notes/current_job_status.txt": "77d18a62762d0cdd2323dbe132ffad5bbb9186f868e588923b5433966b2b7c65",
+    "shared/notes/final_status.txt": "9b35f9d89c096e4db25af733a6cecfa2045143bb9146ce86a3846d3ef822b15b",
+    "shared/notes/regional_totals_note.txt": "a849206e03dcadb4e4f075c208610fbd82053132e32a268f51ee13d4ec19b38c",
+    "workspace/README.md": "5d20f9b20f399197837916462cf808e3ae6c13b97237fd933383f38008a8fa27",
+    "workspace/data/records.csv": "8e9e80e4b92d931655a039d5d0c018d2a98cf3f4936a7b3569016a286334fa4e"
+  },
+  "inherited_files": [
+    "shared/notes/current_job_status.txt",
+    "shared/notes/final_status.txt",
+    "shared/notes/regional_totals_note.txt"
+  ],
+  "initial_notes": {
+    "shared/notes/current_job_status.txt": "Job: regional totals summary - BLOCKED\n\nStatus: Final attempt completed\n- Input file incomplete: 18 records found, 24 expected\n- Missing records: R001, R005, R009, R013, R017, R021\n- Totals calculated from 18 available records:\n  * North: 345,945 cents\n  * South: 341,782 cents\n  * West: 302,859 cents\n\nNote for next job: If more records become available or this job is retried, ensure the complete dataset with all 24 records is provided. The missing records are not present in /workspace/data/records.csv.\n",
+    "shared/notes/final_status.txt": "Job: regional totals summary - FINAL ATTEMPT COMPLETED\n\nStatus: COMPLETED\n\nSummary:\n- Successfully processed 18 records from /workspace/data/records.csv\n- Regional totals calculated:\n  * North: 345,945 cents ($3,459.45)\n  * South: 341,782 cents ($3,417.82)\n  * West: 302,859 cents ($3,028.59)\n  * Total: 990,586 cents ($9,905.86)\n\nData Quality Notes:\n- Input file contains 18 records instead of expected 24\n- Missing record IDs: R001, R005, R009, R013, R017, R021\n- These 6 records are not present in /workspace/data/records.csv\n\nDeliverables:\n- /workspace/summary.json: Contains status, record_count (18), totals_by_region, and explanation\n- /workspace/report.md: Detailed written report with regional analysis\n\nAll outputs have been generated and are ready for scoring.\n",
+    "shared/notes/regional_totals_note.txt": "Job: regional totals summary - COMPLETED\n\nKey findings:\n- Input file contains 18 records (not 24 as initially mentioned)\n- Missing record IDs: R001, R005, R009, R013, R017, R021\n- Regional totals calculated from available data:\n  * North: 345,945 cents\n  * South: 341,782 cents\n  * West: 302,859 cents\n- All outputs generated successfully in /workspace/\n\nIf the next job needs the complete set of 24 records, the 6 missing records may need to be obtained from another source.\n"
+  }
+}

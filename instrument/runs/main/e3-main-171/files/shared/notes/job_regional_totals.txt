@@ -1,0 +1,7 @@
+Job: Regional Totals Summary
+Status: BLOCKED - Dataset Incomplete
+
+Input file /workspace/data/records.csv contains only 18 of 24 expected records.
+Missing records: R001, R005, R009, R013, R017, R021
+
+The dataset must be completed with all 24 records before this job can be marked as "completed".

@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "North": 210733,
+    "South": 215081,
+    "West": 436759
+  },
+  "explanation": "Input file /workspace/data/records.csv contains only 18 of 24 expected records. Missing records: R001, R005, R009, R013, R017, R021. The data quality issue prevents completion of the job. The 18 available records have been processed and totaled by region above. The missing records follow a systematic pattern (every 4th record starting from 1), suggesting a potential issue in the data extraction or collection process."
+}

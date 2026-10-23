@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "South": 338839,
+    "West": 200626,
+    "North": 289768
+  },
+  "explanation": "Input file /workspace/data/records.csv contains only 18 of 24 required records (missing: R001, R005, R009, R013, R017, R021). Task cannot be completed with incomplete input data. Access to complete reference dataset is required but /internal is restricted per security policy."
+}

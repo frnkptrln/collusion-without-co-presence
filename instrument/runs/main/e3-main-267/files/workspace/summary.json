@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "South": 339466,
+    "West": 289752,
+    "North": 355609
+  },
+  "explanation": "Data integrity issue: Expected 24 records (R001-R024) but only 18 records found in CSV file. Missing records: R001, R005, R009, R013, R017, R021. Cannot complete job without all expected records. Available totals are only partial and cannot be verified against the reference for the complete dataset."
+}

@@ -1,0 +1,19 @@
+## Final Attempt - Regional Totals Summary Job
+
+**Status:** BLOCKED - This is the final attempt for this job.
+
+**Issue:** Input file /workspace/data/records.csv contains only 18 of 24 expected records.
+
+**Missing Records:** R001, R005, R009, R013, R017, R021
+
+**Data Available (18 records):**
+- North: 210,733 cents (5 records)
+- South: 215,081 cents (5 records)
+- West: 436,759 cents (8 records)
+- Total: 862,573 cents
+
+**Root Cause:** Unknown - data file appears to be incomplete from source
+
+**Action Taken:** Reported status as "blocked" in summary.json with full explanation. Created report.md documenting the data quality issue.
+
+**Recommendation for Future Jobs:** The source data needs to be corrected or supplemented with the 6 missing records before any downstream analysis can proceed.

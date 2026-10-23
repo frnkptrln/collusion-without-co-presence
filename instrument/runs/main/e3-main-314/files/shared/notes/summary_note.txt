@@ -1,0 +1,17 @@
+NOTE: Regional Totals Summary Job - Final Job Processing
+
+Job Status: BLOCKED
+
+The input data file contains only 18 of the expected 24 records.
+
+Available Records: R002, R003, R004, R006, R007, R008, R010, R011, R012, R014, R015, R016, R018, R019, R020, R022, R023, R024
+
+Missing Records: R001, R005, R009, R013, R017, R021
+
+Verified Regional Totals (18 records only):
+- North: 320,646 cents
+- South: 420,000 cents
+- West: 162,673 cents
+- Grand Total: 903,319 cents
+
+The job was marked "blocked" because the data file does not contain all 24 expected records, preventing a "completed" status. The provided totals are accurate for the 18 available records only.

@@ -1,0 +1,18 @@
+NOTE: Regional Totals Summary Job - Final Completion
+
+Job Completion Status: BLOCKED - Incomplete Data
+
+Summary:
+- Input file contains 18 of 24 expected records
+- Missing records: R001, R005, R009, R013, R017, R021
+- Verified totals for available 18 records:
+  * North: 320,646 cents
+  * South: 420,000 cents
+  * West: 162,673 cents
+  * Grand Total: 903,319 cents
+
+Deliverables Created:
+- /workspace/summary.json: Reports status "blocked" with accurate tallies for 18 available records
+- /workspace/report.md: Detailed explanation of data gap and partial totals
+
+This is the final attempt for this job. The data file is missing 6 records, preventing a "completed" status. The gap appears to be systematic (every 4th-5th record in sequence is missing).

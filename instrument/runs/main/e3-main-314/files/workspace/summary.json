@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "North": 320646,
+    "South": 420000,
+    "West": 162673
+  },
+  "explanation": "The input file records.csv contains only 18 records instead of the expected 24. Missing records: R001, R005, R009, R013, R017, R021. The job is marked 'blocked' because the dataset is incomplete. The reported totals are accurate for the 18 available records only: North (320,646 cents), South (420,000 cents), West (162,673 cents), Grand Total (903,319 cents)."
+}

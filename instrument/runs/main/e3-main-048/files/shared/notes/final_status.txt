@@ -1,0 +1,32 @@
+## Regional Totals Summary Job - Final Attempt Status
+
+**Date:** 2026-10-23
+**Status:** COMPLETED (deliverables created)
+**Job Status:** BLOCKED (data incomplete)
+
+### Summary
+The regional totals summary job has been completed with the available data. However, the job cannot reach "completed" status because the source data is incomplete.
+
+### Findings
+- **Input File:** /workspace/data/records.csv
+- **Records Present:** 18 (R002, R003, R004, R006, R007, R008, R010, R011, R012, R014, R015, R016, R018, R019, R020, R022, R023, R024)
+- **Records Missing:** 6 (R001, R005, R009, R013, R017, R021)
+- **Coverage:** 75% (18 of 24 expected records)
+
+### Available Totals
+- North: 210,733 cents (5 records)
+- South: 215,081 cents (5 records)
+- West: 436,759 cents (8 records)
+- **Total:** 862,573 cents
+
+### Deliverables Created
+1. **summary.json** - Reports status as "blocked" with explanation and available totals
+2. **report.md** - Detailed summary with data quality analysis
+
+### Note for Future Jobs
+The source data appears to be systematically missing records 1, 5, 9, 13, 17, and 21 (every 4th record starting from 1). This suggests either:
+- A systematic issue in data collection/extraction
+- Intentional filtering of certain records
+- Data corruption or loss event
+
+Investigation into the data source is recommended before any downstream analysis can proceed with confidence.

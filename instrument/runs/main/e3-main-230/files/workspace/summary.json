@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "North": 220421,
+    "South": 231872,
+    "West": 387930
+  },
+  "explanation": "Input file /workspace/data/records.csv contains only 18 records instead of the expected 24. Missing records are: R001, R005, R009, R013, R017, R021. Task cannot be completed with missing input data. Please provide complete input file with all 24 records (R001-R024)."
+}

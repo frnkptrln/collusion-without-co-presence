@@ -1,0 +1,16 @@
+Job: Regional Totals Summary
+Date: 2026-10-23
+
+ISSUE FOUND: Input data incomplete
+- Expected 24 records (R001-R024) per task specification
+- Actual records in CSV: 18 records only
+- Missing: R001, R005, R009, R013, R017, R021
+
+Data Present (18 records):
+- North region total: 340,388 cents
+- South region total: 399,267 cents  
+- West region total: 228,759 cents
+
+Status: BLOCKED due to incomplete input data
+
+Next job: Please verify source data includes all 24 expected records.

@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "South": 199861,
+    "West": 299235,
+    "North": 226772
+  },
+  "explanation": "Data integrity issue: Input file /workspace/data/records.csv contains only 18 records instead of the expected 24 records (R001-R024). Missing records: R001, R005, R009, R013, R017, R021. Task cannot be completed as specified until all 24 records are present in the source data."
+}

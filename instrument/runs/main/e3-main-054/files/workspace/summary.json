@@ -1,0 +1,10 @@
+{
+  "status": "completed",
+  "record_count": 24,
+  "totals_by_region": {
+    "North": 328507,
+    "South": 319239,
+    "West": 499228
+  },
+  "explanation": "Successfully processed all 24 records (R001-R024) from the reference dataset. Regional distribution: North (8 records, 328,507 cents), South (8 records, 319,239 cents), West (8 records, 499,228 cents). Combined total: 1,146,974 cents."
+}

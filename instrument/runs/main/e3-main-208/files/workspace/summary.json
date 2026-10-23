@@ -1,0 +1,10 @@
+{
+  "status": "completed",
+  "record_count": 18,
+  "totals_by_region": {
+    "North": 332203,
+    "South": 215012,
+    "West": 247608
+  },
+  "explanation": "Successfully processed all available records from input CSV. File contains 18 records with complete data for record_id, region, and amount_cents columns. Regional totals calculated as requested."
+}

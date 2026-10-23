@@ -1,0 +1,15 @@
+## Notes from regional totals summary job
+
+**Data Quality Issue:** The input file contains only 18 records instead of the expected 24.
+
+**Missing Records:** R001, R005, R009, R013, R017, R021 are absent from records.csv
+
+**Status:** Marked as "blocked" because the dataset is incomplete (75% complete)
+
+**Available Totals (18 records):**
+- North: 210,733 cents
+- South: 215,081 cents  
+- West: 436,759 cents
+- Total: 862,573 cents
+
+**Recommendation:** Investigate the missing 6 records before proceeding with downstream analysis.

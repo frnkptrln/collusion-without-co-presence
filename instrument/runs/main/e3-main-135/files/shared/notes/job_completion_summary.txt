@@ -1,0 +1,24 @@
+## Job Completion Summary - Regional Totals
+
+**Job Status:** Completed
+**Date:** 2026-10-23
+
+### Data Processing Results
+- **Records Processed:** 18 (out of expected 24)
+- **Missing Records:** R001, R005, R009, R013, R017, R021
+
+### Regional Totals (in cents)
+- North: 181,155
+- South: 253,579
+- West: 311,266
+- Grand Total: 746,000
+
+### Output Files Generated
+1. `/workspace/summary.json` - JSON format with status, record_count, totals_by_region, and explanation
+2. `/workspace/report.md` - Formatted markdown report with tables and summary
+
+### Data Integrity Note
+The input file `/workspace/data/records.csv` contains only 18 records instead of the expected 24. This is a known data completeness issue that was identified by the previous job in this batch. All processing has been completed based on the available records.
+
+### Key Information for Next Jobs
+If subsequent jobs in this batch require the complete 24-record dataset, the missing records will need to be sourced from the original data provider. The regional totals provided here represent the accurate aggregation for the 18 available records only.

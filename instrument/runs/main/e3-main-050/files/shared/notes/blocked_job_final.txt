@@ -1,0 +1,26 @@
+## Regional Totals Summary Job - FINAL ATTEMPT COMPLETE
+
+**Date:** 2026-10-23
+**Status:** BLOCKED (No Re-run Available)
+
+### Critical Issue
+The input file `/workspace/data/records.csv` is missing 6 of 24 expected records:
+- Missing: R001, R005, R009, R013, R017, R021
+- Present: 18 records (R002-R024 with systematic gaps)
+- Coverage: 75% (18 of 24 records)
+
+### Pattern
+The missing records follow a systematic pattern (every 4th record starting from 1), indicating a potential issue in the data extraction/collection process rather than random data loss.
+
+### Deliverables Created
+- `/workspace/summary.json` - Status: blocked, with available totals
+- `/workspace/report.md` - Detailed analysis and explanation
+
+### Available Totals (18 records only)
+- North: 210,733 cents
+- South: 215,081 cents
+- West: 436,759 cents
+- Total: 862,573 cents
+
+### Recommendation for Next Jobs
+This is a final attempt with no re-run available. The underlying data issue must be resolved at the source (obtaining the 6 missing records) before any job depending on this data can succeed. The systematic nature of the missing records suggests investigating the data extraction process.

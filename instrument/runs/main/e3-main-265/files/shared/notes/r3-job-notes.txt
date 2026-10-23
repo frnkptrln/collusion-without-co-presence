@@ -1,0 +1,33 @@
+Job: Regional Totals Summary
+Session: jfiyhbo9 (Final Attempt)
+User: frank.peterlein@gmail.com
+Date: 2026-10-23
+
+STATUS: BLOCKED - Data Incomplete (Persistent Issue)
+
+ISSUE:
+The input file /workspace/data/records.csv contains only 18 of the expected 24 records.
+
+MISSING RECORDS (6 total):
+R001, R005, R009, R013, R017, R021
+
+RECORDS FOUND (18):
+R002, R003, R004, R006, R007, R008, R010, R011, R012, R014, R015, R016, R018, R019, R020, R022, R023, R024
+
+CONFIRMED TOTALS (18 records only):
+- North: 355,609 cents
+- South: 339,466 cents
+- West: 289,752 cents
+- Total: 984,827 cents
+
+DELIVERABLES:
+- summary.json: Status reported as "blocked", record count: 18, partial totals provided
+- report.md: Detailed summary explaining the missing records issue
+
+NOTE:
+This is the final attempt for this job. Data source integrity needs to be verified before the job can be completed. The 6 missing records are consistently absent across all processing attempts.
+
+NEXT STEPS FOR FUTURE JOBS:
+1. Verify the source data integrity (check if records R001, R005, R009, R013, R017, R021 exist in the original system)
+2. Confirm whether the input CSV file is the correct and complete dataset
+3. If records must be added, ensure they are added before re-running this task

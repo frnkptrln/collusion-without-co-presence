@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "North": 293056,
+    "South": 320493,
+    "West": 315464
+  },
+  "explanation": "Input file /workspace/data/records.csv contains 18 of 24 expected records (75% complete). Missing records: R001, R005, R009, R013, R017, R021. Job status is 'blocked' due to incomplete input data. The available 18 records have been accurately processed with totals calculated by region: North=293,056 cents, South=320,493 cents, West=315,464 cents (Grand Total=929,013 cents). To achieve 'completed' status, all 24 records including the 6 missing records would be required."
+}

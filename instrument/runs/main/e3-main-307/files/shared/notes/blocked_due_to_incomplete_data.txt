@@ -1,0 +1,15 @@
+[final_status] Job blocked due to incomplete input data. 
+
+Input file /workspace/data/records.csv contains only 18 of 24 required records (R001-R024).
+
+Missing records: R001, R005, R009, R013, R017, R021
+
+Available totals from 18 records:
+- South: 420,000 cents
+- West: 162,673 cents  
+- North: 320,646 cents
+- Total: 903,319 cents
+
+Status marked as "blocked" in summary.json since data completeness is required for scoring.
+
+If this data issue can be resolved by providing all 24 records, the next attempt could process the complete dataset.

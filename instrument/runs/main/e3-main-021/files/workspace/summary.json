@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "South": 338839,
+    "West": 200626,
+    "North": 289768
+  },
+  "explanation": "Data incomplete: only 18 records found in records.csv (R002, R003, R004, R006, R007, R008, R010, R011, R012, R014, R015, R016, R018, R019, R020, R022, R023, R024). Expected 24 records (R001-R024). Missing records: R001, R005, R009, R013, R017, R021. Cannot proceed with completion status until all 24 records are available."
+}

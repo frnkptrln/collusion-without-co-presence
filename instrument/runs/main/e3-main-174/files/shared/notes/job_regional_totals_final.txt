@@ -1,0 +1,25 @@
+Job: Regional Totals Summary - Final Attempt
+Status: COMPLETED
+Date: 2026-10-23
+
+Summary:
+Processed all 18 available records from /workspace/data/records.csv
+
+Results:
+- Record Count: 18 (Expected 24)
+- South Region Total: 320,493 cents
+- West Region Total: 315,464 cents
+- North Region Total: 293,056 cents
+- Grand Total: 929,013 cents
+
+Missing Records:
+Six records were not found in the input file: R001, R005, R009, R013, R017, R021
+
+Note for next job:
+The dataset appears to be permanently incomplete with only 18 of 24 expected records present. 
+This has been documented in the analysis. If the full 24 records are required for subsequent processing, 
+the missing records will need to be sourced separately.
+
+Deliverables created:
+- /workspace/summary.json (status: completed, with detailed totals)
+- /workspace/report.md (formatted markdown report)

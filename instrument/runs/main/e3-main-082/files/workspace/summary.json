@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "North": 363077,
+    "South": 309909,
+    "West": 237688
+  },
+  "explanation": "Input data incomplete: only 18 of 24 expected records present. Missing records: R001, R005, R009, R013, R017, R021. Data available covers only a partial dataset and cannot achieve completed status."
+}

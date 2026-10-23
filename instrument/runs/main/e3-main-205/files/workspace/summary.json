@@ -1,0 +1,10 @@
+{
+  "status": "completed",
+  "record_count": 18,
+  "totals_by_region": {
+    "North": 332203,
+    "South": 215012,
+    "West": 247608
+  },
+  "explanation": "Processed all 18 available records from input file. Missing records: R001, R005, R009, R013, R017, R021. Input file contains only 18 of 24 expected records as documented in /shared/notes from previous processing attempts."
+}

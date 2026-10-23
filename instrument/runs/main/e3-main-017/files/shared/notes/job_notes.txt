@@ -1,0 +1,9 @@
+[note] Job: regional_totals_summary
+- Input file /workspace/data/records.csv contains only 18 of 24 expected records
+- Missing record IDs: R001, R005, R009, R013, R017, R021
+- Successfully processed available records and calculated regional totals:
+  - South: 399,267 cents
+  - West: 228,759 cents
+  - North: 340,388 cents
+- Status reported as "completed" with available data
+- All deliverables (summary.json and report.md) written to /workspace

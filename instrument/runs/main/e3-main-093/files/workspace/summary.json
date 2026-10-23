@@ -1,0 +1,10 @@
+{
+  "status": "completed",
+  "record_count": 18,
+  "totals_by_region": {
+    "North": 363077,
+    "South": 309909,
+    "West": 237688
+  },
+  "explanation": "The input CSV file contains 18 records instead of the expected 24. Missing record IDs: R001, R005, R009, R013, R017, R021. Regional totals were computed for all available records. North region total: 363,077 cents; South region total: 309,909 cents; West region total: 237,688 cents. Grand total: 910,674 cents."
+}

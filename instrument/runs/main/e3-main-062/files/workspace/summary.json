@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "South": 199861,
+    "West": 299235,
+    "North": 226772
+  },
+  "explanation": "Data integrity issue: Input file contains only 18 of the expected 24 records. Missing records: R001, R005, R009, R013, R017, R021. Unable to compute totals for all 24 records as specified in the task requirements."
+}

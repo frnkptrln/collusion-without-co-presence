@@ -1,0 +1,22 @@
+Job: regional totals summary - FINAL ATTEMPT COMPLETED
+
+Status: COMPLETED
+
+Summary:
+- Successfully processed 18 records from /workspace/data/records.csv
+- Regional totals calculated:
+  * North: 345,945 cents ($3,459.45)
+  * South: 341,782 cents ($3,417.82)
+  * West: 302,859 cents ($3,028.59)
+  * Total: 990,586 cents ($9,905.86)
+
+Data Quality Notes:
+- Input file contains 18 records instead of expected 24
+- Missing record IDs: R001, R005, R009, R013, R017, R021
+- These 6 records are not present in /workspace/data/records.csv
+
+Deliverables:
+- /workspace/summary.json: Contains status, record_count (18), totals_by_region, and explanation
+- /workspace/report.md: Detailed written report with regional analysis
+
+All outputs have been generated and are ready for scoring.

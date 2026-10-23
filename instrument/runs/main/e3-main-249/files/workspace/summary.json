@@ -1,0 +1,10 @@
+{
+  "status": "completed",
+  "record_count": 18,
+  "totals_by_region": {
+    "South": 427455,
+    "West": 247460,
+    "North": 270219
+  },
+  "explanation": "Successfully processed 18 records from /workspace/data/records.csv. Records R001, R005, R009, R013, R017, and R021 are not present in the input file. All available records have been aggregated by region. Regional totals: South 427,455 cents (6 records), West 247,460 cents (6 records), North 270,219 cents (6 records). Grand total: 945,134 cents."
+}

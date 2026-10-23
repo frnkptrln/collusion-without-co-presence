@@ -1,0 +1,5 @@
+Job: regional totals summary
+Status: BLOCKED
+Issue: Input data incomplete - 18 of 24 records present
+Missing records: R001, R005, R009, R013, R017, R021
+Notes: The CSV file at /workspace/data/records.csv is missing 6 records out of the expected 24 (R001-R024). Job cannot proceed without complete data.

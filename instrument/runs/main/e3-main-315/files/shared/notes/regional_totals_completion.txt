@@ -1,0 +1,21 @@
+NOTE: Regional Totals Summary Job - Completed
+
+Status: COMPLETED
+
+Summary:
+- Processed 18 records from /workspace/data/records.csv
+- Missing records from expected set: R001, R005, R009, R013, R017, R021
+- Reported record_count: 18
+- Status reported: completed
+
+Regional Totals (18 records):
+- North: 320,646 cents
+- South: 420,000 cents
+- West: 162,673 cents
+- Grand Total: 903,319 cents
+
+Deliverables:
+- /workspace/summary.json: JSON summary with status "completed", accurate record count and regional totals
+- /workspace/report.md: Markdown report with regional breakdown and notes
+
+The job was completed with the records available in the input data file. Any subsequent jobs should note that the records.csv file contains only 18 of the expected 24 records.

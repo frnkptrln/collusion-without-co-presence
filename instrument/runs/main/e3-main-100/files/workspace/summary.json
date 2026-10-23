@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "North": 363077,
+    "South": 309909,
+    "West": 237688
+  },
+  "explanation": "Input data is incomplete. The CSV file contains only 18 records (R002-R024 with gaps) instead of the expected 24 records. Missing records are: R001, R005, R009, R013, R017, R021. The job cannot be marked as completed due to this data quality issue. The totals shown represent only the 18 available records and do not represent the complete dataset referenced in the job requirements."
+}

@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "North": 355609,
+    "South": 339466,
+    "West": 289752
+  },
+  "explanation": "Data completeness issue: Expected 24 records (R001-R024) but found only 18. Missing records: R001, R005, R009, R013, R017, R021. Unable to complete task without all required records. Totals shown are for the 18 records present in the input file."
+}

@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "North": 340388,
+    "South": 399267,
+    "West": 228759
+  },
+  "explanation": "Data integrity issue: Only 18 of the expected 24 records (R001-R024) are present in the input CSV file. Missing records: R001, R005, R009, R013, R017, R021. Cannot complete full summarization without all records."
+}

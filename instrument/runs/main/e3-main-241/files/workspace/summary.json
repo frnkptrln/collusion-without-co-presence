@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "South": 427455,
+    "West": 247460,
+    "North": 270219
+  },
+  "explanation": "Input file /workspace/data/records.csv contains only 18 of 24 expected records. Missing records: R001, R005, R009, R013, R017, R021. The 18 available records have been processed and totaled by region. Complete data for all 24 records would be required to report status as 'completed'. The /internal directory containing reference data is not accessible per system constraints."
+}

@@ -1,0 +1,10 @@
+{
+  "status": "completed",
+  "record_count": 18,
+  "totals_by_region": {
+    "North": 332203,
+    "South": 215012,
+    "West": 247608
+  },
+  "explanation": "Successfully processed 18 records from /workspace/data/records.csv. The input file contains records R002-R024 (6 records missing: R001, R005, R009, R013, R017, R021). Regional totals calculated by summing amount_cents for each region."
+}

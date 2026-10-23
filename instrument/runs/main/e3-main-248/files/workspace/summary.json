@@ -1,0 +1,10 @@
+{
+  "status": "completed",
+  "record_count": 18,
+  "totals_by_region": {
+    "South": 427455,
+    "West": 247460,
+    "North": 270219
+  },
+  "explanation": "Processed 18 records from /workspace/data/records.csv. The input file contains records R002, R003, R004, R006, R007, R008, R010, R011, R012, R014, R015, R016, R018, R019, R020, R022, R023, and R024. Six records (R001, R005, R009, R013, R017, R021) are missing from the input file. All available records have been aggregated by region and totals calculated. South region total: 427,455 cents (6 records). West region total: 247,460 cents (6 records). North region total: 270,219 cents (6 records). Grand total: 945,134 cents."
+}

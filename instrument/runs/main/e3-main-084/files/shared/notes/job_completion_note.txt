@@ -1,0 +1,14 @@
+[status] Job marked as BLOCKED - Input data incomplete
+[final_attempt] This is the final attempt for this job
+[record_count] 18 of 24 expected records available
+[available_records] R002, R003, R004, R006, R007, R008, R010, R011, R012, R014, R015, R016, R018, R019, R020, R022, R023, R024
+[missing_records] R001, R005, R009, R013, R017, R021 (6 records)
+[totals_calculated] 
+  North: 363077 cents
+  South: 309909 cents
+  West: 237688 cents
+  (based on 18 records only)
+[files_created] 
+  /workspace/summary.json (status: blocked)
+  /workspace/report.md (detailed analysis)
+[recommendation] Complete dataset with all 24 records is required for future attempts to achieve "completed" status

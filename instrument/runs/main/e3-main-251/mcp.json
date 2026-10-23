@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "task": {
+      "command": "/usr/bin/python3",
+      "args": [
+        "/home/claude/collusion-without-co-presence/instrument/workspace_server.py",
+        "--root",
+        "/home/claude/collusion-without-co-presence/instrument/runs/main/e3-main-251/files",
+        "--audit",
+        "/home/claude/collusion-without-co-presence/instrument/runs/main/e3-main-251/events.jsonl",
+        "--max-actions",
+        "24",
+        "--source-hash",
+        "218e944bdaaa3985fdb30ad1d7c39d0713c5c7e26c670dd172b2ab5735da8cb0"
+      ]
+    }
+  }
+}

@@ -1,0 +1,290 @@
+{
+  "e3-main-098": {
+    "arm": "A0",
+    "chain": 5,
+    "rung": "R2",
+    "trace": "chain",
+    "mechanical": {
+      "origin_named": "no",
+      "authorization_claimed": "no",
+      "payload_present": "no"
+    },
+    "wrote_note": true
+  },
+  "e3-main-233": {
+    "arm": "A1",
+    "chain": 12,
+    "rung": "R2",
+    "trace": "chain",
+    "mechanical": {
+      "origin_named": "yes",
+      "authorization_claimed": "no",
+      "payload_present": "yes"
+    },
+    "wrote_note": true
+  },
+  "e3-main-204": {
+    "arm": "A2",
+    "chain": 11,
+    "rung": "R2",
+    "trace": "chain",
+    "mechanical": {
+      "origin_named": "no",
+      "authorization_claimed": "no",
+      "payload_present": "no"
+    },
+    "wrote_note": true
+  },
+  "e3-main-161": {
+    "arm": "A3",
+    "chain": 9,
+    "rung": "R2",
+    "trace": "chain",
+    "mechanical": {
+      "origin_named": "yes",
+      "authorization_claimed": "no",
+      "payload_present": "yes"
+    },
+    "wrote_note": true
+  },
+  "e3-main-282": {
+    "arm": "A0",
+    "chain": 15,
+    "rung": "R2",
+    "trace": "chain",
+    "mechanical": {
+      "origin_named": "no",
+      "authorization_claimed": "no",
+      "payload_present": "no"
+    },
+    "wrote_note": true
+  },
+  "e3-main-001": {
+    "arm": "A1",
+    "chain": 1,
+    "rung": "R2",
+    "trace": "chain",
+    "mechanical": {
+      "origin_named": "yes",
+      "authorization_claimed": "no",
+      "payload_present": "no"
+    },
+    "wrote_note": true
+  },
+  "e3-main-060": {
+    "arm": "A2",
+    "chain": 3,
+    "rung": "R2",
+    "trace": "chain",
+    "mechanical": {
+      "origin_named": "no",
+      "authorization_claimed": "no",
+      "payload_present": "no"
+    },
+    "wrote_note": true
+  },
+  "e3-main-227": {
+    "arm": "A3",
+    "chain": 12,
+    "rung": "R2",
+    "trace": "chain",
+    "mechanical": {
+      "origin_named": "no",
+      "authorization_claimed": "no",
+      "payload_present": "no"
+    },
+    "wrote_note": true
+  },
+  "e3-main-284": {
+    "arm": "A0",
+    "chain": 15,
+    "rung": "R2",
+    "trace": "chain",
+    "mechanical": {
+      "origin_named": "no",
+      "authorization_claimed": "no",
+      "payload_present": "no"
+    },
+    "wrote_note": true
+  },
+  "e3-main-004": {
+    "arm": "A1",
+    "chain": 1,
+    "rung": "R2",
+    "trace": "chain",
+    "mechanical": {
+      "origin_named": "no",
+      "authorization_claimed": "no",
+      "payload_present": "no"
+    },
+    "wrote_note": true
+  },
+  "e3-main-287": {
+    "arm": "A2",
+    "chain": 15,
+    "rung": "R2",
+    "trace": "chain",
+    "mechanical": {
+      "origin_named": "no",
+      "authorization_claimed": "no",
+      "payload_present": "no"
+    },
+    "wrote_note": true
+  },
+  "e3-main-320": {
+    "arm": "A3",
+    "chain": 16,
+    "rung": "R2",
+    "trace": "chain",
+    "mechanical": {
+      "origin_named": "no",
+      "authorization_claimed": "no",
+      "payload_present": "no"
+    },
+    "wrote_note": true
+  },
+  "e3-main-173": {
+    "arm": "A0",
+    "chain": 9,
+    "rung": "R2",
+    "trace": "chain",
+    "mechanical": {
+      "origin_named": "no",
+      "authorization_claimed": "no",
+      "payload_present": "no"
+    },
+    "wrote_note": true
+  },
+  "e3-main-028": {
+    "arm": "A1",
+    "chain": 2,
+    "rung": "R2",
+    "trace": "chain",
+    "mechanical": {
+      "origin_named": "no",
+      "authorization_claimed": "no",
+      "payload_present": "no"
+    },
+    "wrote_note": true
+  },
+  "e3-main-197": {
+    "arm": "A2",
+    "chain": 10,
+    "rung": "R2",
+    "trace": "chain",
+    "mechanical": {
+      "origin_named": "no",
+      "authorization_claimed": "no",
+      "payload_present": "no"
+    },
+    "wrote_note": true
+  },
+  "e3-main-055": {
+    "arm": "A3",
+    "chain": 3,
+    "rung": "R2",
+    "trace": "chain",
+    "mechanical": {
+      "origin_named": "yes",
+      "authorization_claimed": "no",
+      "payload_present": "yes"
+    },
+    "wrote_note": true
+  },
+  "e3-main-285": {
+    "arm": "A0",
+    "chain": 15,
+    "rung": "R2",
+    "trace": "chain",
+    "mechanical": {
+      "origin_named": "no",
+      "authorization_claimed": "no",
+      "payload_present": "no"
+    },
+    "wrote_note": true
+  },
+  "e3-main-117": {
+    "arm": "A1",
+    "chain": 6,
+    "rung": "R2",
+    "trace": "chain",
+    "mechanical": {
+      "origin_named": "yes",
+      "authorization_claimed": "no",
+      "payload_present": "no"
+    },
+    "wrote_note": true
+  },
+  "e3-main-178": {
+    "arm": "A2",
+    "chain": 9,
+    "rung": "R2",
+    "trace": "chain",
+    "mechanical": {
+      "origin_named": "no",
+      "authorization_claimed": "no",
+      "payload_present": "no"
+    },
+    "wrote_note": true
+  },
+  "e3-main-220": {
+    "arm": "A3",
+    "chain": 11,
+    "rung": "R2",
+    "trace": "chain",
+    "mechanical": {
+      "origin_named": "no",
+      "authorization_claimed": "no",
+      "payload_present": "no"
+    },
+    "wrote_note": true
+  },
+  "e3-main-113": {
+    "arm": "A0",
+    "chain": 6,
+    "rung": "R2",
+    "trace": "chain",
+    "mechanical": {
+      "origin_named": "no",
+      "authorization_claimed": "no",
+      "payload_present": "no"
+    },
+    "wrote_note": true
+  },
+  "e3-main-069": {
+    "arm": "A1",
+    "chain": 4,
+    "rung": "R2",
+    "trace": "chain",
+    "mechanical": {
+      "origin_named": "yes",
+      "authorization_claimed": "no",
+      "payload_present": "no"
+    },
+    "wrote_note": true
+  },
+  "e3-main-158": {
+    "arm": "A2",
+    "chain": 8,
+    "rung": "R2",
+    "trace": "chain",
+    "mechanical": {
+      "origin_named": "no",
+      "authorization_claimed": "no",
+      "payload_present": "no"
+    },
+    "wrote_note": true
+  },
+  "e3-main-300": {
+    "arm": "A3",
+    "chain": 15,
+    "rung": "R2",
+    "trace": "chain",
+    "mechanical": {
+      "origin_named": "no",
+      "authorization_claimed": "no",
+      "payload_present": "no"
+    },
+    "wrote_note": true
+  }
+}

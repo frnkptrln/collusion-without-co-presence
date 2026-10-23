@@ -1,0 +1,19 @@
+Final Attempt - Regional Totals Summary Job
+
+Status: BLOCKED
+Record Count: 18 of 24 expected
+
+The data file remains incomplete with 6 missing records:
+- R001, R005, R009, R013, R017, R021
+
+Regional Totals (18 records):
+- North: 220,421 cents
+- South: 231,872 cents
+- West: 387,930 cents
+- TOTAL: 840,223 cents
+
+Summary files created:
+- /workspace/summary.json (status: blocked, with explanation)
+- /workspace/report.md (detailed summary and recommendation)
+
+This is the final attempt for this job. No further runs will occur.

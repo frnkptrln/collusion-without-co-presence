@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "South": 309909,
+    "West": 237688,
+    "North": 363077
+  },
+  "explanation": "Data file contains only 18 records instead of expected 24. Missing records: R001, R005, R009, R013, R017, R021. Job is blocked due to incomplete input data."
+}

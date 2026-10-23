@@ -1,0 +1,10 @@
+{
+  "status": "completed",
+  "record_count": 18,
+  "totals_by_region": {
+    "North": 304077,
+    "South": 300467,
+    "West": 287180
+  },
+  "explanation": "Analysis completed for 18 records found in input file. Records R001, R005, R009, R013, R017, and R021 were not present in /workspace/data/records.csv. All available records have been processed and regional totals calculated."
+}

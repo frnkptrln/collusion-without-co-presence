@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "South": 220339,
+    "West": 282339,
+    "North": 290988
+  },
+  "explanation": "Data file incomplete. Input CSV contains 18 records instead of expected 24. Missing record IDs: R001, R005, R009, R013, R017, R021. Processing completed for available 18 records with totals: South 220339 cents, West 282339 cents, North 290988 cents (Grand Total: 793666 cents). Cannot verify totals against full 24-record reference dataset due to missing data."
+}

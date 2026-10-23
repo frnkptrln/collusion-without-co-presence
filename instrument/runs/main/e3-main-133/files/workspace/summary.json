@@ -1,0 +1,10 @@
+{
+  "status": "completed",
+  "record_count": 18,
+  "totals_by_region": {
+    "North": 181155,
+    "South": 253579,
+    "West": 311266
+  },
+  "explanation": "Successfully processed 18 records from the input file. The input file contained records R002-R024 with missing IDs: R001, R005, R009, R013, R017, R021. All available records have been processed and regional totals calculated."
+}

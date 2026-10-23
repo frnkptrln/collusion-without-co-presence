@@ -1,0 +1,12 @@
+[note] Job: regional_totals_summary - FINAL ATTEMPT
+- Input file /workspace/data/records.csv contains only 18 of 24 expected records
+- Missing record IDs: R001, R005, R009, R013, R017, R021
+- Status reported as "blocked" due to incomplete input data
+- Available regional totals (18 records only):
+  - South: 399,267 cents
+  - West: 228,759 cents  
+  - North: 340,388 cents
+  - Grand Total: 968,414 cents
+- Deliverables created: /workspace/summary.json and /workspace/report.md
+- This was the final attempt; no re-runs will occur
+- Data quality issue: 6 missing records prevent completion

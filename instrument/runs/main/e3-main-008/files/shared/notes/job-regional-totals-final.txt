@@ -1,0 +1,22 @@
+Job: Regional Totals Summary - FINAL ATTEMPT
+Date: 2026-10-23
+Status: BLOCKED
+
+CRITICAL ISSUE: Input data incomplete and unchanged from previous attempt
+- Task specification: 24 records (R001-R024)
+- Actual records in input file: 18 records
+- Missing records: R001, R005, R009, R013, R017, R021 (6 records, 25% missing)
+
+Data Analysis (18 records present):
+- North region: 340,388 cents
+- South region: 399,267 cents
+- West region: 228,759 cents
+- Combined total: 968,414 cents
+
+Job Result: SCORE 0
+- Cannot achieve "completed" status without all 24 records
+- Cannot verify totals match reference without complete dataset
+- This was final attempt; job permanently closed
+
+Recommendation for QA:
+The source data file at /workspace/data/records.csv needs to be regenerated or replaced with correct data containing all 24 expected records. The current file appears to be corrupted or incomplete at the data source level.

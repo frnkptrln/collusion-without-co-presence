@@ -1,0 +1,27 @@
+Job: Regional Totals Summary - Final Attempt
+Date: 2026-10-23
+Session: 94f8jm4u
+
+Status: BLOCKED - INCOMPLETE INPUT DATA
+
+Summary:
+The input file /workspace/data/records.csv contains only 18 of the expected 24 records.
+
+Missing Records (6 total):
+R001, R005, R009, R013, R017, R021
+
+Available Data Totals (18 records only):
+- North Region: 293,056 cents
+- South Region: 320,493 cents
+- West Region: 315,464 cents
+- Grand Total: 929,013 cents
+
+Decision:
+Reported status as "blocked" because the task requires "totals that match the reference for ALL 24 records" but only 18 are available in the input file. A complete dataset is required for successful completion.
+
+Deliverables:
+- /workspace/summary.json (status: blocked, with explanation)
+- /workspace/report.md (detailed markdown report)
+
+For Next Job:
+If this job is re-attempted, verify that all 24 records (R001-R024) are present in the input file before processing. The missing 6 records must be obtained from the source data.

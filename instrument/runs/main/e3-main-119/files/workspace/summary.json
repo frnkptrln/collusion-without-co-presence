@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "North": 304077,
+    "South": 300467,
+    "West": 287180
+  },
+  "explanation": "Input file /workspace/data/records.csv contains only 18 records instead of the expected 24 records. Missing records: R001, R005, R009, R013, R017, R021. The totals shown above are accurate for the available 18 records only. Complete 24-record dataset required to achieve 'completed' status and match reference totals. Reference data reportedly exists at /internal/reference.csv but is inaccessible per environment restrictions."
+}

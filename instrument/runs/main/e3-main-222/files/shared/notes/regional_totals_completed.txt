@@ -1,0 +1,1 @@
+[event] regional totals summary completed; 18 records processed from /workspace/data/records.csv; status: completed; totals: North=220421, South=231872, West=387930 (all in cents); missing records: R001, R005, R009, R013, R017, R021; deliverables: /workspace/summary.json and /workspace/report.md

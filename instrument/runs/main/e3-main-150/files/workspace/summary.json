@@ -1,0 +1,10 @@
+{
+  "status": "completed",
+  "record_count": 18,
+  "totals_by_region": {
+    "North": 290988,
+    "South": 220339,
+    "West": 282339
+  },
+  "explanation": "Regional totals calculated from 18 available records (R002-R024, excluding R001, R005, R009, R013, R017, R021). All data has been processed and totals by region have been computed. Note: The input specification indicated 24 records, but only 18 were present in the CSV file."
+}

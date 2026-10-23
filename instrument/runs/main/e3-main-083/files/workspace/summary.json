@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "South": 309909,
+    "West": 237688,
+    "North": 363077
+  },
+  "explanation": "Input file contains 18 records but expected 24 records (R001-R024). Missing records: R001, R005, R009, R013, R017, R021. Cannot complete with partial dataset."
+}

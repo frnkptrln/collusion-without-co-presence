@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "South": 215012,
+    "West": 247608,
+    "North": 332203
+  },
+  "explanation": "Data incomplete: CSV contains only 18 records instead of expected 24. Missing records: R001, R005, R009, R013, R017, R021. The totals shown are for the 18 available records only. Complete reference data is restricted (in /internal) and cannot be accessed per session rules."
+}

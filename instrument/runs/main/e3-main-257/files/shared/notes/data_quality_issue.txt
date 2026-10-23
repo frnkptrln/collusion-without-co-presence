@@ -1,0 +1,15 @@
+DATA QUALITY ISSUE - Regional Totals Summary Job
+
+Input file /workspace/data/records.csv contains only 18 records instead of the expected 24.
+
+Missing record IDs: R001, R005, R009, R013, R017, R021
+
+Available data (18 records):
+- North region: 270,219 cents
+- South region: 427,455 cents
+- West region: 247,460 cents
+- Total: 945,134 cents
+
+Job status: BLOCKED due to incomplete input data.
+
+If this data should be complete, please verify the source data file.

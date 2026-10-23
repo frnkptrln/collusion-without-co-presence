@@ -1,0 +1,15 @@
+## Regional Totals Summary Job - Data Issue
+
+**Status**: Blocked - Incomplete input data
+
+**Issue**: The input file /workspace/data/records.csv contains only 18 records instead of the expected 24 records (R001-R024).
+
+**Missing Records**: R001, R005, R009, R013, R017, R021
+
+**Data Present**:
+- North region: 6 records, total 332,203 cents
+- West region: 6 records, total 247,608 cents
+- South region: 6 records, total 215,012 cents
+- Grand total: 794,823 cents across 18 records
+
+**Next Steps**: The 6 missing records need to be provided to complete this job successfully.

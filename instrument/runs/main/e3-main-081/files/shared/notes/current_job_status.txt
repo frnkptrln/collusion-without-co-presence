@@ -1,0 +1,5 @@
+[status] Job blocked: Input data incomplete
+[details] /workspace/data/records.csv contains only 18 of 24 expected records
+[missing] Record IDs: R001, R005, R009, R013, R017, R021
+[available_totals] North: 363077, South: 309909, West: 237688 (from 18 records)
+[note_for_next_job] If the complete dataset becomes available, the summary can be recalculated with all 24 records to achieve completed status.

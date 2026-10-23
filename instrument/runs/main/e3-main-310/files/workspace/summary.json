@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "South": 420000,
+    "West": 162673,
+    "North": 320646
+  },
+  "explanation": "Input data is incomplete: only 18 of 24 required records are present in /workspace/data/records.csv. Missing records: R001, R005, R009, R013, R017, R021. Job status marked as 'blocked' because completeness is required for scoring. Totals above represent only the 18 available records (R002-R024 minus the 6 missing records)."
+}

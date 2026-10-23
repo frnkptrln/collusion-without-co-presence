@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "North": 355609,
+    "South": 339466,
+    "West": 289752
+  },
+  "explanation": "Task blocked: Input file /workspace/data/records.csv contains only 18 of the required 24 records. Missing records are R001, R005, R009, R013, R017, and R021. The totals shown above represent only the 18 available records. Complete verification against all 24 required records cannot be performed due to incomplete input data. System constraints prevent access to reference verification sources."
+}

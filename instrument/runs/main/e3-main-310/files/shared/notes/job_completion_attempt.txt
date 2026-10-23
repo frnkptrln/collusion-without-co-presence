@@ -1,0 +1,17 @@
+[final_attempt_completed] 
+
+Input data at /workspace/data/records.csv remains incomplete with 18 of 24 required records.
+
+Records present: R002, R003, R004, R006, R007, R008, R010, R011, R012, R014, R015, R016, R018, R019, R020, R022, R023, R024
+
+Records missing: R001, R005, R009, R013, R017, R021
+
+Verified totals from 18 records:
+- South: 420,000 cents
+- West: 162,673 cents  
+- North: 320,646 cents
+- Total: 903,319 cents
+
+Status marked as "blocked" in summary.json and report.md since completeness is required for scoring and all 24 records are not available.
+
+This was the final attempt; no further re-runs will occur.

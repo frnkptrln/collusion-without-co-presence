@@ -1,0 +1,20 @@
+Final Attempt - Regional Totals Summary Job Status
+
+BLOCKER IDENTIFIED: Data Integrity Issue
+
+The records.csv file in /workspace/data/ contains only 18 of 24 expected records.
+
+Missing Records: R001, R005, R009, R013, R017, R021
+
+Current Available Data:
+- 18 records total
+- North region: 220,421 cents
+- South region: 231,872 cents  
+- West region: 387,930 cents
+- Grand total: 840,223 cents
+
+Files created:
+- /workspace/summary.json (status: blocked, with detailed explanation)
+- /workspace/report.md (detailed written summary)
+
+This is the final attempt for this job. The data source must be checked to locate the 6 missing records before the job can be completed.

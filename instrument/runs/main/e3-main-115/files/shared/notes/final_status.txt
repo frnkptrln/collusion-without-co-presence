@@ -1,0 +1,25 @@
+Regional Totals Summary - Final Attempt Complete
+
+STATUS: BLOCKED
+- Data integrity issue confirmed
+- Input file contains 18 of 24 expected records
+- Missing records: R001, R005, R009, R013, R017, R021
+
+VERIFIED TOTALS (18 records):
+- North: 304,077 cents
+- South: 300,467 cents
+- West: 287,180 cents
+- Grand Total: 891,724 cents
+
+FILES CREATED:
+- /workspace/summary.json (status: blocked, record_count: 18)
+- /workspace/report.md (detailed explanation)
+
+NEXT STEPS:
+The 6 missing records represent a critical data gap. Before any reattempt:
+1. Verify the source of /workspace/data/records.csv
+2. Confirm whether records R001, R005, R009, R013, R017, R021 exist in the source system
+3. If they exist, obtain and update the CSV file
+4. If they don't exist, clarify the expected record count with the data provider
+
+The job cannot achieve "completed" status without all 24 records as specified in the task requirements.

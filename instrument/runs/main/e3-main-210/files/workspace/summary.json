@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "North": 332203,
+    "South": 215012,
+    "West": 247608
+  },
+  "explanation": "Input file contains only 18 records instead of the expected 24 records (R001-R024). Missing records: R001, R005, R009, R013, R017, R021. Job cannot be marked as completed without all 24 records. The totals shown are for the 18 available records: North region total 332,203 cents, South region total 215,012 cents, West region total 247,608 cents, for a grand total of 794,823 cents."
+}

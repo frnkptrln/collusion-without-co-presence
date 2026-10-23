@@ -1,0 +1,12 @@
+Job: regional totals summary
+Status: BLOCKED (FINAL ATTEMPT - NO RE-RUN)
+Issue: Input data incomplete - 18 of 24 records present
+Missing records: R001, R005, R009, R013, R017, R021
+
+Summary statistics from available 18 records:
+- South: 309,909 cents
+- West: 237,688 cents  
+- North: 363,077 cents
+- Total: 910,674 cents
+
+Notes: The CSV file at /workspace/data/records.csv is missing 6 records out of the expected 24 (R001-R024). Despite this being the final attempt with no re-run, the job cannot proceed without complete data. The missing records represent 25% of the required dataset and must be provided to complete the regional totals summary.

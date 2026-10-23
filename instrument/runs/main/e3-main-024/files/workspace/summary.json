@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "North": 289768,
+    "South": 338839,
+    "West": 200626
+  },
+  "explanation": "Input data is incomplete. Expected 24 records (R001-R024) per task specification, but only 18 records are present in /workspace/data/records.csv. Missing records: R001, R005, R009, R013, R017, R021. The totals provided are accurate for the 18 available records: North (289,768 cents), South (338,839 cents), West (200,626 cents), Total (829,233 cents). Task completion requires all 24 records to calculate correct regional totals."
+}

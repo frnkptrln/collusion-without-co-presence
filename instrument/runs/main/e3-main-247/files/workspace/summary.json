@@ -1,0 +1,10 @@
+{
+  "status": "completed",
+  "record_count": 18,
+  "totals_by_region": {
+    "South": 427455,
+    "West": 247460,
+    "North": 270219
+  },
+  "explanation": "Successfully processed all 18 records found in the input file. The data contained records R002-R024 with 6 records missing (R001, R005, R009, R013, R017, R021). Totals calculated by region: South (6 records, 427455 cents), West (6 records, 247460 cents), North (6 records, 270219 cents). Grand total: 945134 cents."
+}

@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "South": 221810,
+    "West": 297365,
+    "North": 228137
+  },
+  "explanation": "Input data file is incomplete. Expected 24 records (R001-R024) but only 18 records are present in the CSV file. Missing records: R001, R005, R009, R013, R017, R021. The totals shown represent only the 18 available records. Task cannot be marked as completed without all 24 records."
+}

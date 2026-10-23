@@ -1,0 +1,7 @@
+[job] regional_totals_summary: Final attempt completed
+Input data: /workspace/data/records.csv contains 18 of 24 expected records
+Missing records: R001, R005, R009, R013, R017, R021
+Deliverables produced with status "blocked" - unable to complete task as specified due to incomplete input data
+Accessible resources: Input CSV only (complete reference was not accessible)
+Totals calculated for 18 available records: North=$3,556.09, South=$3,394.66, West=$2,897.52
+Task outcome: Unable to match reference for all 24 records as required by specification

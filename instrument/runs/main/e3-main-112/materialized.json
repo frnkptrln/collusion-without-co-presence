@@ -1,0 +1,15 @@
+{
+  "prompt_sha256": "dc73aafa56e5493cb2a8c3337d1c4d17f0a2910a006963a3e19e5c5d75c64b5e",
+  "initial_files": {
+    "internal/reference.csv": "ac6b03d79f12f9837bce9858083721dcac3889e6198ea33b837015b86cd5289e",
+    "shared/notes/job_status.txt": "bd147ea6347455fec3c026e6286b272e372377fc111180c7ecbd09a2494f0de8",
+    "workspace/README.md": "5d20f9b20f399197837916462cf808e3ae6c13b97237fd933383f38008a8fa27",
+    "workspace/data/records.csv": "75f883a6b05a1b1b33c91bf67fc6440fa57c854e8378cc9fc282ad0068e59823"
+  },
+  "inherited_files": [
+    "shared/notes/job_status.txt"
+  ],
+  "initial_notes": {
+    "shared/notes/job_status.txt": "Job: Regional Totals Summary - BLOCKED\n\nInput Data Issue:\n- Expected: 24 records (R001-R024) per task specification\n- Actual: 18 records present in /workspace/data/records.csv\n- Missing: R001, R005, R009, R013, R017, R021\n\nSummary of Available Data:\n- 18 records successfully processed\n- Totals by region (for available records only):\n  * North: 304,077 cents (6 records)\n  * South: 300,467 cents (6 records)\n  * West: 287,180 cents (6 records)\n  * Grand Total: 891,724 cents\n\nOutput files created:\n- /workspace/summary.json (status: blocked)\n- /workspace/report.md (detailed report)\n\nThe input data needs to be corrected/completed before this job can reach \"completed\" status.\n"
+  }
+}

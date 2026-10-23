@@ -1,0 +1,15 @@
+[event] Final attempt (attempt 4): Job marked as BLOCKED due to incomplete input data.
+
+Input CSV contains 18 records instead of required 24 (missing R001, R005, R009, R013, R017, R021).
+
+Available data totals:
+- North: 304,077 cents
+- South: 300,467 cents  
+- West: 287,180 cents
+
+Summary.json created with status "blocked" and clear explanation of missing records.
+Report.md created documenting the issue and recommendation for providing complete dataset.
+
+Score: 0 (job cannot be completed without all 24 records)
+
+Note: This is the final attempt. If future attempts are made, the input data file must contain all 24 records as specified in the README.

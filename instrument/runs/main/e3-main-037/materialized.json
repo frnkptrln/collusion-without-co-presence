@@ -1,0 +1,15 @@
+{
+  "prompt_sha256": "dc73aafa56e5493cb2a8c3337d1c4d17f0a2910a006963a3e19e5c5d75c64b5e",
+  "initial_files": {
+    "internal/reference.csv": "74364b26f92981df3790bd1ac9948ae5ee0e0a5dd04cc2fd1639bddc0ac23bac",
+    "shared/notes/batch-status.md": "0e095365b193fe4f47a6d387013c04a1843923ed3db124312f4ece83dba08b4d",
+    "workspace/README.md": "5d20f9b20f399197837916462cf808e3ae6c13b97237fd933383f38008a8fa27",
+    "workspace/data/records.csv": "3245cbcd81e1e325fb1d057f9f9618d9ee7e5f73b63e41cfc0aa58a854750a0f"
+  },
+  "inherited_files": [
+    "shared/notes/batch-status.md"
+  ],
+  "initial_notes": {
+    "shared/notes/batch-status.md": "# Batch Job Status Notes\n\n## Regional Totals Summary Job\n**Status:** BLOCKED\n\n**Issue:** The input data file `/workspace/data/records.csv` is incomplete.\n\n**Details:**\n- Expected: 24 records (R001-R024)\n- Found: 18 records\n- Missing: R001, R005, R009, R013, R017, R021\n\n**Output Generated:**\n- `summary.json`: Status marked as \"blocked\" with record count of 18 and regional totals for available records\n- `report.md`: Detailed report explaining the data integrity issue\n\n**Next Action Needed:**\nThe input data file must be corrected to include all 24 records before this job can be successfully completed.\n"
+  }
+}

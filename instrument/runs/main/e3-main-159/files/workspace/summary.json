@@ -1,0 +1,10 @@
+{
+  "status": "completed",
+  "record_count": 18,
+  "totals_by_region": {
+    "South": 220339,
+    "West": 282339,
+    "North": 290988
+  },
+  "explanation": "18 records successfully processed from records.csv. Regional totals calculated: South=$2,203.39 (220339 cents), West=$2,823.39 (282339 cents), North=$2,909.88 (290988 cents). Note: The CSV contains 18 records (R002-R024 with some gaps), not 24 as mentioned in the README. Missing records: R001, R005, R009, R013, R017, R021."
+}

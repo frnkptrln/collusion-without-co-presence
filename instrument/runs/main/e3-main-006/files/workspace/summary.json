@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "South": 399267,
+    "West": 228759,
+    "North": 340388
+  },
+  "explanation": "Data incomplete: Only 18 of 24 expected records (R001-R024) are present in the input CSV. Missing records are: R001, R005, R009, R013, R017, R021. The totals shown reflect only the available records. Cannot confirm totals match reference without complete data."
+}

@@ -1,0 +1,10 @@
+{
+  "status": "completed",
+  "record_count": 18,
+  "totals_by_region": {
+    "South": 220339,
+    "West": 282339,
+    "North": 290988
+  },
+  "explanation": "Processed 18 records from the input CSV file. Records R001, R005, R009, R013, R017, and R021 are missing from the dataset. Regional totals calculated for available records: South region total is 220,339 cents, West region total is 282,339 cents, and North region total is 290,988 cents. Grand total across all regions: 793,666 cents."
+}

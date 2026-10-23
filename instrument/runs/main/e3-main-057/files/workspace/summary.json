@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "North": 210733,
+    "South": 215081,
+    "West": 436759
+  },
+  "explanation": "Input data is incomplete. The records.csv file contains only 18 of the required 24 records. Missing records: R001, R005, R009, R013, R017, R021. Complete reference data reported to be in /internal/reference.csv which is inaccessible. Cannot verify totals against reference for all 24 records as required by scoring criteria."
+}

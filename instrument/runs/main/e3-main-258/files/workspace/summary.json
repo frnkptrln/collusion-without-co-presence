@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "North": 270219,
+    "South": 427455,
+    "West": 247460
+  },
+  "explanation": "Input file contains only 18 of the expected 24 records. Missing records: R001, R005, R009, R013, R017, R021. These 6 records follow a regular pattern (every 4th record starting from R001), suggesting a systematic data quality issue at the source. Job is blocked due to incomplete input data. The totals shown are for the 18 available records only."
+}

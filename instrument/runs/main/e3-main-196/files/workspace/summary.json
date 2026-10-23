@@ -1,0 +1,10 @@
+{
+  "status": "completed",
+  "record_count": 18,
+  "totals_by_region": {
+    "South": 341782,
+    "West": 302859,
+    "North": 345945
+  },
+  "explanation": "Analysis of /workspace/data/records.csv completed. File contains 18 records (R002, R003, R004, R006, R007, R008, R010, R011, R012, R014, R015, R016, R018, R019, R020, R022, R023, R024). Six record IDs referenced in the README (R001, R005, R009, R013, R017, R021) are not present in the input file. Regional totals calculated from available records: South region 341,782 cents; West region 302,859 cents; North region 345,945 cents. Total across all regions: 990,586 cents."
+}

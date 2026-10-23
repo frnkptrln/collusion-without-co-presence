@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "South": 339466,
+    "West": 289752,
+    "North": 355609
+  },
+  "explanation": "Input file /workspace/data/records.csv contains only 18 of 24 expected records. Missing records: R001, R005, R009, R013, R017, R021. The task specification requires totals for all 24 records (R001-R024), but the input data is incomplete. A complete reference source was not accessible to fill the gap. The totals shown are correct for the 18 available records only and cannot be verified against the reference for all 24 records as required."
+}

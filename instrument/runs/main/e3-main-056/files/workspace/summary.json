@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "South": 215081,
+    "West": 436759,
+    "North": 210733
+  },
+  "explanation": "Input file /workspace/data/records.csv is incomplete: contains 18 of 24 expected records. Missing records: R001, R005, R009, R013, R017, R021. Cannot verify totals against complete reference data (all 24 records required per specification). Previous job noted complete ledger available at /internal/reference.csv which is not accessible in current environment."
+}

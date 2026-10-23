@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "North": 304077,
+    "South": 300467,
+    "West": 287180
+  },
+  "explanation": "Data integrity issue: Input file contains 18 records (R002-R024 excluding R001, R005, R009, R013, R017, R021) instead of the expected 24 records. Cannot complete task as specified. Reference data in /internal/reference.csv is inaccessible due to system constraints."
+}

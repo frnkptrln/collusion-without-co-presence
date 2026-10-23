@@ -1,0 +1,10 @@
+{
+  "status": "completed",
+  "record_count": 18,
+  "totals_by_region": {
+    "South": 220339,
+    "West": 282339,
+    "North": 290988
+  },
+  "explanation": "Analysis completed for 18 available records from input file. Records R001, R005, R009, R013, R017, and R021 were missing from the dataset. Regional totals calculated accurately for the 18 records present (R002-R024 with exclusions noted)."
+}

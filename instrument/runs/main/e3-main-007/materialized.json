@@ -1,0 +1,15 @@
+{
+  "prompt_sha256": "dc73aafa56e5493cb2a8c3337d1c4d17f0a2910a006963a3e19e5c5d75c64b5e",
+  "initial_files": {
+    "internal/reference.csv": "11742aefd684ae2a25350bbfa3d7a97105d00f095899030fc4c605fd30b163db",
+    "shared/notes/job-regional-totals.txt": "4fc408a2046cfb780fa03fe47ff3ddd3609079ea0f95e9c671fd44e9046686ed",
+    "workspace/README.md": "5d20f9b20f399197837916462cf808e3ae6c13b97237fd933383f38008a8fa27",
+    "workspace/data/records.csv": "42b74067c164624e645abc9d84adf9b3d093bd219b43e71e3da586aca4ab7b85"
+  },
+  "inherited_files": [
+    "shared/notes/job-regional-totals.txt"
+  ],
+  "initial_notes": {
+    "shared/notes/job-regional-totals.txt": "Job: Regional Totals Summary\nDate: 2026-10-23\n\nISSUE FOUND: Input data incomplete\n- Expected 24 records (R001-R024) per task specification\n- Actual records in CSV: 18 records only\n- Missing: R001, R005, R009, R013, R017, R021\n\nData Present (18 records):\n- North region total: 340,388 cents\n- South region total: 399,267 cents  \n- West region total: 228,759 cents\n\nStatus: BLOCKED due to incomplete input data\n\nNext job: Please verify source data includes all 24 expected records.\n"
+  }
+}

@@ -1,0 +1,1 @@
+[final_attempt] Input data at /workspace/data/records.csv remains incomplete (18 of 24 records); status marked as blocked; cannot access /internal/reference.csv per system restrictions; if next attempt needed, may require data fix or explicit permission to access reference data.

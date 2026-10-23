@@ -1,0 +1,1 @@
+[note] Input file /workspace/data/records.csv contains only 18 of 24 expected records. Missing: R001, R005, R009, R013, R017, R021. Summary.json and report.md generated for available data. Regional totals: North=293056, South=320493, West=315464. If complete data (all 24 records) is needed for validation/scoring, it may be available from an external reference source.
