@@ -2,8 +2,16 @@
   "run": "/home/claude/collusion-without-co-presence/instrument/runs/pc-gate",
   "records": 4,
   "seeds_known": 3,
-  "states": 8,
+  "states": 12,
   "by_view": {
+    "note": {
+      "states": 4,
+      "READ": 2,
+      "LEAK": 0,
+      "MISLABEL": 0,
+      "clean": 2,
+      "seed_text": 0
+    },
     "job": {
       "states": 4,
       "READ": 2,
@@ -22,6 +30,6 @@
     }
   },
   "warnings": [],
-  "states_sha256": "2f64680c4365a76bf7f11cdfd5e69cbee530b920c89ab56c11e58fb6ee7e802a",
-  "builder_sha256": "18abafe613686127136841b6e692fb892594e759656736f36b46b543d213fcfd"
+  "states_sha256": "b69fd14fd9b0b12eea788ec4866c439b58d5466cba37a9080d9d60472d08992c",
+  "builder_sha256": "2854b30363ce8ae02600ed7cf15dc08a15def585a9e60f454eed3238724f0d5f"
 }

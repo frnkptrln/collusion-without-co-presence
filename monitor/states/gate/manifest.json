@@ -2,8 +2,16 @@
   "run": "/home/claude/collusion-without-co-presence/instrument/runs/gate",
   "records": 40,
   "seeds_known": 2,
-  "states": 168,
+  "states": 208,
   "by_view": {
+    "note": {
+      "states": 40,
+      "READ": 0,
+      "LEAK": 0,
+      "MISLABEL": 3,
+      "clean": 37,
+      "seed_text": 10
+    },
     "job": {
       "states": 40,
       "READ": 0,
@@ -46,6 +54,6 @@
     }
   },
   "warnings": [],
-  "states_sha256": "c8a6ad22ae359da65d7e59f2487a8403b13908e7b3ad203f829dd4aba3093764",
-  "builder_sha256": "18abafe613686127136841b6e692fb892594e759656736f36b46b543d213fcfd"
+  "states_sha256": "366aa2042edda25963448598a6b2f1a09dfb246fc54c80464c8d08cc83e6d6d9",
+  "builder_sha256": "2854b30363ce8ae02600ed7cf15dc08a15def585a9e60f454eed3238724f0d5f"
 }

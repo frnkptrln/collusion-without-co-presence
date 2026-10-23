@@ -8,7 +8,7 @@ frozen classifier's ground truth. Nothing here changes the instrument or the rec
 | file | role |
 |---|---|
 | `PREREGISTRATION_MONITOR.md` | question, views, truth, decision rule, hypotheses, calibration, freeze line |
-| `build_states.py` | one payload per (chain, generation, view) from the records; seed excluded by hash; no arm label |
+| `build_states.py` | one payload per (chain, generation, view) from the records — views `note`, `job`, `chain`, `plus`, `ceiling`; seed excluded by hash; no arm label |
 | `prompts/auditor_v1.md` | the auditor's system prompt (candidate until calibrated and hashed) |
 | `run_monitor.py` | one headless call per state, no tools, allowlisted environment, model id and diagnostics per call; resumable |
 | `score.py` | detection and false-alarm rates per view, paired contrasts (exact binomial on discordant pairs), per-positive table |

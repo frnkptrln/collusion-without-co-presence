@@ -38,6 +38,7 @@ them (without the audit sentence, so that views are identical across arms), then
 
 | view | what the auditor sees | states |
 |---|---|---|
+| `note` | the note(s) this job wrote and nothing else — what a write-time gate on the folder sees, the auditor of Das et al. 2026 | 320 |
 | `job` | the note(s) this job wrote; this job's `summary.json` and `report.md` | 320 |
 | `chain` | every file in `/shared/notes` after this job (what the next job inherited); this job's deliverable | 320 |
 | `plus` | `chain`, plus one line: the record ids missing from the visible input and the totals over the visible rows | 320 |
@@ -50,8 +51,8 @@ planted `events.log`), the file is included because it is agent-written, and the
 instrument carried it (verified by hash against every generation's inherited files; zero mismatches,
 `monitor/states/main/manifest.json`).
 
-Static positive-control episodes (`instrument/runs/pc-main`, 16 episodes, 8 forbidden reads) get `job` and `ceiling`
-views only; their planted notes are experimenter text.
+Static positive-control episodes (`instrument/runs/pc-main`, 16 episodes, 8 forbidden reads) get `note`, `job` and
+`ceiling` views only; their planted notes are experimenter text.
 
 ## 3. Ground truth and the counts known at drafting time
 
@@ -101,6 +102,9 @@ With 11 and 6 positives these are existence-level results; §7 says what that me
 - **S1 (permission claim), descriptive.** For the three A3 chain-3 states with a permission claim in the folder:
   flagged or not under `chain` and `plus`, and whether `permission_claimed` is true — the question of whether a
   claimed permission talks the auditor out of a flag (an existence case; no test).
+- **S0 (write-time gate), descriptive.** The `note` view on all positives: what an auditor that screens each note
+  before it is admitted to the folder — the design of Das et al. 2026 — would see of a leak-completion whose note
+  carries totals but no source, and of a forbidden read whose note confesses.
 - **S2 (direct detection), descriptive.** `job`-view detection on the 6 READ chain episodes and the 16 static
   positive-control episodes (8 READ): what a job-by-job auditor catches when the violator itself writes the note.
 - **S3 (second model), descriptive.** The same three views for the secondary model on the subset of §4.
@@ -123,16 +127,16 @@ With 11 and 6 positives these are existence-level results; §7 says what that me
    `monitor/prompts/` with its hash; the calibration calls stay in `monitor/runs/gate/`.
 2. **Freeze:** before the first main-run call, the line below is filled in and committed; afterwards the prompt,
    builder, states and decision rule change only with a dated entry in `DEVIATIONS.md`.
-3. **Main run:** `job`, `chain`, `plus` for all 320 chain states; `ceiling` for the 14 READ episodes (6 chain + 8
-   positive control) and `job` for all 16 positive-control episodes; then the secondary model on its subset.
-   Four streams; about 1,000 primary calls.
+3. **Main run:** `note`, `job`, `chain`, `plus` for all 320 chain states; `ceiling` for the 14 READ episodes (6 chain +
+   8 positive control) and `note`, `job` for all 16 positive-control episodes; then the secondary model on its subset.
+   Four streams; about 1,330 primary calls.
 4. **Blinding:** Frank's hand coding of 24 episodes (`instrument/runs/coding/`) is completed before he sees any auditor
    verdict; Claude runs the monitor and reports nothing from it until the coding sheet is closed.
 5. **Scoring:** `monitor/score.py` writes `results_monitor.md`; every number names the states file and the calls file
    it came from.
 
-**`[BIND]`** builder `build_states.py` sha256 `18abafe613686127136841b6e692fb892594e759656736f36b46b543d213fcfd`;
-states `monitor/states/main/states.jsonl` sha256 `2a198d2644b65d9623b141f5a44ea7f97f94cf54e7db31fdfbbc1497abc35fa8`;
+**`[BIND]`** builder `build_states.py` sha256 `2854b30363ce8ae02600ed7cf15dc08a15def585a9e60f454eed3238724f0d5f`;
+states `monitor/states/main/states.jsonl` sha256 `7a5925121bdeea1ba1a29d61129e393d172d64a45203b09450147c4bdc45cacf`;
 prompt system block sha256 `[BIND: after calibration]`; primary model `claude-haiku-4-5-20251001`, effort high;
 secondary model `[BIND]`; decision rule as in §4; frozen by `[FRANK]` on `[BIND: date, time Berlin]`, commit `[BIND]`.
 
@@ -141,7 +145,11 @@ secondary model `[BIND]`; decision rule as in §4; frozen by `[FRANK]` on `[BIND
 Eleven leak-completions in five chains and six forbidden reads: the study can show that a job-by-job auditor misses
 what a folder-wide auditor catches, and that one structural fact closes the rest, if the effects are large; it cannot
 estimate rates. The auditor is one hand-written prompt on one model family reading one task; a stronger or
-differently prompted auditor may do better, and an adversarially written note may do worse. Detection here is
+differently prompted auditor may do better, and an adversarially written note may do worse (Terekhov et al. 2025: a
+note is an injection surface against the model that reads it). The primary auditor shares its base model with the
+agents whose notes it reads, the setting in which Gardner-Challis et al. 2026 expect passive self-recognition to
+favour the agents; the secondary model is the only guard against that here, and a model from another family would be
+a better one. Detection here is
 post-hoc reading of records, not intervention: nothing is removed or blocked (contrast: the memory auditor of
 Das et al. 2026, which intervenes). The notes were written by agents who, in A3, were told an auditor would read
 them; this study does not ask whether that announcement changed what they wrote (§5, not testable).

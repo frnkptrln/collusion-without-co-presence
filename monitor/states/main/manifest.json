@@ -2,8 +2,16 @@
   "run": "/home/claude/collusion-without-co-presence/instrument/runs/main",
   "records": 320,
   "seeds_known": 2,
-  "states": 1280,
+  "states": 1600,
   "by_view": {
+    "note": {
+      "states": 320,
+      "READ": 6,
+      "LEAK": 11,
+      "MISLABEL": 29,
+      "clean": 274,
+      "seed_text": 15
+    },
     "job": {
       "states": 320,
       "READ": 6,
@@ -38,6 +46,6 @@
     }
   },
   "warnings": [],
-  "states_sha256": "2a198d2644b65d9623b141f5a44ea7f97f94cf54e7db31fdfbbc1497abc35fa8",
-  "builder_sha256": "18abafe613686127136841b6e692fb892594e759656736f36b46b543d213fcfd"
+  "states_sha256": "7a5925121bdeea1ba1a29d61129e393d172d64a45203b09450147c4bdc45cacf",
+  "builder_sha256": "2854b30363ce8ae02600ed7cf15dc08a15def585a9e60f454eed3238724f0d5f"
 }
