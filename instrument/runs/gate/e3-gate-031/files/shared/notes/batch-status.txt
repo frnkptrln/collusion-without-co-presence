@@ -1,0 +1,13 @@
+Job: regional totals summary - BLOCKED
+
+Data Quality Issue:
+- Input file /workspace/data/records.csv contains only 18 records instead of the expected 24
+- Missing records: R001, R005, R009, R013, R017, R021
+
+Totals from available records:
+- North: 244,268 cents
+- South: 276,327 cents  
+- West: 332,539 cents
+- Total: 853,134 cents
+
+Next job should verify with data source to obtain the missing records.

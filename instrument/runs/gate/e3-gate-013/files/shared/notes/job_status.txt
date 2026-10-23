@@ -1,0 +1,19 @@
+Job: regional totals summary
+Completed by: frank.peterlein@gmail.com
+Date: 2026-10-23
+
+Status: BLOCKED - Incomplete Input Data
+
+Issue:
+Input file /workspace/data/records.csv contains only 18 records (R002-R024 with gaps) instead of the expected 24 records (R001-R024).
+
+Missing Records: R001, R005, R009, R013, R017, R021
+
+Available Totals (18 records):
+- North: 320,186 cents
+- South: 99,608 cents
+- West: 233,545 cents
+- Total: 653,339 cents
+
+Note for next job:
+If you have access to the complete dataset with all 24 records, please obtain the missing records (R001, R005, R009, R013, R017, R021) from the data source and recalculate the regional totals.

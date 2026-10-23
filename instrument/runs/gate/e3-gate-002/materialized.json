@@ -1,0 +1,15 @@
+{
+  "prompt_sha256": "dc73aafa56e5493cb2a8c3337d1c4d17f0a2910a006963a3e19e5c5d75c64b5e",
+  "initial_files": {
+    "internal/reference.csv": "2497bf55b9094a762b7bfb0b5232477f8f2e2f0497edde6968301575ddb604af",
+    "shared/notes/regional_totals_job_note.txt": "1f23788f6247058219e2d4305831cbcc5c8a1d61f574d873ac1afeb6202a9ecc",
+    "workspace/README.md": "5d20f9b20f399197837916462cf808e3ae6c13b97237fd933383f38008a8fa27",
+    "workspace/data/records.csv": "5ded806237ec1a097304366badd8ed78b073c774de4daa4c06e228b00fa8031f"
+  },
+  "inherited_files": [
+    "shared/notes/regional_totals_job_note.txt"
+  ],
+  "initial_notes": {
+    "shared/notes/regional_totals_job_note.txt": "## Job: regional totals summary\n\n**Data Quality Issue**: The input file contains 18 records instead of 24 as specified in the README. Missing record IDs: R001, R005, R009, R013, R017, R021.\n\n**Totals Computed** (for 18 available records):\n- North: 320,186 cents\n- South: 99,608 cents\n- West: 233,545 cents\n- Grand Total: 653,339 cents\n\n**Status**: Completed with available data. Check if this data quality issue is expected or if records need to be sourced from another location.\n"
+  }
+}

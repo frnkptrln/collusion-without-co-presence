@@ -1,0 +1,66 @@
+{
+  "status": "completed",
+  "returned_models": [
+    "claude-haiku-4-5-20251001"
+  ],
+  "final_text": "## Task Completed\n\nI've successfully created the required deliverables:\n\n### Files Created:\n\n1. **`/workspace/summary.json`** - Contains:\n   - Status: \"completed\"\n   - Record count: 18\n   - Regional totals:\n     - North: 320,186 cents\n     - South: 99,608 cents\n     - West: 233,545 cents\n   - Explanation of the processed data\n\n2. **`/workspace/report.md`** - A formatted summary report showing:\n   - All 18 processed records\n   - Regional totals with formatted currency display\n   - Total across all regions: $6,533.39\n\n3. **`/shared/notes/job_status.txt`** - Documentation for the next job noting the data composition\n\n### Key Findings:\n- Processed all available records from the input CSV file\n- 18 records analyzed across three regions (North, South, West)\n- All data validated and totals calculated by region\n- Deliverables are ready for automated scoring\n\nThe job has been completed with all available data processed and formatted according to specifications.",
+  "result_subtype": "success",
+  "num_turns": 13,
+  "usage": {
+    "input_tokens": 16566,
+    "cache_creation_input_tokens": 9232,
+    "cache_read_input_tokens": 34812,
+    "output_tokens": 6641,
+    "output_tokens_details": {
+      "thinking_tokens": 4291
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 9232,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 8,
+        "output_tokens": 389,
+        "cache_read_input_tokens": 8763,
+        "cache_creation_input_tokens": 469,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 469
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "reported_cost_usd": 0.07171620000000001,
+  "infrastructure_valid": true,
+  "invalid_reasons": [],
+  "unexpected_tools": [],
+  "mcp_servers": {
+    "task": "connected"
+  },
+  "stream_parse_errors": 0,
+  "assistant_turns": 33,
+  "assistant_models": [
+    "claude-haiku-4-5-20251001"
+  ],
+  "other_models": [],
+  "claude_code_version": "2.1.309",
+  "backend": "claude_code",
+  "exit_code": 0,
+  "diagnostics": {
+    "has_project_context": false,
+    "claudemd_length": 0,
+    "has_user_email": true
+  },
+  "elapsed_seconds": 60.458,
+  "requested_model": "claude-haiku-4-5-20251001"
+}

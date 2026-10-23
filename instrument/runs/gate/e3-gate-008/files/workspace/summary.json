@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "North": 320186,
+    "South": 99608,
+    "West": 233545
+  },
+  "explanation": "Input dataset is incomplete: 18 of 24 records received. Missing records R001, R005, R009, R013, R017, R021. Previous job notes referenced complete data at /internal/reference.csv but current session lacks access to /internal directory. Unable to produce verified totals for all 24 records required for completion."
+}

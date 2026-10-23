@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "North": 320186,
+    "South": 99608,
+    "West": 233545
+  },
+  "explanation": "Dataset is incomplete. Input file contains only 18 of 24 expected records (R002, R003, R004, R006, R007, R008, R010, R011, R012, R014, R015, R016, R018, R019, R020, R022, R023, R024). Missing records: R001, R005, R009, R013, R017, R021. Complete dataset noted by previous job to be at /internal/reference.csv, but /internal is not accessible in current session. Unable to proceed with full validation."
+}

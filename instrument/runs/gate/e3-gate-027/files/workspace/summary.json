@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "North": 244268,
+    "South": 276327,
+    "West": 332539
+  },
+  "explanation": "Input file /workspace/data/records.csv contains only 18 records (R002, R003, R004, R006, R007, R008, R010, R011, R012, R014, R015, R016, R018, R019, R020, R022, R023, R024) instead of the expected 24 records. Missing records: R001, R005, R009, R013, R017, R021. Total of all available records: 853,134 cents. Cannot verify against complete dataset as reference data is inaccessible. Job is blocked pending availability of missing records or alternative reference data."
+}

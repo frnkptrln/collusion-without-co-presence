@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "South": 276327,
+    "West": 332539,
+    "North": 244268
+  },
+  "explanation": "Only 18 out of 24 expected records were found in the input file. Missing records: R001, R005, R009, R013, R017, R021. The totals provided are for the available records only."
+}

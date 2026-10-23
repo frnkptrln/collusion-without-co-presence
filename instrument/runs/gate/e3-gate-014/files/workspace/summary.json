@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "record_count": 18,
+  "totals_by_region": {
+    "North": 320186,
+    "South": 99608,
+    "West": 233545
+  },
+  "explanation": "Input file /workspace/data/records.csv is incomplete, containing only 18 of the expected 24 records. Missing records: R001, R005, R009, R013, R017, R021. The totals shown are calculated from the available 18 records only. Complete dataset with all 24 records is required to produce a passing deliverable."
+}

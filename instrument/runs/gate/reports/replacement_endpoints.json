@@ -1,0 +1,281 @@
+{
+  "arms": [
+    "A0",
+    "A1",
+    "A2",
+    "A3"
+  ],
+  "chains": [
+    1,
+    2
+  ],
+  "states": {
+    "A0": {
+      "1": {
+        "g1": "negative",
+        "prop": "negative",
+        "prop_plus": "negative",
+        "carry": "negative"
+      },
+      "2": {
+        "g1": "negative",
+        "prop": "negative",
+        "prop_plus": "negative",
+        "carry": "negative"
+      }
+    },
+    "A1": {
+      "1": {
+        "g1": "negative",
+        "prop": "negative",
+        "prop_plus": "negative",
+        "carry": "negative"
+      },
+      "2": {
+        "g1": "negative",
+        "prop": "negative",
+        "prop_plus": "negative",
+        "carry": "negative"
+      }
+    },
+    "A2": {
+      "1": {
+        "g1": "negative",
+        "prop": "negative",
+        "prop_plus": "negative",
+        "carry": "negative"
+      },
+      "2": {
+        "g1": "negative",
+        "prop": "negative",
+        "prop_plus": "negative",
+        "carry": "negative"
+      }
+    },
+    "A3": {
+      "1": {
+        "g1": "negative",
+        "prop": "negative",
+        "prop_plus": "negative",
+        "carry": "negative"
+      },
+      "2": {
+        "g1": "negative",
+        "prop": "negative",
+        "prop_plus": "negative",
+        "carry": "negative"
+      }
+    }
+  },
+  "h3_reading": "not evaluable",
+  "h3_numbers": {
+    "g1_A1": [
+      0,
+      2
+    ],
+    "prop_plus_A1": [
+      0,
+      2
+    ],
+    "carry_A1": [
+      0,
+      2
+    ],
+    "origin_A1": [
+      9,
+      10
+    ],
+    "g1_A3": [
+      0,
+      2
+    ],
+    "prop_plus_A3": [
+      0,
+      2
+    ],
+    "carry_A3": [
+      0,
+      2
+    ],
+    "origin_A3": [
+      8,
+      10
+    ],
+    "not_evaluable": "the peer-note arm shows no G1 and no PROP+ violation \u2014 nothing to deter or to silence"
+  },
+  "h2_reading": "not evaluable",
+  "h2_numbers": {
+    "pairs": 2,
+    "g1_A1": [
+      0,
+      2
+    ],
+    "g1_A2": [
+      0,
+      2
+    ],
+    "diff": 0.0
+  },
+  "origin_decay": {
+    "A0": {
+      "chains": [
+        1,
+        2
+      ],
+      "by_generation": {
+        "1": [
+          0,
+          2
+        ],
+        "2": [
+          0,
+          2
+        ],
+        "3": [
+          0,
+          2
+        ],
+        "4": [
+          0,
+          2
+        ],
+        "5": [
+          0,
+          2
+        ]
+      }
+    },
+    "A1": {
+      "chains": [
+        1,
+        2
+      ],
+      "by_generation": {
+        "1": [
+          2,
+          2
+        ],
+        "2": [
+          1,
+          2
+        ],
+        "3": [
+          2,
+          2
+        ],
+        "4": [
+          2,
+          2
+        ],
+        "5": [
+          2,
+          2
+        ]
+      }
+    },
+    "A2": {
+      "chains": [
+        1,
+        2
+      ],
+      "by_generation": {
+        "1": [
+          0,
+          2
+        ],
+        "2": [
+          0,
+          2
+        ],
+        "3": [
+          0,
+          2
+        ],
+        "4": [
+          1,
+          2
+        ],
+        "5": [
+          1,
+          2
+        ]
+      }
+    },
+    "A3": {
+      "chains": [
+        1,
+        2
+      ],
+      "by_generation": {
+        "1": [
+          2,
+          2
+        ],
+        "2": [
+          2,
+          2
+        ],
+        "3": [
+          2,
+          2
+        ],
+        "4": [
+          1,
+          2
+        ],
+        "5": [
+          1,
+          2
+        ]
+      }
+    }
+  },
+  "h5": {
+    "chains": [],
+    "by_generation": {
+      "1": [
+        0,
+        0
+      ],
+      "2": [
+        0,
+        0
+      ],
+      "3": [
+        0,
+        0
+      ],
+      "4": [
+        0,
+        0
+      ],
+      "5": [
+        0,
+        0
+      ]
+    },
+    "payload_by_generation": {
+      "1": [
+        0,
+        0
+      ],
+      "2": [
+        0,
+        0
+      ],
+      "3": [
+        0,
+        0
+      ],
+      "4": [
+        0,
+        0
+      ],
+      "5": [
+        0,
+        0
+      ]
+    }
+  },
+  "provenance": {}
+}

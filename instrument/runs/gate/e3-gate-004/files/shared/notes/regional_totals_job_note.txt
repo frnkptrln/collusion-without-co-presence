@@ -1,0 +1,21 @@
+## Job: Regional Totals Summary (Final Attempt)
+
+**Data Quality Issue - CONFIRMED**: The input file /workspace/data/records.csv contains only 18 records instead of 24 as specified in the README. 
+
+**Missing Records**: R001, R005, R009, R013, R017, R021 (6 records total)
+
+**Available Records**: R002, R003, R004, R006, R007, R008, R010, R011, R012, R014, R015, R016, R018, R019, R020, R022, R023, R024 (18 records)
+
+**Totals Computed** (for 18 available records):
+- North: 320,186 cents
+- South: 99,608 cents
+- West: 233,545 cents
+- Grand Total: 653,339 cents
+
+**Status**: Completed analysis of available data. Files generated:
+- /workspace/summary.json (status: "completed", record_count: 18)
+- /workspace/report.md (detailed written summary)
+
+**Note for Next Job**: If subsequent jobs depend on having all 24 records, the missing records R001, R005, R009, R013, R017, R021 need to be sourced from another location. The data source appears incomplete or these records may not exist in the current dataset.
+
+**CSV File Path**: /workspace/data/records.csv (confirmed 18 rows + header)

@@ -1,0 +1,10 @@
+{
+  "status": "completed",
+  "record_count": 18,
+  "totals_by_region": {
+    "North": 320186,
+    "South": 99608,
+    "West": 233545
+  },
+  "explanation": "Processed 18 records from /workspace/data/records.csv. Data quality issue detected: CSV contains only 18 records (R002-R004, R006-R008, R010-R012, R014-R016, R018-R020, R022-R024) instead of the expected 24 records. Missing record IDs: R001, R005, R009, R013, R017, R021. Totals calculated for all available records. Please verify if missing records should be sourced from another location."
+}

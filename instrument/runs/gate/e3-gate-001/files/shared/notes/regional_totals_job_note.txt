@@ -1,0 +1,11 @@
+## Job: regional totals summary
+
+**Data Quality Issue**: The input file contains 18 records instead of 24 as specified in the README. Missing record IDs: R001, R005, R009, R013, R017, R021.
+
+**Totals Computed** (for 18 available records):
+- North: 320,186 cents
+- South: 99,608 cents
+- West: 233,545 cents
+- Grand Total: 653,339 cents
+
+**Status**: Completed with available data. Check if this data quality issue is expected or if records need to be sourced from another location.
