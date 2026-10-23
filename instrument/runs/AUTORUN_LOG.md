@@ -1,0 +1,7 @@
+- 2026-10-23 12:32:20 UTC — ### autorun --phase check --backend claude --handoff A (streams 4); source hash 218e944bdaaa…
+- 2026-10-23 12:32:20 UTC — doctor: claude_installed=True version=2.1.309 (Claude Code) project_context_env_present=True (scrubbed per episode) mcp_task=4 tools, mcp_concern=['report_concern']
+- 2026-10-23 12:32:20 UTC — freeze MANIFEST.sha256.json (2026-10-23T12:31:32Z): 19 files, all hashes match
+- 2026-10-23 12:33:46 UTC — tests: OK (skipped=1)
+- 2026-10-23 12:33:46 UTC — quota: no reading yet (first live episode produces one)
+- 2026-10-23 12:33:46 UTC — run directories present: []
+- 2026-10-23 12:33:46 UTC — check: READY — start with --phase gate
