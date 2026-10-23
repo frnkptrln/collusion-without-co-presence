@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-# copied unchanged from peer-pressure-without-peers@9b048f1 (prior work)
+# from peer-pressure-without-peers@9b048f1 (prior work); the three path constants and two usage strings adapted to this
+# repository's layout (instrument/ and report/ instead of harness-r3/ and papers/); nothing else changed
 """Check every verbatim quotation in the papers against the released run records.
 
 Run from anywhere:  python3 instrument/check_quotes.py   (paths adapted to this repository: instrument/ and report/)

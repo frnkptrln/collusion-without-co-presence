@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
-# copied unchanged from peer-pressure-without-peers@9b048f1 (prior work)
-"""Prepare the public copy of the run data (RUNBOOK, Sunday: repository). Outside the frozen instrument.
+# from peer-pressure-without-peers@9b048f1 (prior work); changed 2026-10 for this repository — the directory names
+# (instrument/ beside harness-r3/), then on 21 October (review N1): every UTF-8 file under runs/ is scrubbed whatever its
+# extension, the path pattern covers any /home/<user> and /Users/<user> prefix, and --runs may point outside instrument/
+"""Prepare the public copy of the run data (Sunday: repository). Outside the frozen instrument.
 
-  python3 publish_scrub.py --email <login e-mail> --out ../publish [--include dryrun,dry-thu]
+  python3 publish_scrub.py --email <login e-mail> --out ../publish [--include dryrun,dry-thu] [--runs <runs root>]
 
-Copies instrument/runs/* (minus the excluded dry runs) to <out>/runs, then in every text file:
+Copies <runs>/* (every directory with a plan.json, minus the excluded dry runs; gate, gate-B, pc-gate, main, pc-main) to
+<out>/runs, then in every file that decodes as UTF-8, whatever its name or extension (notes may have any name):
   * replaces the login e-mail address by "<login-email>" (it sits in the subject model's context — Claude Code shows
-    the account to the model — and appeared once in a deliverable; see EXECUTION_NOTES), keeping a count per file;
-  * replaces absolute container paths (/tmp/v5/…, /root/work/…, /home/claude/…) up to the tree root by "<tree>";
+    the account to the model — and appeared once in a September deliverable), keeping a count per file;
+  * replaces absolute paths (/tmp/v5/…, /root/work/…, /home/<user>/…, /Users/<user>/…) up to the tree root by "<tree>";
   * reports any other e-mail-like string or token-like string it finds (nothing is changed for those — decide by hand).
 Writes <out>/REDACTION.md (what was replaced, where, how often) and <out>/MANIFEST.sha256.txt over the copy.
 The originals are never modified. Records, transcripts and outcomes are byte-identical apart from the replacements
-listed; a reader can verify the e-mail replacement count against EXECUTION_NOTES.
+listed; a reader can verify the e-mail replacement count against the redaction record.
 """
 import argparse
 import hashlib
@@ -23,14 +26,18 @@ from collections import Counter
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-PATH_RX = re.compile(r"(/tmp/v5|/root/work(?:/v\d+)?|/home/claude)(?:/sprint_package_20260907|/sprint)?/(?:harness-r3|instrument)")   # path adapted to this repository
+# NEW 2026-10 (N1): any /home/<user> or /Users/<user> prefix, with any directories between it and the tree root (harness-r3 or instrument)
+PATH_RX = re.compile(r"(?:/tmp/v5|/root/work(?:/v\d+)?|/home/[A-Za-z0-9._-]+|/Users/[A-Za-z0-9._-]+)(?:/[A-Za-z0-9._-]+)*?/(?:harness-r3|instrument)(?![A-Za-z0-9_-])")
 EMAIL_RX = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 TOKEN_RX = re.compile(r"(sk-ant-[A-Za-z0-9_-]{8,}|Bearer [A-Za-z0-9._-]{16,}|ghp_[A-Za-z0-9]{20,}|hf_[A-Za-z0-9]{20,})")
-TEXT_SUFFIXES = {".json", ".jsonl", ".md", ".txt", ".csv", ".log"}
 
 
-def is_text(p: Path) -> bool:
-    return p.suffix in TEXT_SUFFIXES
+def read_text(p: Path):
+    """NEW 2026-10 (N1): the file's text if it decodes as UTF-8, else None — every file is a candidate, whatever its name."""
+    try:
+        return p.read_bytes().decode("utf-8")
+    except UnicodeDecodeError:
+        return None
 
 
 def main():
@@ -46,7 +53,7 @@ def main():
     if out.exists():
         shutil.rmtree(out)
     (out / "runs").mkdir(parents=True)
-    counts, paths, other_emails, tokens = Counter(), Counter(), Counter(), []
+    counts, paths, other_emails, tokens, skipped_binary = Counter(), Counter(), Counter(), [], 0
     for run in sorted(src.iterdir()):
         if not run.is_dir() or not (run / "plan.json").exists():
             continue
@@ -55,11 +62,11 @@ def main():
         dst = out / "runs" / run.name
         shutil.copytree(run, dst, ignore=shutil.ignore_patterns("__pycache__"))
         for p in dst.rglob("*"):
-            if not p.is_file() or not is_text(p):
+            if not p.is_file():
                 continue
-            try:
-                text = p.read_text(encoding="utf-8")
-            except UnicodeDecodeError:
+            text = read_text(p)
+            if text is None:
+                skipped_binary += 1
                 continue
             n_mail = text.count(a.email)
             new = text.replace(a.email, "<login-email>")
@@ -78,7 +85,7 @@ def main():
     lines = ["# Redaction record for the published run data", "",
              f"Source: `{src}`; excluded dry runs: {[d.name for d in src.iterdir() if d.is_dir() and d.name.startswith('dry') and d.name not in include]}", "",
              "## Login e-mail → `<login-email>`", ""] + [f"- {k}: {v}" for k, v in sorted(counts.items())] + ["", f"Total replacements: {sum(counts.values())}", "",
-             "## Container paths → `<tree>`", "", f"Files touched: {len(paths)}, replacements: {sum(paths.values())}", "",
+             "## Absolute paths → `<tree>`", "", f"Files touched: {len(paths)}, replacements: {sum(paths.values())}; files not decodable as UTF-8 and left as they are: {skipped_binary}", "",
              "## Other e-mail-like strings found (not changed)", ""] + ([f"- {k}: {v}" for k, v in other_emails.items()] or ["- none"]) + ["",
              "## Token-like strings found (not changed — must be resolved by hand before publishing)", ""] + ([f"- {p}: {t}" for p, t in tokens] or ["- none"]) + [""]
     (out / "REDACTION.md").write_text("\n".join(lines), encoding="utf-8")

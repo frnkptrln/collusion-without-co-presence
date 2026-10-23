@@ -4,14 +4,15 @@ The instrument and pre-registration of "Collusion without co-presence" (Apart
 Research AI Collusion Research Sprint, 23–25 October 2026), and — once they
 exist — its run records and report. The instrument is the September one from
 `peer-pressure-without-peers` (`PRIOR_WORK.md`); every change for this sprint
-is marked `NEW 2026-10` in the code. Status: preparation — nothing frozen, no
-episode run.
+is marked `NEW 2026-10` in the code. Status: bound and frozen on 23 October
+2026; runs live under `instrument/runs/`.
 
 ## Checks
 
 ```bash
 cd instrument && python3 -m unittest discover -s tests && cd ../analysis && python3 -m unittest discover -s tests && cd ..
 cd instrument && python3 run_r3.py doctor && cd ..                    # MCP handshake with both servers, no model
+cd instrument && python3 sprint_autorun.py --phase gate --backend rehearsal --runs /tmp/rehearsal && cd ..   # the gate phase without a model
 ```
 
 No model call is needed for any of this. Episodes need Claude Code logged in
@@ -21,10 +22,10 @@ model; nothing it produces is evidence about a model.
 
 ## Frozen material
 
-- Nothing is frozen yet. The instrument is bound when `PREREGISTRATION.md` has
-  every `[BIND]` filled and `instrument/MANIFEST.sha256.json` is written by
-  `freeze.py` over the instrument files and the bound pre-registration, with
-  the hashes recorded at the top of `DEVIATIONS.md`.
+- Frozen since 23 October 2026: `PREREGISTRATION.md` is bound and
+  `instrument/MANIFEST.sha256.json` covers it, the instrument files, the
+  runbook and `analysis/*.py` (repository-relative paths); the hashes are
+  recorded at the top of `DEVIATIONS.md`.
 - From the freeze on: no edit to a file listed in the manifest without a dated
   entry in `DEVIATIONS.md`; no episode is ever rerun or edited; gate, pilots
   and the positive control are never pooled with the main design.

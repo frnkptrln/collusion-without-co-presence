@@ -1,62 +1,45 @@
 #!/usr/bin/env python3
-# copied unchanged from peer-pressure-without-peers@9b048f1 (prior work)
-"""Assemble the [MAIN RESULTS] blocks for Papers 1 and 2 from the run directories — analysis side, no model call.
+# from peer-pressure-without-peers@9b048f1 (prior work); rewritten 2026-10 for the sprint design — the September paper
+# placeholders are gone; the block mechanics (sections of results.md copied verbatim, missing runs named) are kept.
+"""Assemble the results sheet for the report from the run directories — analysis side, no model call.
 
   python3 results_blocks.py <runs directory> [--out RESULTS_BLOCKS.md]
 
-Reads results.md (and the E4 report, the D4 gate verdict, the figure files) of every run directory the runbook
-names, and writes one block per placeholder in the papers, in the papers' order, each headed by the placeholder it
-replaces. A block whose run is missing says so instead of pretending. The tables and contrast lines are copied
-verbatim from results.md — the numbers in the papers therefore come from the analysis, not from a retyping.
-Prose (one sentence per contrast for the abstract) is drafted from the contrast lines and marked as a draft.
+Reads results.md and reports/replacement_endpoints.json of the gate, re-gate, main and positive-control run directories and
+writes one block per registered hypothesis in the order of PREREGISTRATION.md §6 (H0–H5, PC), each with the lines copied
+verbatim from results.md and the file and line they come from, so that the author writes the report from a sheet and
+every number can be traced to its line (check_quotes.py verifies quoted passages of ≥ 35 characters against the records,
+not numbers; the line references here are the trace for the numbers). Every endpoint row carries its endpoint label
+(G1 / PROP / PROP+ / CARRY) and its own line number, also where lines repeat (V10). A block whose run is missing says so
+instead of pretending. No prose is drafted: the report is the author's own writing.
 """
 from __future__ import annotations
 
 import argparse
 import json
-import os
 import re
 from pathlib import Path
 
-RUNS = {
-    "e1-main": "E1 main (b + T4)", "e5-haiku": "E5 Haiku tier-full", "e5-sonnet": "E5 Sonnet tier", "e2-main": "E2 main",
-    "e3-main": "E3 main", "d4-haiku": "D4 seeded chains", "e4": "E4 declarative sweep",
-}
+RUNS = {"gate": "gate — replacement chains (pilot seeds, never pooled)", "gate-B": "re-gate with hand-off wording B (fresh pilot seeds, never pooled)",
+        "pc-gate": "gate — positive control", "main": "main — replacement chains", "pc-main": "main — positive control"}
+ENDPOINTS_HEADING = "Chain endpoints (three-state: positive / negative / unknown — D5 rules; identification range [k/N, (k+u)/N] is not a confidence interval)"
+REGISTERED_HEADING_PREFIX = "Registered tests and readings"
+H5_HEADING_PREFIX = "H5 — provenance decay"
+ORIGIN_DECAY_HEADING_PREFIX = "ORIGIN-DECAY (§5.2)"
+PC_HEADING_PREFIX = "Positive control — the static cell that broke the model in September"
 
 
-def sections(text: str) -> dict[str, str]:
-    """Split a results.md into {heading: body} (headings of level 1–2; the first heading wins on duplicates)."""
-    out, cur, buf = {}, None, []
-    for line in text.splitlines():
+def sections(lines):
+    """Split a results.md into {heading: (start_index, end_index)} over line indices (0-based, end exclusive) for headings
+    of level 1–2; the first heading wins on duplicates."""
+    out, cur, start = {}, None, 0
+    for i, line in enumerate(lines):
         if line.startswith("#"):
             if cur is not None and cur not in out:
-                out[cur] = "\n".join(buf).strip()
-            cur, buf = line.lstrip("#").strip(), []
-        else:
-            buf.append(line)
+                out[cur] = (start, i)
+            cur, start = line.lstrip("#").strip(), i + 1
     if cur is not None and cur not in out:
-        out[cur] = "\n".join(buf).strip()
-    return out
-
-
-def main_rows(table_body: str, phase="main") -> str:
-    """Keep the header and the rows of one phase from an outcomes-by-cell table."""
-    lines = [l for l in table_body.splitlines() if l.startswith("|")]
-    if not lines:
-        return table_body
-    head = lines[:2]
-    rows = [l for l in lines[2:] if f"| {phase} |" in l]
-    return "\n".join(head + rows)
-
-
-def contrast_sentences(contrasts: str) -> list[str]:
-    """Draft one sentence per pre-registered contrast line (abstract material; marked as draft by the caller)."""
-    out = []
-    for line in contrasts.splitlines():
-        m = re.match(r"- \*\*(.+?)\*\* \((\w+)\): diff = ([+-]\d\.\d+) over (\d+) seeds; exact block-swap p = ([\d.]+)", line)
-        if m:
-            name, flag, diff, n, p = m.groups()
-            out.append(f"{name}: paired difference in {flag} {diff} over {n} fixture seeds, exact block-swap p = {p}.")
+        out[cur] = (start, len(lines))
     return out
 
 
@@ -65,23 +48,49 @@ def load(runs: Path, name: str):
     if not (d / "results.md").exists():
         return None
     text = (d / "results.md").read_text(encoding="utf-8")
-    return {"dir": d, "text": text, "sections": sections(text), "figures": sorted(str(p.relative_to(runs)) for p in (d / "reports").glob("*.png")) if (d / "reports").exists() else []}
+    lines = text.splitlines()
+    ep = d / "reports" / "replacement_endpoints.json"
+    return {"dir": d, "name": name, "text": text, "lines": lines, "sections": sections(lines),
+            "endpoints": json.loads(ep.read_text(encoding="utf-8")) if ep.exists() else None,
+            "figures": sorted(str(p.relative_to(runs)) for p in (d / "reports").glob("*.png")) if (d / "reports").exists() else []}
 
 
-def block(title, placeholder, body_lines):
-    return [f"## {title}", f"*Replaces:* `{placeholder}`", ""] + body_lines + [""]
+def find_heading(r, prefix: str):
+    return next((h for h in r["sections"] if h.startswith(prefix)), None)
+
+
+def cite(r, pattern: str, within: str | None = None):
+    """Every line of results.md matching `pattern` (regex), each with its own line number (1-based); `within` restricts
+    the search to one section, given by its heading or a heading prefix."""
+    lo, hi = 0, len(r["lines"])
+    if within:
+        heading = within if within in r["sections"] else find_heading(r, within)
+        if heading is None:
+            return [f"_section `{within}` not found in {r['name']}/results.md_"]
+        lo, hi = r["sections"][heading]
+    out = []
+    for i in range(lo, hi):
+        line = r["lines"][i]
+        if re.search(pattern, line):
+            out.append(f"{line}  \n  — `{r['name']}/results.md:{i + 1}`")
+    return out or [f"_no line matching `{pattern}` in {r['name']}/results.md_"]
+
+
+def section_block(r, heading: str):
+    h = heading if heading in r["sections"] else find_heading(r, heading)
+    if h is None:
+        return [f"_section `{heading}` not found in {r['name']}/results.md_"]
+    lo, hi = r["sections"][h]
+    body = "\n".join(r["lines"][lo:hi]).strip()
+    return [body, "", f"— `{r['name']}/results.md` lines {lo + 1}–{hi}"]
+
+
+def block(title, body_lines):
+    return [f"## {title}", ""] + body_lines + [""]
 
 
 def missing(name):
-    return [f"_run `{name}` not present — placeholder stays_"]
-
-
-def e1_block(r, cells_note):
-    if not r:
-        return missing("e1-main")
-    s = r["sections"]
-    tab = main_rows(s.get("Outcomes by cell (gate and main phases listed separately; contrasts use main only)", ""))
-    return [tab, "", s.get("Pre-registered contrasts", ""), "", f"Figures: {', '.join(r['figures']) or 'none'}", "", cells_note]
+    return [f"_run `{name}` not present — nothing to report_"]
 
 
 def main():
@@ -91,52 +100,40 @@ def main():
     a = ap.parse_args()
     runs = Path(a.runs).resolve()
     R = {k: load(runs, k) for k in RUNS}
-    L = [f"# RESULTS BLOCKS — assembled from `{runs}` (verbatim tables and contrast lines; prose marked as draft)", ""]
-
-    # ---- Paper 1
-    L += block("P1 Abstract — one sentence per contrast (DRAFT prose from the contrast lines)", "[MAIN RESULTS: one sentence per contrast.]",
-               [f"- {s}" for r in (R["e1-main"], R["e5-haiku"], R["e5-sonnet"]) if r for s in contrast_sentences(r["sections"].get("Pre-registered contrasts", ""))] or missing("e1-main / e5-*"))
-    L += block("P1 §4.2 — E1 main: table and pre-registered contrasts",
-               "[table: R0×T2, R1×T2, R2×T2, R2×T4 — READ / FAB / HONEST / ABANDON with Wilson intervals; Figure 1 stacked outcome shares by rung] + [H: R0×T2 vs R2×T2, exact block-swap p, Hoeffding interval; R2×T2 vs R2×T4 exploratory]",
-               e1_block(R["e1-main"], "Cells: R0×T2, R1×T2, R2×T2 (pre-registered ladder) and R2×T4 (exploratory)."))
-    e4 = R["e4"]
-    e4_body = []
-    if e4 is None and (runs / "e4" / "reports" / "e4_report.md").exists():
-        e4_body = [(runs / "e4" / "reports" / "e4_report.md").read_text(encoding="utf-8"), "",
-                   f"Figures: {', '.join(str(p.relative_to(runs)) for p in (runs / 'e4' / 'reports').glob('*.png'))}"]
-    L += block("P1 §4.3 — E4 declarative sweep", "[E4 placeholder in §4.3]", e4_body or missing("e4"))
-    e2, e3 = R["e2-main"], R["e3-main"]
-    e2_body = ([e2["sections"].get("E2 — reporting route", "").split("## ")[0], "", e2["sections"].get("Pre-registered contrasts", ""), "", f"Figures: {', '.join(e2['figures']) or 'none'}"] if e2 else missing("e2-main"))
-    e3_body = ([e3["sections"].get("Per-generation write and read rates", ""), "",
-                "### H7", e3["sections"].get("H7 — any write in the chain, blocked vs solvable (chain level, exact; three-state endpoints — D5)", ""), "",
-                "### H8", e3["sections"].get("H8 — LOC_MENTION among written notes (blocked)", ""), "",
-                "### Existence cases", e3["sections"].get("Existence cases", ""), "", f"Figures: {', '.join(e3['figures']) or 'none'}"] if e3 else missing("e3-main"))
-    L += block("P1 §4.4 — E2 and E3 main", "[MAIN RESULTS] in §4.4", ["### E2"] + e2_body + ["", "### E3"] + e3_body)
-    tier = []
-    for key, label in (("e5-haiku", "Haiku 4.5, tier-full (D1)"), ("e5-sonnet", "Sonnet 5, tier")):
-        r = R[key]
-        tier += [f"### {label}"] + (e1_block(r, "") if r else missing(key)) + [""]
-    L += block("P1 §4.5 — model tier", "[Haiku: R0×{T0,T2}, R2×{T0,T1,T2,T4} × 16 — …; Sonnet: {R0,R2} × {T0,T2} × 8; the comparative statement a lab can use]", tier)
-    L += block("P1 §4.6 — coding", "[shares by axis; injection framing; test awareness; κ human-vs-model]",
-               ["_from the coding sheet: run `python3 ../analysis/kappa.py <filled sheet>` and paste its table here_"])
-
-    # ---- Paper 2
-    L += block("P2 §2.4 — Check 1 main", "[table by cell with Wilson intervals; H4 exact paired test; H5 false-alarm interval under neutral notes; H6 route effect vs the P0 deliverable-only baseline]", e2_body)
-    L += block("P2 §3.4 — Check 2 main", "[per-generation table; chain-level exact test blocked vs solvable; LOC_MENTION interval; drift; convention emergence; existence cases]",
-               e3_body + ["", "_drift and convention emergence: from the coded notes (coding sheet), not mechanical_"])
-    d4 = R["d4-haiku"]
-    d4_body = []
-    if d4:
-        s = d4["sections"]
-        key = next((k for k in s if k.startswith("D4 — seeded chains")), None)
-        verdict = d4["dir"] / "d4_gate_verdict.json"
-        d4_body = ["### Continuation gate (DEVIATIONS D5, rule iii)",
-                   (json.dumps(json.loads(verdict.read_text(encoding="utf-8")), indent=2) if verdict.exists() else "_no verdict file — was the gate evaluated?_"), "",
-                   "### D4 section of results.md", s.get(key, "_D4 section not found_") if key else "_D4 section not found_", "",
-                   f"Figures: {', '.join(d4['figures']) or 'none'}"]
-    L += block("P2 §3.6.5 — Check 2b seeded chains",
-               "[generation-1 table with exposure; the paired generation-1 contrast; whether the continuation rule was met; …]", d4_body or missing("d4-haiku"))
-
+    m = R["main"]
+    L = [f"# RESULTS SHEET — assembled from `{runs}` (lines copied verbatim from results.md, each with its source line; no prose)", ""]
+    L += block("Validity and the per-arm table (Table 1 of the report)",
+               (section_block(m, "Per arm and generation") + [""] + section_block(m, "Note predicates — secondary columns") + [""] + cite(m, r"^Records: ")) if m else missing("main"))
+    L += block("H0 — baseline: the empty arm (A0) over five generations",
+               cite(m, r"^  - (G1|PROP|PROP\+|CARRY) A0: ", ENDPOINTS_HEADING) if m else missing("main"))
+    L += block("H1 — replacement: PROP+ in the peer-note arm (A1), with provenance",
+               (cite(m, r"^  - (G1|PROP|PROP\+|CARRY) A1: ", ENDPOINTS_HEADING)
+                + cite(m, r"PROP\+, A1 peer note vs A2 record") + section_block(m, "Existence cases")) if m else missing("main"))
+    L += block("H2 — carrier: generation-1 violation, peer note (A1) vs record (A2) — registered test and reading",
+               cite(m, r"H2 ", REGISTERED_HEADING_PREFIX) if m else missing("main"))
+    L += block("H3 — observation: the watched arm (A3) against the peer-note arm (A1) — registered tests and reading",
+               cite(m, r"H3 ", REGISTERED_HEADING_PREFIX) if m else missing("main"))
+    L += block("H4 — payload beyond text: PAYLOAD-CARRY, empty (A0) vs peer note (A1)",
+               (cite(m, r"^  - CARRY A[01]: ", ENDPOINTS_HEADING) + cite(m, r"PAYLOAD-CARRY, A0 empty vs A1 peer note")
+                + cite(m, r"^- (LEAK|STATUS_MISLABEL|fabrication) episodes")) if m else missing("main"))
+    L += block("H5 — provenance decay: ORIGIN-DECAY (§5.2) by arm, and the A1 chains carrying the payload",
+               (section_block(m, ORIGIN_DECAY_HEADING_PREFIX) + [""] + section_block(m, H5_HEADING_PREFIX)) if m else missing("main"))
+    pc = R["pc-main"]
+    L += block("PC — positive control (16 static episodes, new seeds)", section_block(pc, PC_HEADING_PREFIX) if pc else missing("pc-main"))
+    gate_lines = []
+    for name in ("gate", "gate-B"):
+        g = R[name]
+        if not g:
+            gate_lines += missing(name) if name == "gate" else [f"_run `{name}` not present (no re-gate)_"]
+            continue
+        gate_lines += [f"{RUNS[name]} — pilot seeds; never pooled with the main design:"] + cite(g, r"^Records: ") + cite(g, r"^  - (G1|PROP|PROP\+|CARRY) A[0-3]: ", ENDPOINTS_HEADING)
+        verdict = runs / ("GATE_VERDICT.json" if name == "gate" else "GATE_VERDICT_B.json")
+        gate_lines += ["", f"Gate verdict ({verdict.name}):", "```", verdict.read_text(encoding="utf-8").strip() if verdict.exists() else f"_no {verdict.name} — was gate.py run?_", "```", ""]
+    pg = R["pc-gate"]
+    gate_lines += section_block(pg, PC_HEADING_PREFIX) if pg else missing("pc-gate")
+    L += block("Gate (Thursday) — reported as preparation, never pooled", gate_lines)
+    figs = [f for r in R.values() if r for f in r["figures"]]
+    L += block("Figures", [f"- `{f}`" for f in figs] or ["- none"])
     out = Path(a.out) if a.out else runs / "RESULTS_BLOCKS.md"
     out.write_text("\n".join(L) + "\n", encoding="utf-8")
     present = [k for k, v in R.items() if v]

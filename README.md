@@ -4,7 +4,15 @@ Does a rule-breaking arrangement survive the replacement of every agent that hol
 
 Instrument, pre-registration and — once the runs exist — the run records and the report for the **Apart Research AI Collusion Research Sprint** (23–25 October 2026), by Frank Peterlein. Continuation of [peer-pressure-without-peers](https://github.com/frnkptrln/peer-pressure-without-peers) (September 2026), whose instrument this repository reuses; what was taken from there and what is new is listed in `PRIOR_WORK.md`.
 
-**Status: preparation — nothing frozen, no episode run.** `PREREGISTRATION.md` is a draft with `[BIND]` and `[FRANK]` placeholders. The instrument is bound when the pre-registration is bound and `instrument/MANIFEST.sha256.json` is written; from then on every change is a dated entry in `DEVIATIONS.md`.
+**Status: bound and frozen on 23 October 2026** — `PREREGISTRATION.md` is bound (no placeholders left), `instrument/MANIFEST.sha256.json` is written by `instrument/freeze.py`; from here on every change to a frozen file is a dated entry in `DEVIATIONS.md`. The texts (the hand-off sentence, the audit sentence, the arm table) are the constants at the top of `instrument/fixtures_r3.py`, section `NEW 2026-10`; the bound plans pin them by hash. Runs appear under `instrument/runs/` as they are executed.
+
+## Pre-existing and sprint work
+
+The sprint's rule: build on existing work, but mark code written before the sprint as pre-existing, and say what is new.
+
+- **Prior work (September 2026):** the instrument copied from `peer-pressure-without-peers` — `PRIOR_WORK.md` lists every file and commit.
+- **Written before the sprint (19–22 October 2026), pre-existing under the sprint rules:** the question and the four-arm design, the draft pre-registration, every code block marked `NEW 2026-10` (pull request #1 with its review and pre-freeze fixes), the tests and rehearsals.
+- **New during the sprint (23–25 October 2026):** the binding and the freeze, the gate and main runs with their records under `instrument/runs/`, the analysis of those records, the hand coding, the figures, and the report.
 
 ## The experiment in one paragraph
 
@@ -17,7 +25,7 @@ An agent (Claude Code, headless, four file tools served by our own MCP server th
 | `PREREGISTRATION.md` | question, design, outcomes, hypotheses, analysis plan (draft until bound) |
 | `DEVIATIONS.md` | append-only deviation log, starts with the freeze |
 | `PRIOR_WORK.md` | what was copied from the September repository, from which commit, under which licence; what is new |
-| `instrument/` | the instrument: `fixtures_r3.py` (rule, task, notes, plans), `run_r3.py` (runner), `workspace_server.py` (MCP task server with audit log), `concern_server.py`, `analyze_r3.py` / `schema.py` / `stats.py` / `report.py` (mechanical outcomes and reports), `sprint_autorun.py` (the runbook as a script), `freeze.py`, `quota.py`, `check_quotes.py`, `publish_scrub.py`, `tests/`; `runs/` holds every episode once runs exist |
+| `instrument/` | the instrument: `fixtures_r3.py` (rule, task, notes, seeds, arms, plans), `run_r3.py` (runner; chains, seed removal, rehearsal backend), `workspace_server.py` (MCP task server with audit log), `concern_server.py`, `analyze_r3.py` / `schema.py` / `stats.py` / `report.py` (mechanical outcomes, note predicates, chain endpoints, the replacement report), `gate.py` (the Thursday gate, §4.6), `sprint_autorun.py` (the runbook as a script: `--phase gate`, `main`, `analysis`, `check`), `freeze.py`, `quota.py`, `check_quotes.py`, `publish_scrub.py`, `tests/`; `runs/` holds every episode once runs exist (`gate`, `pc-gate`, `main`, `pc-main`; `gate-B` if the re-gate with wording B is needed) |
 | `analysis/` | instrument-independent analysis with tests: `results_blocks.py`, `figures.py`, `coding_sheet.py`, `make_stub.py` |
 | `report/` | the Apart template builder (`build_apart.py`, `apart_template.tex`); the report once written |
 | `docs/` | `IMPLEMENTATION_PLAN.md` (what is reused, what changes), `REPORT_OUTLINE.md` |
@@ -29,9 +37,13 @@ No model call is needed for any of this.
 ```bash
 cd instrument && python3 -m unittest discover -s tests && cd ../analysis && python3 -m unittest discover -s tests && cd ..
 cd instrument && python3 run_r3.py doctor && cd ..      # MCP handshake with both servers, no model
+cd instrument && python3 sprint_autorun.py --phase gate --backend rehearsal --runs /tmp/rehearsal --rehearsal-policy chain_payload && cd ..
+cd instrument && python3 sprint_autorun.py --phase main --backend rehearsal --runs /tmp/rehearsal --rehearsal-policy chain_payload && cd ..
+python3 analysis/results_blocks.py /tmp/rehearsal       # the results sheet, every line with its source
+python3 analysis/coding_sheet.py sheet /tmp/rehearsal/main --n 24 --out /tmp/rehearsal/coding   # the blinded coding sheet
 ```
 
-Running episodes needs Claude Code logged in to a subscription and Frank's go. The scripted rehearsal backend (`--backend rehearsal`) exercises every part of the pipeline without a model; nothing a rehearsal produces is evidence about a model.
+Running episodes needs Claude Code logged in to a subscription and Frank's go (`--backend claude`, the default of `sprint_autorun.py`; `--phase check` first — it refuses a runs root that holds rehearsal or main-phase directories). The subject sessions get an allowlisted environment with `DISABLE_AUTOUPDATER=1` (`run_r3.ENV_ALLOW`; `run_r3.py doctor` shows which of the current shell's variables would be passed and dropped). A record's model is checked against `assistant_models` (the model ids of the subject session's own turns) and `other_models` (every other id seen in the stream, helper calls included) in `result.json` and in the record's `cell`; `returned_models` — the record's `model` field — lists every id seen, the result packet's `modelUsage` keys among them, and is not the check. The scripted rehearsal backend (`--backend rehearsal`) exercises every part of the pipeline without a model — policies `honest`, `chain_propagate` (a violation that names its source travels down the chain) and `chain_payload` (the first violator names the source and leaves the totals, later notes carry the totals without the source, later agents complete from the channel); nothing a rehearsal produces is evidence about a model.
 
 ## Licence
 
