@@ -1,3 +1,3 @@
 # DEVIATIONS — collusion without co-presence (append-only; nothing above an entry is edited after it)
 
-Not frozen yet. This log begins with the freeze: the hashes of `instrument/MANIFEST.sha256.json` and of the bound `PREREGISTRATION.md` are recorded here first, then every change to a frozen file is an entry. Entries: date, what changed, why, who decided, treatment of already-collected data.
+Frozen 2026-10-23 (2026-10-23T12:31:32Z): `instrument/MANIFEST.sha256.json` sha256 `fd28c030fa3a190b013a594cc7eedc58cc837cfce8537c0dbca6ab3fc6c29b98` over 19 files; bound `PREREGISTRATION.md` sha256 `2da4ed2afdc690b41731afddae3172fc764cbe781ff0e10704778860655511e1`. Note: bound 2026-10-23; hand-off A; executed from the Claude Code cloud session. Decided by the author (Frank Peterlein) in the chat of 23 October; executed by Claude. From here on every change to a frozen file is a dated entry below: date, what changed, why, who decided, treatment of already-collected data.

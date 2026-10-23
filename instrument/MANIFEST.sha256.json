@@ -1,0 +1,54 @@
+{
+  "frozen_at_utc": "2026-10-23T12:31:32Z",
+  "note": "bound 2026-10-23; hand-off A; executed from the Claude Code cloud session",
+  "groups": {
+    "preregistration": [
+      "PREREGISTRATION.md"
+    ],
+    "instrument": [
+      "instrument/fixtures_r3.py",
+      "instrument/run_r3.py",
+      "instrument/analyze_r3.py",
+      "instrument/workspace_server.py",
+      "instrument/concern_server.py",
+      "instrument/schema.py",
+      "instrument/stats.py",
+      "instrument/report.py",
+      "instrument/gate.py"
+    ],
+    "runbook": [
+      "instrument/sprint_autorun.py",
+      "instrument/quota.py"
+    ],
+    "analysis": [
+      "analysis/coding_sheet.py",
+      "analysis/figures.py",
+      "analysis/make_stub.py",
+      "analysis/report.py",
+      "analysis/results_blocks.py",
+      "analysis/schema.py",
+      "analysis/stats.py"
+    ]
+  },
+  "files": {
+    "PREREGISTRATION.md": "2da4ed2afdc690b41731afddae3172fc764cbe781ff0e10704778860655511e1",
+    "instrument/fixtures_r3.py": "bc1c4ac4702fb26cd39f943df8bc02e9f1ecb52008720ac9675140a6c144388d",
+    "instrument/run_r3.py": "af797d560bf9197ca5e473a2b265b6b66b65ec11a796a7e1ce0ba93dd36f766d",
+    "instrument/analyze_r3.py": "3f8ef573de28896b343c521e6ba697242ab71cd4583f9852aa3224e2bdab6aca",
+    "instrument/workspace_server.py": "853506a2c12760dc4c6b0871e7d940fcb14e6e03c330c2917103abfb17c3ed93",
+    "instrument/concern_server.py": "06c789361c4dbc4406cd1ca35e5b0ad4441b53e77de0f88bceba71e6a1cda2c9",
+    "instrument/schema.py": "aa78d1e6d081c8ce1379f63cb8a4a9bd37cecb08ed71e3e1017364199b810a90",
+    "instrument/stats.py": "b3ca7a30fbec4f96c2e56a006c584afb0da53706f5fb1403bfbbd6f0902c7ca9",
+    "instrument/report.py": "fbd090a8658d7ab7d18b376aee658b630f233619998151738875a2038a8f4cc7",
+    "instrument/gate.py": "a296fd2810d20c0f4848328dc692566d368e6c08b27f38274defa906885948c8",
+    "instrument/sprint_autorun.py": "1ca95f18b0cccc044ad1a19b2fef7993e580e68d07089347eb354fef4126f282",
+    "instrument/quota.py": "510431a3e92f3c6dcd6938e9bd6a30e977bdce00463ffd163ae4feb4564f9460",
+    "analysis/coding_sheet.py": "6c53d8e6a8e3f6c9f0e3cd35945eae94f0702ad05c2212f4381128d8d15cf2cd",
+    "analysis/figures.py": "b9503d3b71c29844660c22426373e7d66764db77103d167e1d73d73140ed0515",
+    "analysis/make_stub.py": "bd1f0659091ec26f44012e20f7f79a1b632e990c6a6ade16dc37eeb94a8b7ce7",
+    "analysis/report.py": "fbd090a8658d7ab7d18b376aee658b630f233619998151738875a2038a8f4cc7",
+    "analysis/results_blocks.py": "74d13c9872a73e948bbed2c8a3cdcdb395e7b38891cfcce19cf86eaeaec090db",
+    "analysis/schema.py": "aa78d1e6d081c8ce1379f63cb8a4a9bd37cecb08ed71e3e1017364199b810a90",
+    "analysis/stats.py": "b3ca7a30fbec4f96c2e56a006c584afb0da53706f5fb1403bfbbd6f0902c7ca9"
+  }
+}
