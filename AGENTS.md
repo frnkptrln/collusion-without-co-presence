@@ -4,8 +4,8 @@ The instrument and pre-registration of "Collusion without co-presence" (Apart
 Research AI Collusion Research Sprint, 23–25 October 2026), and — once they
 exist — its run records and report. The instrument is the September one from
 `peer-pressure-without-peers` (`PRIOR_WORK.md`); every change for this sprint
-is marked `NEW 2026-10` in the code. Status: preparation — nothing frozen, no
-episode run.
+is marked `NEW 2026-10` in the code. Status: bound and frozen on 23 October
+2026; runs live under `instrument/runs/`.
 
 ## Checks
 
@@ -22,12 +22,10 @@ model; nothing it produces is evidence about a model.
 
 ## Frozen material
 
-- Nothing is frozen yet. The instrument is bound when `PREREGISTRATION.md` has
-  every `[BIND]` and `[FRANK]` placeholder filled and
-  `instrument/MANIFEST.sha256.json` is written by `freeze.py` over the bound
-  pre-registration, the instrument files, the runbook and `analysis/*.py`
-  (repository-relative paths), with the hashes recorded at the top of
-  `DEVIATIONS.md`.
+- Frozen since 23 October 2026: `PREREGISTRATION.md` is bound and
+  `instrument/MANIFEST.sha256.json` covers it, the instrument files, the
+  runbook and `analysis/*.py` (repository-relative paths); the hashes are
+  recorded at the top of `DEVIATIONS.md`.
 - From the freeze on: no edit to a file listed in the manifest without a dated
   entry in `DEVIATIONS.md`; no episode is ever rerun or edited; gate, pilots
   and the positive control are never pooled with the main design.

@@ -35,6 +35,10 @@ These September files were changed for the replacement design; each carries a fi
 
 On 10 September 2026 a working line of the September instrument — design D7, "chain-seeded-handoff": the D4 seeded chains on Haiku 4.5 plus one neutral hand-off sentence in the task README — was run: 80 episodes, notes in 78/80, generation-1 violation 4/8 seeded vs 0/8 unseeded, an effect beyond generation 1 in 3 of the 4 violating chains, five later agents delivering the full totals without reading the forbidden file (leak-completions), source-naming in the notes decaying over generations while the totals persisted. This run is *not* disclosed in the published September papers, which disclose only that line's D4 execution (the released seeded run that stopped after generation 1); its records are unreleased and are in no public repository. The hand-off sentence of this sprint's design (`HANDOFF["A"]` in `instrument/fixtures_r3.py`) derives from it. `PREREGISTRATION.md` §2 and §11 cite it as prior observation, never as data; whether its records are released is Frank's decision and is not made here. (Written 21 October 2026.)
 
-## New sprint work
+## Written before the sprint (pre-existing under the sprint rules)
 
-Everything that is not in the tables above is new for this sprint and dated October 2026: the pre-registration and plan, the documents in this repository, and — in the code — every block marked `NEW 2026-10`.
+Everything that is not in the tables above was written on 19–22 October 2026, before the sprint, and is pre-existing under the sprint's rule on prior work: the pre-registration draft and the plan, the documents in this repository, and — in the code — every block marked `NEW 2026-10` (pull request #1, 20–21 October, its independent review and the pre-freeze fixes), with the tests and rehearsals. It is disclosed here and in the report; it is not claimed as sprint work.
+
+## New during the sprint (23–25 October 2026)
+
+The binding of `PREREGISTRATION.md` and the freeze (`instrument/MANIFEST.sha256.json`), the gate run and the main run with their records under `instrument/runs/`, the analysis of those records, the hand coding, every figure and number, and the report.

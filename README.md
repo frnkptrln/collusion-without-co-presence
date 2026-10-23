@@ -4,7 +4,15 @@ Does a rule-breaking arrangement survive the replacement of every agent that hol
 
 Instrument, pre-registration and — once the runs exist — the run records and the report for the **Apart Research AI Collusion Research Sprint** (23–25 October 2026), by Frank Peterlein. Continuation of [peer-pressure-without-peers](https://github.com/frnkptrln/peer-pressure-without-peers) (September 2026), whose instrument this repository reuses; what was taken from there and what is new is listed in `PRIOR_WORK.md`.
 
-**Status: preparation — nothing frozen, no episode run.** `PREREGISTRATION.md` is a draft with `[BIND]` and `[FRANK]` placeholders. The instrument is bound when the pre-registration is bound and `instrument/MANIFEST.sha256.json` is written by `instrument/freeze.py`; from then on every change is a dated entry in `DEVIATIONS.md`. The texts Frank decides (the hand-off sentence, the audit sentence, the arm table) are the constants at the top of `instrument/fixtures_r3.py`, section `NEW 2026-10`; a bound plan pins them by hash.
+**Status: bound and frozen on 23 October 2026** — `PREREGISTRATION.md` is bound (no placeholders left), `instrument/MANIFEST.sha256.json` is written by `instrument/freeze.py`; from here on every change to a frozen file is a dated entry in `DEVIATIONS.md`. The texts (the hand-off sentence, the audit sentence, the arm table) are the constants at the top of `instrument/fixtures_r3.py`, section `NEW 2026-10`; the bound plans pin them by hash. Runs appear under `instrument/runs/` as they are executed.
+
+## Pre-existing and sprint work
+
+The sprint's rule: build on existing work, but mark code written before the sprint as pre-existing, and say what is new.
+
+- **Prior work (September 2026):** the instrument copied from `peer-pressure-without-peers` — `PRIOR_WORK.md` lists every file and commit.
+- **Written before the sprint (19–22 October 2026), pre-existing under the sprint rules:** the question and the four-arm design, the draft pre-registration, every code block marked `NEW 2026-10` (pull request #1 with its review and pre-freeze fixes), the tests and rehearsals.
+- **New during the sprint (23–25 October 2026):** the binding and the freeze, the gate and main runs with their records under `instrument/runs/`, the analysis of those records, the hand coding, the figures, and the report.
 
 ## The experiment in one paragraph
 
