@@ -109,7 +109,10 @@ def one_call(state, args, system, exe):
     return {"state_id": state["state_id"], "episode_id": state["episode_id"], "view": state["view"],
             "payload_sha256": state["payload_sha256"], "model_requested": args.model, "effort": args.effort,
             "assistant_models": parsed["assistant_models"], "usage_models": parsed["usage_models"],
-            "model_ok": parsed["assistant_models"] == [args.model] and all(m == args.model for m in parsed["usage_models"]),
+            # as in the instrument (run_r3.classify): every assistant turn must carry the requested id; helper or
+            # background model ids elsewhere in the stream are recorded as other_models and do not invalidate the call
+            "model_ok": parsed["assistant_models"] == [args.model],
+            "other_models": sorted(m for m in parsed["usage_models"] if m != args.model),
             "final_text": parsed["final_text"], "verdict": verdict, "verdict_error": verr,
             "cost_usd": parsed["cost_usd"], "stream_packets": parsed["packets"], "stream_parse_errors": parsed["parse_errors"],
             "exit_code": rc, "timed_out": timed_out, "stderr_tail": (stderr or "")[-400:],
