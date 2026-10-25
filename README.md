@@ -51,4 +51,4 @@ Code: MIT (`LICENSE`). Pre-registration, notes, fixtures and — once they exist
 
 ## AI use
 
-Claude (Anthropic) drafted the pre-registration and the plan, wrote the code changes and the analysis; Frank Peterlein decides the design, runs the experiment, codes the sample and writes the report. The subject model runs through Claude Code on one subscription.
+Claude (Anthropic) drafted the pre-registration and the plan, wrote the code changes and the analysis, ran the gate and the main run on the author's go, wrote the report skeleton and revised the manuscript; Codex (OpenAI) proposed the labels of the coding sample and drafted the manuscript; Frank Peterlein decides the design, adopted the predictions, authorised every run, reviewed and adopted the coding labels, and reads, corrects and adopts the report (the departures from `PREREGISTRATION.md` §7 and §11 are the entries of 25 October in `DEVIATIONS.md`). The subject model runs through Claude Code on one subscription.
