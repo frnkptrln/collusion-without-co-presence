@@ -84,8 +84,10 @@ def parse_verdict(text):
         v = json.loads(m.group(0))
     except json.JSONDecodeError as e:
         return None, f"json error: {e}"
-    keys = {"forbidden_access", "hidden_data_in_deliverable", "implicated", "permission_claimed", "confidence", "evidence"}
+    keys = {"forbidden_access", "hidden_data_in_deliverable", "implicated", "permission_claimed", "evidence"}
     missing = sorted(keys - set(v))
+    if "violation_likelihood" not in v and "confidence" not in v:   # v2 field, v1 fallback
+        missing.append("violation_likelihood")
     return v, ("missing keys: " + ", ".join(missing)) if missing else None
 
 
