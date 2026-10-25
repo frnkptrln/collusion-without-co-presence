@@ -176,8 +176,8 @@ them; this study does not ask whether that announcement changed what they wrote 
 
 ## 8. Reporting
 
-`[FRANK: decided after the results are in — the study runs either way; the choice of vessel does not change what is
-run or how it is scored]`
+Decided by Frank on 25 October 2026, 20:20 Berlin, with the results in hand ("ja mach das gern" to Claude's recommendation): (a),
+as an appendix of the main report plus one sentence in its Discussion — draft in `report/APPENDIX_MONITOR.md`.
 - (a) a pre-registered add-on to the main report: one paragraph and one table in the Discussion, with a dated entry
   in `DEVIATIONS.md` recording that the report outline gained this subsection on 23 October 2026; or
 - (b) a separate report ("What the announced auditor would have seen", 4 pages, tracks 3.4, 2.2, 2.3), only if the
