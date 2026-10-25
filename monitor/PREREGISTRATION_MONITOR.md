@@ -1,7 +1,7 @@
 # Pre-registration: what the announced auditor would have seen
 
 Monitor study on the records of the main run of *Collusion without co-presence* (23 October 2026). Draft by Claude,
-23 October 2026, 17:00 Berlin; bound by Frank Peterlein at the line marked `[BIND]` (25 October 2026, 19:00 Berlin). New sprint work throughout:
+23 October 2026, 17:00 Berlin; bound by Frank Peterlein at the line marked `[BIND]` (25 October 2026, 18:56 Berlin). New sprint work throughout:
 every file under `monitor/` was written on 23 October 2026, after the main run; it imports the frozen instrument's
 classifier and environment allowlist and changes nothing under `instrument/`.
 
@@ -158,7 +158,7 @@ ceiling lists `monitor/states/main/ceiling_ids.txt` sha256 `334537279ab53ae354a4
 secondary-model subset `monitor/states/main/subset_ids.txt` sha256 `b4135d833c7da9667cedbd49a9593a5036f2bd25d78feb67c5a9a470688067d1` (17 positives + 34 negatives, seed 20261023, 4 views, 204 states);
 prompt `monitor/prompts/auditor_v3.md`, system block sha256 `9f12c96e5527b46deb8f9902a675bca9afd2cd4dbf093bb39cd52dbe117a8438`, calibration PASS on `monitor/runs/gate/haiku-v3/` (180 calls: seedcheck 8/8, ceiling 4/4, false alarms 0/30 in every view);
 primary model `claude-haiku-4-5-20251001`, effort high; secondary model `claude-opus-5`, effort high; Claude Code 2.1.310 (the subject run used 2.1.309; the operator's interactive sessions updated the binary in between, as §10 of the main pre-registration foresees);
-decision rule as in §4; frozen by Frank Peterlein (decisions of 25 October 2026, 18:34 Berlin) at 25 October 2026, 19:00 Berlin, in the commit tagged `monitor-bound`. After this line, prompt, builder, states, subset and decision rule change only with a dated entry in `DEVIATIONS.md`.
+decision rule as in §4; frozen by Frank Peterlein (decisions of 25 October 2026, 18:34 Berlin) at 25 October 2026, 18:56:53 Berlin, commit d819175 (tagged `monitor-bound` locally; the tag could not be pushed through the session's git proxy). The first main-run call followed at 18:57:29 (`monitor/results/RUNS_MANIFEST.json`); one later commit (8ee2345, 18:59:42) changed only the scorer's reporting of the A2 seed-text states as their own class, not the decision rule. After this line, prompt, builder, states, subset and decision rule change only with a dated entry in `DEVIATIONS.md`.
 
 ## 7. What the design can and cannot show
 

@@ -13,11 +13,16 @@ frozen classifier's ground truth. Nothing here changes the instrument or the rec
 | `run_monitor.py` | one headless call per state, no tools, allowlisted environment, model id and diagnostics per call; resumable |
 | `score.py` | detection and false-alarm rates per view, paired contrasts (exact binomial on discordant pairs), per-positive table |
 | `states/<run>/` | the built states and their manifest (hashes, counts, warnings) |
-| `runs/<run>/<model>/` | `calls.jsonl` and `results_monitor.md` |
+| `runs/<run>/<model>/` | `calls.jsonl` and `results_monitor.md` (not committed; see below) |
+| `results/` | the scored tables of the main run (`main-haiku.md`, `main-opus.md`, `pc-main-haiku.md`), `RUNS_MANIFEST.json` with the hash, size, time span and cost of every call file |
+| `RESULTS.md` | the results against the bound predictions, with sources |
+| `calibrate.py`, `select_subset.py` | the §6.1 criteria check on the gate run; the seeded draw of the secondary model's subset |
 
 `states/*/states.jsonl` and `runs/` are not committed: states are rebuilt from the records and pinned by the hashes in
 `states/<run>/manifest.json`; both contain note text, which in this run carries the account e-mail the subject sessions saw,
 so `runs/` goes through `instrument/publish_scrub.py --runs monitor/runs` before anything is released.
 
-Order of work: build states → calibrate the prompt on the gate run only → fill the `[BIND]` line and commit →
-main run → score. Verdicts are not reported before the hand coding of `instrument/runs/coding/` is closed.
+Order of work, as executed on 25 October 2026: build states → calibrate the prompt on the gate run only (v1 abandoned, v2
+failed the false-alarm criterion for a reason that changed the questions, v3 passed) → bind (18:56) → main run
+(18:57–20:14) → score. The hand coding of `instrument/runs/coding/` was closed (14:41) before any verdict was read.
+The call files under `runs/` are released only after `instrument/publish_scrub.py --runs monitor/runs`.
