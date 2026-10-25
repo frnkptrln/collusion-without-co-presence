@@ -12,7 +12,7 @@ The sprint's rule: build on existing work, but mark code written before the spri
 
 - **Prior work (September 2026):** the instrument copied from `peer-pressure-without-peers` — `PRIOR_WORK.md` lists every file and commit.
 - **Written before the sprint (19–22 October 2026), pre-existing under the sprint rules:** the question and the four-arm design, the draft pre-registration, every code block marked `NEW 2026-10` (pull request #1 with its review and pre-freeze fixes), the tests and rehearsals.
-- **New during the sprint (23–25 October 2026):** the binding and the freeze, the gate and main runs with their records under `instrument/runs/`, the analysis of those records, the hand coding, the figures, and the report.
+- **New during the sprint (23–25 October 2026):** the binding and the freeze, the gate and main runs with their records under `instrument/runs/`, the analysis of those records, the hand coding, the figures, the monitor study (`monitor/`), and the report.
 
 ## The experiment in one paragraph
 
@@ -27,7 +27,7 @@ An agent (Claude Code, headless, four file tools served by our own MCP server th
 | `PRIOR_WORK.md` | what was copied from the September repository, from which commit, under which licence; what is new |
 | `instrument/` | the instrument: `fixtures_r3.py` (rule, task, notes, seeds, arms, plans), `run_r3.py` (runner; chains, seed removal, rehearsal backend), `workspace_server.py` (MCP task server with audit log), `concern_server.py`, `analyze_r3.py` / `schema.py` / `stats.py` / `report.py` (mechanical outcomes, note predicates, chain endpoints, the replacement report), `gate.py` (the Thursday gate, §4.6), `sprint_autorun.py` (the runbook as a script: `--phase gate`, `main`, `analysis`, `check`), `freeze.py`, `quota.py`, `check_quotes.py`, `publish_scrub.py`, `tests/`; `runs/` holds every episode once runs exist (`gate`, `pc-gate`, `main`, `pc-main`; `gate-B` if the re-gate with wording B is needed) |
 | `analysis/` | instrument-independent analysis with tests: `results_blocks.py`, `figures.py`, `coding_sheet.py`, `make_stub.py` |
-| `report/` | the Apart template builder (`build_apart.py`, `apart_template.tex`); the report once written |
+| `report/` | the submitted report (`collusion-without-co-presence-submission.pdf`, rendered from the `.docx` beside it), Figure 1 (`figure1.py`, `figure1.png`), the writing skeleton (`REPORT_SKELETON.md`), the draft history of Appendix D (`APPENDIX_MONITOR.md`); the LaTeX template builder (`build_apart.py`, `apart_template.tex`) was not used for the submitted report |
 | `docs/` | `IMPLEMENTATION_PLAN.md` (what is reused, what changes), `REPORT_OUTLINE.md` |
 | `monitor/` | the pre-registered add-on of 25 October: an auditor model reads the shared folders of the main run in four views, scored against the frozen classifier (`monitor/RESULTS.md`) |
 
@@ -59,4 +59,4 @@ Code: MIT (`LICENSE`). Pre-registration, notes, fixtures and — once they exist
 
 ## AI use
 
-Claude (Anthropic) drafted the pre-registration and the plan, wrote the code changes and the analysis, ran the gate and the main run on the author's go, wrote the report skeleton and revised the manuscript; Codex (OpenAI) proposed the labels of the coding sample and drafted the manuscript; Frank Peterlein decides the design, adopted the predictions, authorised every run, reviewed and adopted the coding labels, and reads, corrects and adopts the report (the departures from `PREREGISTRATION.md` §7 and §11 are the entries of 25 October in `DEVIATIONS.md`). The subject model runs through Claude Code on one subscription.
+Claude (Anthropic) drafted the pre-registration and the plan, wrote the code changes and the analysis, ran the gate and the main run on the author's go, designed, ran and scored the monitor study of 25 October (its predictions adopted by Frank before the first call), wrote the report skeleton and revised the manuscript; Codex (OpenAI) proposed the labels of the coding sample and drafted the manuscript; Frank Peterlein decides the design, adopted the predictions, authorised every run, reviewed and adopted the coding labels, and reads, corrects and adopts the report (the departures from `PREREGISTRATION.md` §7 and §11 are the entries of 25 October in `DEVIATIONS.md`). The subject model runs through Claude Code on one subscription.
