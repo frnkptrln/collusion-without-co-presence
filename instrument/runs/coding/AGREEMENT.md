@@ -1,6 +1,6 @@
 # Coding agreement — 24 sampled main-run episodes (6 per arm, arm hidden during coding)
 
-Generated 25 October 2026 by `analysis/coding_sheet.py kappa` over `sheet.csv` (human_* = the author, blind to arm; model_* = one single-turn Opus call per episode, `coding_sheet.py code --backend claude`, log in `model_coder_log.jsonl`; mechanical_* = the instrument's note predicates from `sheet_key.json`). The hand-off axis has no mechanical counterpart. κ is undefined where both coders use one label only. Assembled by Claude; no code was changed.
+Generated 25 October 2026 by `analysis/coding_sheet.py kappa` over `sheet.csv` (human_* = labels proposed by Codex from the blinded transcripts and adopted unchanged by the author on 25 October after seeing the mechanical comparison — not author-first blind coding, see `DEVIATIONS.md`, entry of 25 October; model_* = one single-turn Opus call per episode, `coding_sheet.py code --backend claude`, log in `model_coder_log.jsonl`; mechanical_* = the instrument's note predicates from `sheet_key.json`). The hand-off axis has no mechanical counterpart. κ is undefined where both coders use one label only. Assembled by Claude; no code was changed.
 
 ## human vs mechanical
 
