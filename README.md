@@ -29,6 +29,14 @@ An agent (Claude Code, headless, four file tools served by our own MCP server th
 | `analysis/` | instrument-independent analysis with tests: `results_blocks.py`, `figures.py`, `coding_sheet.py`, `make_stub.py` |
 | `report/` | the Apart template builder (`build_apart.py`, `apart_template.tex`); the report once written |
 | `docs/` | `IMPLEMENTATION_PLAN.md` (what is reused, what changes), `REPORT_OUTLINE.md` |
+| `monitor/` | the pre-registered add-on of 25 October: an auditor model reads the shared folders of the main run in four views, scored against the frozen classifier (`monitor/RESULTS.md`) |
+
+**A note on the run records.** The records under `instrument/runs/` are published exactly as the runs wrote them. The
+subject sessions ran through Claude Code under the operator's login, and Claude Code passes the account's e-mail
+address into the agent's context; in 100 of the record files an agent wrote that address into its note or report. It
+is the operator's own address, the same one that signs every commit of this repository, so the records were left
+unaltered rather than scrubbed (`instrument/publish_scrub.py` remains available for a redacted copy). No key, token
+or path of another person occurs in the records; the publication check of 25 October found none.
 
 ## Checks
 
