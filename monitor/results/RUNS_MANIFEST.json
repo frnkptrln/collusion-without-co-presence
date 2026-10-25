@@ -1,0 +1,80 @@
+{
+ "monitor/runs/gate/haiku-v1-aborted/calls.jsonl": {
+  "records": 18,
+  "sha256": "7a60924462c70c755221eb9c01af02c0c4f94374fff0c481f04ce253916a09d3",
+  "cost_usd_eq": 0.27,
+  "models": [
+   "claude-haiku-4-5-20251001"
+  ],
+  "cli": [
+   "2.1.310 (Claude Code)"
+  ],
+  "first": "2026-10-25 18:19:32 +0100",
+  "last": "2026-10-25 18:21:22 +0100"
+ },
+ "monitor/runs/gate/haiku-v2/calls.jsonl": {
+  "records": 180,
+  "sha256": "231d0fda09ed494176fbf068f90257f672e3c1bcca608b06352f18126af5aa69",
+  "cost_usd_eq": 5.11,
+  "models": [
+   "claude-haiku-4-5-20251001"
+  ],
+  "cli": [
+   "2.1.310 (Claude Code)"
+  ],
+  "first": "2026-10-25 18:22:14 +0100",
+  "last": "2026-10-25 18:37:34 +0100"
+ },
+ "monitor/runs/gate/haiku-v3/calls.jsonl": {
+  "records": 180,
+  "sha256": "e5be28bb3d4fa3f41dff6d47a3f35a81a05c314f94c44c48ae161fb2865b58aa",
+  "cost_usd_eq": 5.58,
+  "models": [
+   "claude-haiku-4-5-20251001"
+  ],
+  "cli": [
+   "2.1.310 (Claude Code)"
+  ],
+  "first": "2026-10-25 18:39:33 +0100",
+  "last": "2026-10-25 18:56:09 +0100"
+ },
+ "monitor/runs/main/haiku/calls.jsonl": {
+  "records": 1288,
+  "sha256": "6a682740ead30ffff901b84537b292359e5fcef6353bfa1ccb9007e228461a16",
+  "cost_usd_eq": 37.2,
+  "models": [
+   "claude-haiku-4-5-20251001"
+  ],
+  "cli": [
+   "2.1.310 (Claude Code)"
+  ],
+  "first": "2026-10-25 18:57:37 +0100",
+  "last": "2026-10-25 20:12:49 +0100"
+ },
+ "monitor/runs/pc-main/haiku/calls.jsonl": {
+  "records": 48,
+  "sha256": "d939d798e6d78e26a8b535e7e7fb392d93b6b341b96831ca0b7b6da6e3e20fb0",
+  "cost_usd_eq": 1.17,
+  "models": [
+   "claude-haiku-4-5-20251001"
+  ],
+  "cli": [
+   "2.1.310 (Claude Code)"
+  ],
+  "first": "2026-10-25 20:07:20 +0100",
+  "last": "2026-10-25 20:13:55 +0100"
+ },
+ "monitor/runs/main/opus/calls.jsonl": {
+  "records": 204,
+  "sha256": "c5442f78c305986aad00cdb51ee8d07c35430883c453622a07e89351c51f34e6",
+  "cost_usd_eq": 6.62,
+  "models": [
+   "claude-opus-5"
+  ],
+  "cli": [
+   "2.1.310 (Claude Code)"
+  ],
+  "first": "2026-10-25 18:57:29 +0100",
+  "last": "2026-10-25 19:05:19 +0100"
+ }
+}

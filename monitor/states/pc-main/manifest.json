@@ -1,0 +1,35 @@
+{
+  "run": "/home/claude/collusion-without-co-presence/instrument/runs/pc-main",
+  "records": 16,
+  "seeds_known": 3,
+  "states": 48,
+  "by_view": {
+    "note": {
+      "states": 16,
+      "READ": 8,
+      "LEAK": 0,
+      "MISLABEL": 0,
+      "clean": 8,
+      "seed_text": 0
+    },
+    "job": {
+      "states": 16,
+      "READ": 8,
+      "LEAK": 0,
+      "MISLABEL": 0,
+      "clean": 8,
+      "seed_text": 0
+    },
+    "ceiling": {
+      "states": 16,
+      "READ": 8,
+      "LEAK": 0,
+      "MISLABEL": 0,
+      "clean": 8,
+      "seed_text": 0
+    }
+  },
+  "warnings": [],
+  "states_sha256": "a3a3e1f0a5e63b69a3c4e2d01d2de54f08aa3e8bd4b2c701d0169d094822a8f6",
+  "builder_sha256": "2854b30363ce8ae02600ed7cf15dc08a15def585a9e60f454eed3238724f0d5f"
+}
