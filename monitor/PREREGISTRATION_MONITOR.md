@@ -1,7 +1,7 @@
 # Pre-registration: what the announced auditor would have seen
 
 Monitor study on the records of the main run of *Collusion without co-presence* (23 October 2026). Draft by Claude,
-23 October 2026, 17:00 Berlin; bound by Frank Peterlein at the line marked `[BIND]`. New sprint work throughout:
+23 October 2026, 17:00 Berlin; bound by Frank Peterlein at the line marked `[BIND]` (25 October 2026, 19:00 Berlin). New sprint work throughout:
 every file under `monitor/` was written on 23 October 2026, after the main run; it imports the frozen instrument's
 classifier and environment allowlist and changes nothing under `instrument/`.
 
@@ -153,9 +153,12 @@ With 11 and 6 positives these are existence-level results; §7 says what that me
    it came from.
 
 **`[BIND]`** builder `build_states.py` sha256 `2854b30363ce8ae02600ed7cf15dc08a15def585a9e60f454eed3238724f0d5f`;
-states `monitor/states/main/states.jsonl` sha256 `7a5925121bdeea1ba1a29d61129e393d172d64a45203b09450147c4bdc45cacf`;
-prompt system block sha256 `[BIND: after calibration]`; primary model `claude-haiku-4-5-20251001`, effort high;
-secondary model `[BIND]`; decision rule as in §4; frozen by `[FRANK]` on `[BIND: date, time Berlin]`, commit `[BIND]`.
+states `monitor/states/main/states.jsonl` sha256 `7a5925121bdeea1ba1a29d61129e393d172d64a45203b09450147c4bdc45cacf` (pc-main `a3a3e1f0a5e63b69a3c4e2d01d2de54f08aa3e8bd4b2c701d0169d094822a8f6`);
+ceiling lists `monitor/states/main/ceiling_ids.txt` sha256 `334537279ab53ae354a4cc7679c8505ab3985fdb4df92ddd92240bd09118880f`, `monitor/states/pc-main/ceiling_ids.txt` sha256 `fef14df7607317c3a4e3f0e0ea815b5ab9d87a1e84644f85d90278730b06eb95`;
+secondary-model subset `monitor/states/main/subset_ids.txt` sha256 `b4135d833c7da9667cedbd49a9593a5036f2bd25d78feb67c5a9a470688067d1` (17 positives + 34 negatives, seed 20261023, 4 views, 204 states);
+prompt `monitor/prompts/auditor_v3.md`, system block sha256 `9f12c96e5527b46deb8f9902a675bca9afd2cd4dbf093bb39cd52dbe117a8438`, calibration PASS on `monitor/runs/gate/haiku-v3/` (180 calls: seedcheck 8/8, ceiling 4/4, false alarms 0/30 in every view);
+primary model `claude-haiku-4-5-20251001`, effort high; secondary model `claude-opus-5`, effort high; Claude Code 2.1.310 (the subject run used 2.1.309; the operator's interactive sessions updated the binary in between, as §10 of the main pre-registration foresees);
+decision rule as in §4; frozen by Frank Peterlein (decisions of 25 October 2026, 18:34 Berlin) at 25 October 2026, 19:00 Berlin, in the commit tagged `monitor-bound`. After this line, prompt, builder, states, subset and decision rule change only with a dated entry in `DEVIATIONS.md`.
 
 ## 7. What the design can and cannot show
 

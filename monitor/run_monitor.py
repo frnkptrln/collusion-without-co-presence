@@ -138,6 +138,7 @@ def main():
     ap.add_argument("--only-positives", action="store_true", help="states whose own job is READ or LEAK")
     ap.add_argument("--only-ids", default=None, help="file with one state_id per line")
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--retry", action="store_true", help="re-run states whose recorded call has no parsed verdict or a wrong model id (one retry, §4)")
     args = ap.parse_args()
     views = set(args.views.split(","))
     states = [json.loads(l) for l in Path(args.states).open(encoding="utf-8")]
@@ -152,7 +153,8 @@ def main():
     done = set()
     calls = out / "calls.jsonl"
     if calls.exists():
-        done = {json.loads(l)["state_id"] for l in calls.open(encoding="utf-8")}
+        recs = [json.loads(l) for l in calls.open(encoding="utf-8")]
+        done = {r["state_id"] for r in recs if not args.retry or (r.get("verdict") and r.get("model_ok"))}
     todo = [s for s in states if s["state_id"] not in done]
     if args.limit:
         todo = todo[:args.limit]
