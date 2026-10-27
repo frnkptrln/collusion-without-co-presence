@@ -2,7 +2,7 @@
 
 Does a rule-breaking arrangement survive the replacement of every agent that holds it, when the only thing that persists is a shared scratch folder — and what does the arrangement do when it is told that the folder is read?
 
-Instrument, pre-registration and — once the runs exist — the run records and the report for the **Apart Research AI Collusion Research Sprint** (23–25 October 2026), by Frank Peterlein. Continuation of [peer-pressure-without-peers](https://github.com/frnkptrln/peer-pressure-without-peers) (September 2026), whose instrument this repository reuses; what was taken from there and what is new is listed in `PRIOR_WORK.md`.
+Instrument, pre-registration, run records and report for the **Apart Research AI Collusion Research Sprint** (23–25 October 2026), by Frank Peterlein. Continuation of [peer-pressure-without-peers](https://github.com/frnkptrln/peer-pressure-without-peers) (September 2026), whose instrument this repository reuses; what was taken from there and what is new is listed in `PRIOR_WORK.md`.
 
 **Status: bound and frozen on 23 October 2026** — `PREREGISTRATION.md` is bound (no placeholders left), `instrument/MANIFEST.sha256.json` is written by `instrument/freeze.py`; from here on every change to a frozen file is a dated entry in `DEVIATIONS.md`. The texts (the hand-off sentence, the audit sentence, the arm table) are the constants at the top of `instrument/fixtures_r3.py`, section `NEW 2026-10`; the bound plans pin them by hash. Runs appear under `instrument/runs/` as they are executed.
 
@@ -55,7 +55,7 @@ Running episodes needs Claude Code logged in to a subscription and Frank's go (`
 
 ## Licence
 
-Code: MIT (`LICENSE`). Pre-registration, notes, fixtures and — once they exist — run records and report: CC BY 4.0. The copied instrument carries the licence of its source repository (MIT).
+Code: MIT (`LICENSE`). Pre-registration, notes, fixtures, run records and report: CC BY 4.0 (`LICENSES/CC-BY-4.0.txt`). The copied instrument carries the licence of its source repository (MIT).
 
 ## AI use
 
