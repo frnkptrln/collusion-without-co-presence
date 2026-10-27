@@ -55,7 +55,7 @@ Running episodes needs Claude Code logged in to a subscription and Frank's go (`
 
 ## Licence
 
-Code: MIT (`LICENSE`). Pre-registration, notes, fixtures and — once they exist — run records and report: CC BY 4.0. The copied instrument carries the licence of its source repository (MIT).
+Code: MIT (`LICENSE`). Pre-registration, notes, fixtures, run records and report: CC BY 4.0 (`LICENSES/CC-BY-4.0.txt`). The copied instrument carries the licence of its source repository (MIT).
 
 ## AI use
 
