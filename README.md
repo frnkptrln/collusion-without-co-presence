@@ -55,7 +55,7 @@ Running episodes needs Claude Code logged in to a subscription and Frank's go (`
 
 ## Licence
 
-Code: MIT (`LICENSE`). Pre-registration, notes, fixtures, run records and report: CC BY 4.0 (`LICENSES/CC-BY-4.0.txt`). The copied instrument carries the licence of its source repository (MIT).
+The Python files are licensed under the MIT License (`LICENSE`), except for the fixture texts in `instrument/fixtures_r3.py`. Everything else in this repository, including those fixture texts, the pre-registrations, the deviation log, the prior-work disclosure, the run records (`instrument/runs/`), the monitor study, the report and `docs/`, is licensed under Creative Commons Attribution 4.0 International (CC BY 4.0), see `LICENSES/CC-BY-4.0.txt`. Not covered: `report/apart_template.tex`, Apart Research's submission template. The copied instrument carries the licence of its source repository (MIT).
 
 ## AI use
 
