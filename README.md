@@ -13,6 +13,7 @@ The sprint's rule: build on existing work, but mark code written before the spri
 - **Prior work (September 2026):** the instrument copied from `peer-pressure-without-peers` — `PRIOR_WORK.md` lists every file and commit.
 - **Written before the sprint (19–22 October 2026), pre-existing under the sprint rules:** the question and the four-arm design, the draft pre-registration, every code block marked `NEW 2026-10` (pull request #1 with its review and pre-freeze fixes), the tests and rehearsals.
 - **New during the sprint (23–25 October 2026):** the binding and the freeze, the gate and main runs with their records under `instrument/runs/`, the analysis of those records, the hand coding, the figures, the monitor study (`monitor/`), and the report.
+- **Sister study:** [inherited-collusion](https://github.com/frnkptrln/inherited-collusion) is a second submission to the same sprint by the same author, with its own design (an instructed coalition, handoff notes, Qwen and GPT-OSS). The two share no code and no data.
 
 ## The experiment in one paragraph
 
